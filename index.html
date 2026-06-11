@@ -4,32 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="FIFA World Cup 2026 Private Pool Tracker — 24 participants, 48 nations, Groups A–L">
-  <meta name="theme-color" content="#020F2A">
+  <meta name="theme-color" content="#081A0A">
   <title>FIFA World Cup 2026 — Pool Tracker</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css">
   <style>
-    /* ── FIFA Brand Colors (confirmed from fifa.com) ── */
+    /* ── Soccer Pitch Color Palette ── */
     :root {
-      --bg:        #020F2A;   /* fifa.com meta-theme-color */
-      --card:      #071A38;
-      --surface:   #0C2550;
-      --border:    #1A3560;
-      --blue:      #326295;   /* fifa.com msapplication-TileColor */
-      --blue-lt:   #4A8EC2;
+      --bg:        #081A0A;   /* deep night stadium */
+      --card:      #0D2410;   /* dark forest green */
+      --surface:   #143018;   /* mid green */
+      --border:    #234E2C;   /* green border */
+      --blue:      #22C55E;   /* bright pitch green — primary accent */
+      --blue-lt:   #4ADE80;   /* lighter bright green */
       --text:      #FFFFFF;
-      --muted:     #8BAFD6;
-      --faint:     #4A6890;
-      --green:     #00A651;
-      --green-bg:  rgba(0,166,81,.12);
-      --red:       #C8343B;
-      --red-bg:    rgba(200,52,59,.12);
-      --gold:      #C8A84B;
-      --gold-bg:   rgba(200,168,75,.12);
+      --muted:     #A3C9A8;   /* soft sage */
+      --faint:     #4A7050;   /* muted deep green */
+      --green:     #22C55E;
+      --green-bg:  rgba(34,197,94,.14);
+      --red:       #F87171;
+      --red-bg:    rgba(248,113,113,.13);
+      --gold:      #FBBF24;
+      --gold-bg:   rgba(251,191,36,.13);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--bg);
+      /* subtle diagonal mown-lawn stripes */
+      background-image:
+        repeating-linear-gradient(
+          -45deg,
+          transparent 0px, transparent 28px,
+          rgba(255,255,255,.018) 28px, rgba(255,255,255,.018) 56px
+        );
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       min-height: 100vh;
@@ -164,15 +171,52 @@
     /* ── Scoring legend ── */
     .legend { font-size: .68rem; color: var(--faint); text-align: center; margin-top: .4rem; }
 
+    /* ── Pool mobile cards ── */
+    .pool-cards { display: none; }
+    .pcard {
+      background: var(--card); border: .5px solid var(--border);
+      border-radius: 10px; padding: .75rem .875rem; margin-bottom: .5rem;
+    }
+    .pcard-top { display: flex; align-items: center; gap: .5rem; margin-bottom: .5rem; }
+    .pcard-rank { font-size: .875rem; font-weight: 800; width: 22px; text-align: center; flex-shrink: 0; }
+    .pcard-name { font-size: .9375rem; font-weight: 700; flex: 1; }
+    .pcard-pts  { font-size: 1.1rem; font-weight: 800; color: var(--blue-lt); }
+    .pcard-countries { display: flex; flex-direction: column; gap: .3rem; margin-left: 30px; }
+    .pcard-country { display: flex; align-items: center; gap: .4rem; font-size: .8125rem; }
+    .pcard-bottom { display: flex; align-items: center; justify-content: flex-end; margin-top: .4rem; }
+
     /* ── Responsive ── */
     @media (max-width:640px) {
-      .stats { grid-template-columns: repeat(2,1fr); }
+      .wrap { padding: 1rem .75rem 3rem; }
+      .stats { grid-template-columns: repeat(2,1fr); gap: .5rem; }
       .grids { grid-template-columns: repeat(2,1fr); }
-      .hdr-text h1 { font-size: 1.2rem; }
-      th, td { padding-left: .6rem; padding-right: .6rem; }
+      .hdr { gap: .6rem; margin-bottom: 1rem; }
+      .hdr svg { width: 40px; height: 40px; }
+      .hdr-text h1 { font-size: 1.1rem; }
+      .hdr-text p  { font-size: .72rem; }
+      .hdr-badge { font-size: .68rem; padding: .28rem .65rem; margin-left: 0; }
+      /* Tabs scroll horizontally */
+      .tabs {
+        flex-wrap: nowrap; overflow-x: auto; gap: .3rem;
+        -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        padding-bottom: .25rem; margin-bottom: 1rem;
+      }
+      .tabs::-webkit-scrollbar { display: none; }
+      .tbtn { white-space: nowrap; padding: .45rem .85rem; font-size: .8rem; flex-shrink: 0; }
+      /* Pool: hide table, show cards */
+      .pool-table-wrap { display: none; }
+      .pool-cards { display: block; padding-top: .25rem; }
+      /* Schedule compact */
+      .mrow { padding: .5rem .75rem; gap: .35rem; }
+      .dhdr { padding: .4rem .75rem; }
+      td, th { padding-left: .5rem; padding-right: .5rem; }
+      .card-hdr { padding: .6rem .75rem; }
+      .infobox { padding: .75rem; }
+      .legend { font-size: .63rem; }
     }
     @media (max-width:400px) {
       .grids { grid-template-columns: 1fr; }
+      .hdr-text p { display: none; }
     }
   </style>
 </head>
@@ -181,16 +225,12 @@
 
   <!-- ── Header ── -->
   <header class="hdr">
-    <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="FIFA globe logo">
-      <circle cx="27" cy="27" r="26" fill="#326295"/>
-      <circle cx="27" cy="27" r="26" stroke="#1E4A7A" stroke-width=".5"/>
-      <ellipse cx="27" cy="27" rx="14" ry="25" stroke="white" stroke-width=".7" fill="none" opacity=".28"/>
-      <ellipse cx="27" cy="27" rx="25" ry="12" stroke="white" stroke-width=".7" fill="none" opacity=".28"/>
-      <line x1="27" y1="1" x2="27" y2="53" stroke="white" stroke-width=".7" opacity=".28"/>
-      <line x1="1" y1="27" x2="53" y2="27" stroke="white" stroke-width=".7" opacity=".28"/>
-      <circle cx="27" cy="27" r="26" stroke="white" stroke-width=".7" fill="none" opacity=".28"/>
-      <text x="27" y="31" text-anchor="middle" fill="white" font-size="10" font-weight="800" letter-spacing="1.8">FIFA</text>
-    </svg>
+    <img
+      src="trionda_ball.png"
+      width="58" height="58" alt="Adidas Trionda — Official FIFA World Cup 2026 Ball"
+      style="border-radius:50%;box-shadow:0 4px 18px rgba(0,0,0,.6);flex-shrink:0;object-fit:cover"
+      onerror="this.outerHTML='<span style=\'font-size:2rem\'>⚽</span>'"
+    />
     <div class="hdr-text">
       <h1>World Cup 2026™</h1>
       <p>Pool tracker &nbsp;·&nbsp; 24 participants &nbsp;·&nbsp; Jun 11 – Jul 19, 2026</p>
@@ -222,17 +262,22 @@
         <span class="card-ttl">Pool Standings</span>
         <span class="card-sub" id="updated-lbl"><i class="ti ti-clock"></i> Auto-updates daily</span>
       </div>
-      <table>
-        <thead><tr>
-          <th style="width:36px">#</th>
-          <th>Participant</th>
-          <th>Country 1</th>
-          <th>Country 2</th>
-          <th class="th-c" style="width:52px">Pts</th>
-          <th class="th-c" style="width:100px">Status</th>
-        </tr></thead>
-        <tbody id="pool-body"></tbody>
-      </table>
+      <!-- Desktop table -->
+      <div class="pool-table-wrap">
+        <table>
+          <thead><tr>
+            <th style="width:36px">#</th>
+            <th>Participant</th>
+            <th>Country 1</th>
+            <th>Country 2</th>
+            <th class="th-c" style="width:52px">Pts</th>
+            <th class="th-c" style="width:100px">Status</th>
+          </tr></thead>
+          <tbody id="pool-body"></tbody>
+        </table>
+      </div>
+      <!-- Mobile cards -->
+      <div class="pool-cards" id="pool-cards" style="padding:.5rem .5rem .25rem"></div>
     </div>
     <p class="legend">Scoring: Champion=6 &nbsp;·&nbsp; Runner-up=5 &nbsp;·&nbsp; SF=4 &nbsp;·&nbsp; QF=3 &nbsp;·&nbsp; R16=2 &nbsp;·&nbsp; R32=1 &nbsp;·&nbsp; Group exit=0</p>
   </div>
@@ -479,8 +524,11 @@ function renderPool() {
     return {...p,t1,t2,pts,_sort:pts*100+(both?20:one?10:0),_i:i};
   }).sort((a,b)=>b._sort-a._sort||a.name.localeCompare(b.name));
 
-  const body = document.getElementById('pool-body');
+  const body  = document.getElementById('pool-body');
+  const cards = document.getElementById('pool-cards');
   body.innerHTML = '';
+  cards.innerHTML = '';
+
   rows.forEach((p,rank)=>{
     const [bg,fg]=AV_COLORS[p._i%AV_COLORS.length];
     const ini=p.name.substring(0,2).toUpperCase();
@@ -505,6 +553,7 @@ function renderPool() {
       </div>`;
     };
 
+    // ── Desktop table row ──
     body.innerHTML+=`<tr>
       <td><span class="${rankCls}">${rank+1}</span></td>
       <td><div style="display:flex;align-items:center;gap:.5rem">
@@ -516,6 +565,32 @@ function renderPool() {
       <td style="text-align:center"><span class="b-pts">${p.pts}</span></td>
       <td style="text-align:center">${statusBadge}</td>
     </tr>`;
+
+    // ── Mobile card ──
+    const t1alive=p.t1.status!=='eliminated', t2alive=p.t2.status!=='eliminated';
+    const rankColor = rank===0?'#C8A84B':rank===1?'#A0AEC0':rank===2?'#CD7F32':'var(--faint)';
+    const mc1=`<div class="pcard-country">
+      <span style="font-size:1rem">${p.t1.flag}</span>
+      <span style="${t1alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c1}</span>
+      <span class="b b-grp">${p.t1.group}</span>
+      ${!t1alive?`<span class="b b-out" style="font-size:.58rem">${p.t1.roundReached||'Out'}</span>`:''}
+    </div>`;
+    const mc2=`<div class="pcard-country">
+      <span style="font-size:1rem">${p.t2.flag}</span>
+      <span style="${t2alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c2}</span>
+      <span class="b b-grp">${p.t2.group}</span>
+      ${!t2alive?`<span class="b b-out" style="font-size:.58rem">${p.t2.roundReached||'Out'}</span>`:''}
+    </div>`;
+    cards.innerHTML+=`<div class="pcard">
+      <div class="pcard-top">
+        <span class="pcard-rank" style="color:${rankColor}">${rank+1}</span>
+        <div class="av" style="background:${bg};color:${fg};width:28px;height:28px;font-size:.6rem">${ini}</div>
+        <span class="pcard-name">${p.name}</span>
+        <span class="pcard-pts">${p.pts}</span>
+      </div>
+      <div class="pcard-countries">${mc1}${mc2}</div>
+      <div class="pcard-bottom">${statusBadge}</div>
+    </div>`;
   });
 }
 
