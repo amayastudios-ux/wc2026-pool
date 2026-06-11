@@ -171,6 +171,12 @@
     /* ── Scoring legend ── */
     .legend { font-size: .68rem; color: var(--faint); text-align: center; margin-top: .4rem; }
 
+    /* ── Live score ── */
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+    .live-dot { display:inline-block; width:7px; height:7px; background:#F87171; border-radius:50%; margin-left:5px; vertical-align:middle; animation:pulse 1.2s ease-in-out infinite; }
+    .mscore-live { font-size:.875rem; font-weight:800; padding:.2rem .6rem; background:rgba(248,113,113,.18); border:.5px solid rgba(248,113,113,.4); border-radius:6px; color:#F87171; }
+    .mlive { font-size:.68rem; color:#F87171; font-weight:700; white-space:nowrap; }
+
     /* ── Pool mobile cards ── */
     .pool-cards { display: none; }
     .pcard {
@@ -622,9 +628,24 @@ function renderSchedule() {
     body.innerHTML+=`<div class="dhdr">${day.date}</div>`;
     day.ms.forEach(m=>{
       const f1=ti(m.t1).flag, f2=ti(m.t2).flag;
-      const right=m.score
-        ?`<span class="mscore">${m.score}</span>`
-        :`<span class="mtime">${m.time} ET</span>`;
+      // Check live scores first
+      const lk = liveScores[`${m.t1}|${m.t2}`] || liveScores[`${m.t2}|${m.t1}`];
+      let right;
+      if (lk) {
+        const s1 = lk.t1===m.t1 ? lk.homeScore : lk.awayScore;
+        const s2 = lk.t1===m.t1 ? lk.awayScore : lk.homeScore;
+        if (lk.state==='in') {
+          right=`<span class="mscore-live">${s1}–${s2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
+        } else if (lk.state==='post') {
+          right=`<span class="mscore">${s1}–${s2} FT</span>`;
+        } else {
+          right=`<span class="mtime">${m.time} ET</span>`;
+        }
+      } else if (m.score) {
+        right=`<span class="mscore">${m.score}</span>`;
+      } else {
+        right=`<span class="mtime">${m.time} ET</span>`;
+      }
       body.innerHTML+=`<div class="mrow">
         <span class="b b-grp" style="flex-shrink:0">Grp ${m.g}</span>
         <div class="mteams">
@@ -692,9 +713,81 @@ function sw(id,btn){
   btn.classList.add('on');
 }
 
+/* ── ESPN LIVE SCORES ───────────────────────────────── */
+const ESPN_URL = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
+const ESPN_MAP = {
+  'Mexico':'Mexico','South Africa':'South Africa','South Korea':'Korea Republic',
+  'Czech Republic':'Czechia','Czechia':'Czechia','Canada':'Canada',
+  'Bosnia and Herzegovina':'Bosnia & Herzegovina','Qatar':'Qatar','Switzerland':'Switzerland',
+  'Brazil':'Brazil','Morocco':'Morocco','Haiti':'Haiti','Scotland':'Scotland',
+  'United States':'USA','USA':'USA','Paraguay':'Paraguay','Australia':'Australia',
+  'Turkey':'Türkiye','Türkiye':'Türkiye','Germany':'Germany','Curacao':'Curaçao',
+  "Côte d'Ivoire":"Côte d'Ivoire",'Ivory Coast':"Côte d'Ivoire",'Ecuador':'Ecuador',
+  'Netherlands':'Netherlands','Japan':'Japan','Sweden':'Sweden','Tunisia':'Tunisia',
+  'Belgium':'Belgium','Egypt':'Egypt','Iran':'Iran','New Zealand':'New Zealand',
+  'Spain':'Spain','Cape Verde':'Cabo Verde','Saudi Arabia':'Saudi Arabia','Uruguay':'Uruguay',
+  'France':'France','Senegal':'Senegal','Iraq':'Iraq','Norway':'Norway',
+  'Argentina':'Argentina','Algeria':'Algeria','Austria':'Austria','Jordan':'Jordan',
+  'Portugal':'Portugal','DR Congo':'Congo DR','Congo DR':'Congo DR',
+  'Uzbekistan':'Uzbekistan','Colombia':'Colombia',
+  'England':'England','Croatia':'Croatia','Ghana':'Ghana','Panama':'Panama',
+};
+let liveScores = {};
+let liveInterval = null;
+
+async function fetchLiveScores() {
+  try {
+    const r = await fetch(ESPN_URL + '?t=' + Date.now());
+    if (!r.ok) return;
+    const j = await r.json();
+    const events = j.events || [];
+    const fresh = {};
+    let hasLive = false;
+
+    events.forEach(ev => {
+      const comp = ev.competitions?.[0];
+      if (!comp) return;
+      const state = ev.status?.type?.state;   // 'pre' | 'in' | 'post'
+      const clock = ev.status?.displayClock || '';
+      const home  = comp.competitors?.find(c => c.homeAway === 'home');
+      const away  = comp.competitors?.find(c => c.homeAway === 'away');
+      if (!home || !away) return;
+      const t1 = ESPN_MAP[home.team?.displayName] || home.team?.displayName;
+      const t2 = ESPN_MAP[away.team?.displayName] || away.team?.displayName;
+      const entry = { t1, t2, homeScore: home.score||'0', awayScore: away.score||'0', clock, state };
+      fresh[`${t1}|${t2}`] = entry;
+      fresh[`${t2}|${t1}`] = entry;
+      if (state === 'in') hasLive = true;
+    });
+
+    liveScores = fresh;
+    renderSchedule();
+
+    // Pulse the Schedule tab when live
+    const schedBtn = document.querySelector('.tbtn[onclick*="sched"]');
+    if (schedBtn) {
+      const already = schedBtn.querySelector('.live-dot');
+      if (hasLive && !already) {
+        schedBtn.innerHTML = 'Schedule <span class="live-dot"></span>';
+      } else if (!hasLive && already) {
+        schedBtn.innerHTML = 'Schedule';
+      }
+    }
+
+    // Poll every 60 s while live, stop when no live games
+    if (hasLive && !liveInterval) {
+      liveInterval = setInterval(fetchLiveScores, 60000);
+    } else if (!hasLive && liveInterval) {
+      clearInterval(liveInterval); liveInterval = null;
+    }
+  } catch { /* ESPN unavailable — silent fail */ }
+}
+
 /* ── INIT ───────────────────────────────────────────── */
 loadData();
 setInterval(loadData, 600000); // refresh every 10 min
+fetchLiveScores();              // check ESPN immediately
+setInterval(fetchLiveScores, 300000); // re-check every 5 min even if no live game detected
 </script>
 </body>
 </html>
