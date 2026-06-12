@@ -303,7 +303,7 @@ def main():
                 teams[name]["roundReached"] = ex_t.get("roundReached")
 
     elim_count   = sum(1 for t in teams.values() if t["status"] == "eliminated")
-    recent_clean = [{k: v for k, v in r.items() if k != "slug"} for r in espn_results[-20:]]
+    recent_clean = [{k: v for k, v in r.items() if k != "slug"} for r in espn_results]  # all matches (~118 total WC)
 
     out = {
         "meta": {
