@@ -2,7 +2,7 @@ name: Update World Cup Results
 
 on:
   schedule:
-    - cron: '0 11 * * *'   # 7:00 AM ET every day
+    - cron: '0 */3 * * *'  # every 3 hours (results appear ~3h after each match)
   workflow_dispatch:         # allow manual trigger from GitHub UI
 
 permissions:

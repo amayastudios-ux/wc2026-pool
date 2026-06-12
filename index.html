@@ -125,9 +125,16 @@
     .grids { display: grid; grid-template-columns: repeat(3,1fr); gap: .75rem; }
     .gcrd { background: var(--card); border: .5px solid var(--border); border-radius: 10px; overflow: hidden; }
     .ghdr { padding: .5rem .875rem; background: var(--blue); font-size: .875rem; font-weight: 800; letter-spacing: .05em; }
-    .gteam { display: flex; align-items: center; gap: .5rem; padding: .5rem .875rem; border-bottom: .5px solid var(--border); font-size: .8125rem; }
-    .gteam:last-child { border-bottom: none; }
-    .gteam.out { opacity: .45; }
+    .gteam { display:flex; align-items:center; gap:.35rem; padding:.42rem .75rem; border-bottom:.5px solid var(--border); font-size:.8125rem; }
+    .gteam:last-child { border-bottom:none; }
+    .gteam.out { opacity:.45; }
+    .gname { flex:1; min-width:0; }
+    .gwdl-hdr { display:flex; justify-content:flex-end; padding:.18rem .75rem; font-size:.6rem; font-weight:700; color:var(--faint); background:rgba(0,0,0,.18); border-bottom:.5px solid var(--border); }
+    .gwdl-hdr span { width:1.55rem; text-align:center; }
+    .gcol-w { width:1.55rem; text-align:center; font-size:.7rem; font-weight:700; color:var(--green); }
+    .gcol-d { width:1.55rem; text-align:center; font-size:.7rem; font-weight:700; color:var(--gold); }
+    .gcol-l { width:1.55rem; text-align:center; font-size:.7rem; font-weight:700; color:var(--red); }
+    .gcol-na { width:1.55rem; text-align:center; font-size:.7rem; color:var(--faint); }
 
     /* ── Schedule ── */
     .dhdr {
@@ -895,16 +902,28 @@ function renderGroups() {
   const body=document.getElementById('groups-body');
   body.innerHTML='';
   GROUPS.forEach(g=>{
-    const rows=g.teams.map(tn=>{
+    // Sort teams by group-stage pts (W=3,D=1), then GF
+    const sorted=[...g.teams].sort((a,b)=>{
+      const sa=STATS[a]||{w:0,d:0,l:0,gf:0}, sb=STATS[b]||{w:0,d:0,l:0,gf:0};
+      const pa=sa.w*3+sa.d, pb=sb.w*3+sb.d;
+      return pb-pa||sb.gf-sa.gf||a.localeCompare(b);
+    });
+    const rows=sorted.map(tn=>{
       const info=ti(tn);
       const out=info.status==='eliminated';
+      const s=STATS[tn];
+      const t=TRENDS[tn];
+      const arr=t==='win'?'<span class="ta-up">↑</span>':t==='loss'?'<span class="ta-dn">↓</span>':t==='draw'?'<span class="ta-tie">→</span>':'';
+      const wCol=s!=null?`<span class="gcol-w">${s.w}</span>`:'<span class="gcol-na">—</span>';
+      const dCol=s!=null?`<span class="gcol-d">${s.d}</span>`:'<span class="gcol-na">—</span>';
+      const lCol=s!=null?`<span class="gcol-l">${s.l}</span>`:'<span class="gcol-na">—</span>';
       return `<div class="gteam ${out?'out':''}">
-        <span style="font-size:1rem">${info.flag}</span>
-        <span style="${out?'text-decoration:line-through;color:var(--faint)':''};font-size:.8125rem">${tn}</span>
-        ${out?`<span class="b b-out" style="margin-left:auto;font-size:.58rem">${tr('out')}</span>`:''}
+        <span style="font-size:.95rem">${info.flag}</span>
+        <span class="gname" style="${out?'text-decoration:line-through;color:var(--faint)':''}">${tn}</span>${arr}
+        ${wCol}${dCol}${lCol}
       </div>`;
     }).join('');
-    body.innerHTML+=`<div class="gcrd"><div class="ghdr">${tr('group')} ${g.id}</div>${rows}</div>`;
+    body.innerHTML+=`<div class="gcrd"><div class="ghdr">${tr('group')} ${g.id}</div><div class="gwdl-hdr"><span>W</span><span>D</span><span>L</span></div>${rows}</div>`;
   });
 }
 
