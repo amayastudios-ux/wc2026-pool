@@ -723,9 +723,10 @@ async function loadData() {
         } else {
           TRENDS[res.home] = 'draw'; TRENDS[res.away] = 'draw';
         }
-        if (!STATS[res.home]) STATS[res.home] = {w:0,d:0,l:0,gf:0};
-        if (!STATS[res.away]) STATS[res.away] = {w:0,d:0,l:0,gf:0};
+        if (!STATS[res.home]) STATS[res.home] = {w:0,d:0,l:0,gf:0,ga:0};
+        if (!STATS[res.away]) STATS[res.away] = {w:0,d:0,l:0,gf:0,ga:0};
         STATS[res.home].gf += hs; STATS[res.away].gf += as;
+        STATS[res.home].ga += as; STATS[res.away].ga += hs;
         if (hs > as)      { STATS[res.home].w++; STATS[res.away].l++; }
         else if (as > hs) { STATS[res.away].w++; STATS[res.home].l++; }
         else              { STATS[res.home].d++;  STATS[res.away].d++; }
@@ -811,12 +812,13 @@ function renderPool() {
     const pts = (t1.pts||0)+(t2.pts||0);
     const both = t1.status!=='eliminated' && t2.status!=='eliminated';
     const one  = t1.status!=='eliminated' || t2.status!=='eliminated';
-    const s1 = STATS[p.c1]||{w:0,d:0,l:0,gf:0};
-    const s2 = STATS[p.c2]||{w:0,d:0,l:0,gf:0};
+    const s1 = STATS[p.c1]||{w:0,d:0,l:0,gf:0,ga:0};
+    const s2 = STATS[p.c2]||{w:0,d:0,l:0,gf:0,ga:0};
     const wins  = s1.w  + s2.w;
     const draws = s1.d  + s2.d;
     const gf    = s1.gf + s2.gf;
-    return {...p,t1,t2,pts,wins,draws,gf,_sort:pts*100000+wins*1000+draws*100+gf+(both?20:one?10:0),_i:i};
+    const gd    = gf - (s1.ga + s2.ga);
+    return {...p,t1,t2,pts,wins,draws,gf,_sort:pts*100000+wins*1000+draws*100+gd*10+gf+(both?20:one?10:0),_i:i};
   }).sort((a,b)=>b._sort-a._sort||a.name.localeCompare(b.name));
 
   const body  = document.getElementById('pool-body');
@@ -904,9 +906,10 @@ function renderGroups() {
   GROUPS.forEach(g=>{
     // Sort teams by group-stage pts (W=3,D=1), then GF
     const sorted=[...g.teams].sort((a,b)=>{
-      const sa=STATS[a]||{w:0,d:0,l:0,gf:0}, sb=STATS[b]||{w:0,d:0,l:0,gf:0};
+      const sa=STATS[a]||{w:0,d:0,l:0,gf:0,ga:0}, sb=STATS[b]||{w:0,d:0,l:0,gf:0,ga:0};
       const pa=sa.w*3+sa.d, pb=sb.w*3+sb.d;
-      return pb-pa||sb.gf-sa.gf||a.localeCompare(b);
+      const gda=(sa.gf-sa.ga), gdb=(sb.gf-sb.ga);
+      return pb-pa||(gdb-gda)||(sb.gf-sa.gf)||a.localeCompare(b);
     });
     const rows=sorted.map(tn=>{
       const info=ti(tn);
