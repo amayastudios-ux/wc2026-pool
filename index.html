@@ -704,7 +704,7 @@ async function loadData() {
     }
 
     // Patch scores + build trends from meta.recentResults
-    TRENDS = {};
+    TRENDS = {}; STATS = {};
     if (j.meta?.recentResults) {
       j.meta.recentResults.forEach(res => {
         // Schedule overlay
