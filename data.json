@@ -1,10 +1,25 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-12T06:09:19Z",
+    "lastUpdated": "2026-06-12T06:22:13Z",
     "stage": "Group Stage",
     "matchday": 1,
     "eliminatedCount": 0,
-    "recentResults": []
+    "recentResults": [
+      {
+        "home": "Mexico",
+        "away": "South Africa",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Korea Republic",
+        "away": "Czechia",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Group Stage"
+      }
+    ]
   },
   "teams": {
     "Mexico": {

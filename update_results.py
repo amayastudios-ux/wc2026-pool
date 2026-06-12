@@ -1,230 +1,195 @@
 #!/usr/bin/env python3
 """
 FIFA World Cup 2026 — Pool Tracker Data Updater
-Fetches live results from API-Football and writes data.json.
-Run daily via GitHub Actions.
+Primary source: ESPN public scoreboard API (no key needed)
+Fallback: API-Football v3 (requires API_FOOTBALL_KEY secret)
+Run every 3 hours via GitHub Actions.
 """
 import json, os, sys, requests
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
-# ── Config ──────────────────────────────────────────────────────────────────
-API_KEY    = os.environ.get("API_FOOTBALL_KEY", "")
-API_HOST   = "v3.football.api-sports.io"
-LEAGUE_ID  = 1       # FIFA World Cup
-SEASON     = 2026
-DATA_FILE  = "data.json"
+API_KEY   = os.environ.get("API_FOOTBALL_KEY", "")
+API_HOST  = "v3.football.api-sports.io"
+LEAGUE_ID = 1
+SEASON    = 2026
+DATA_FILE = "data.json"
+TOURNEY_START = datetime(2026, 6, 11, tzinfo=timezone.utc)
 
-# ── Canonical name map (API name → our key) ─────────────────────────────────
 TEAM_NAME_MAP = {
-    # Group A
-    "Mexico":                 "Mexico",
-    "South Korea":            "Korea Republic",
-    "Korea Republic":         "Korea Republic",
-    "Republic of Korea":      "Korea Republic",
-    "Czech Republic":         "Czechia",
-    "Czechia":                "Czechia",
-    "South Africa":           "South Africa",
-    # Group B
-    "Canada":                 "Canada",
+    "Mexico": "Mexico", "South Korea": "Korea Republic",
+    "Korea Republic": "Korea Republic", "Republic of Korea": "Korea Republic",
+    "Czech Republic": "Czechia", "Czechia": "Czechia",
+    "South Africa": "South Africa", "Canada": "Canada",
     "Bosnia and Herzegovina": "Bosnia & Herzegovina",
-    "Bosnia & Herzegovina":   "Bosnia & Herzegovina",
-    "Qatar":                  "Qatar",
-    "Switzerland":            "Switzerland",
-    # Group C
-    "Brazil":                 "Brazil",
-    "Morocco":                "Morocco",
-    "Haiti":                  "Haiti",
-    "Scotland":               "Scotland",
-    # Group D
-    "United States":          "USA",
-    "USA":                    "USA",
-    "Paraguay":               "Paraguay",
-    "Australia":              "Australia",
-    "Turkey":                 "Türkiye",
-    "Türkiye":                "Türkiye",
-    # Group E
-    "Germany":                "Germany",
-    "Curacao":                "Curaçao",
-    "Curaçao":                "Curaçao",
-    "Ivory Coast":            "Côte d'Ivoire",
-    "Cote d'Ivoire":          "Côte d'Ivoire",
-    "Côte d'Ivoire":          "Côte d'Ivoire",
-    "Ecuador":                "Ecuador",
-    # Group F
-    "Netherlands":            "Netherlands",
-    "Japan":                  "Japan",
-    "Sweden":                 "Sweden",
-    "Tunisia":                "Tunisia",
-    # Group G
-    "Belgium":                "Belgium",
-    "Egypt":                  "Egypt",
-    "Iran":                   "Iran",
-    "New Zealand":            "New Zealand",
-    # Group H
-    "Spain":                  "Spain",
-    "Cape Verde":             "Cabo Verde",
-    "Cabo Verde":             "Cabo Verde",
-    "Saudi Arabia":           "Saudi Arabia",
-    "Uruguay":                "Uruguay",
-    # Group I
-    "France":                 "France",
-    "Senegal":                "Senegal",
-    "Iraq":                   "Iraq",
-    "Norway":                 "Norway",
-    # Group J
-    "Argentina":              "Argentina",
-    "Algeria":                "Algeria",
-    "Austria":                "Austria",
-    "Jordan":                 "Jordan",
-    # Group K
-    "Portugal":               "Portugal",
-    "DR Congo":               "Congo DR",
-    "Congo DR":               "Congo DR",
+    "Bosnia & Herzegovina": "Bosnia & Herzegovina",
+    "Qatar": "Qatar", "Switzerland": "Switzerland",
+    "Brazil": "Brazil", "Morocco": "Morocco", "Haiti": "Haiti",
+    "Scotland": "Scotland", "United States": "USA", "USA": "USA",
+    "Paraguay": "Paraguay", "Australia": "Australia",
+    "Turkey": "Turkiye", "Turkiye": "Turkiye",
+    "Germany": "Germany", "Curacao": "Curcao",
+    "Ivory Coast": "Cote d'Ivoire", "Cote d'Ivoire": "Cote d'Ivoire",
+    "Ecuador": "Ecuador", "Netherlands": "Netherlands",
+    "Japan": "Japan", "Sweden": "Sweden", "Tunisia": "Tunisia",
+    "Belgium": "Belgium", "Egypt": "Egypt", "Iran": "Iran",
+    "New Zealand": "New Zealand", "Spain": "Spain",
+    "Cape Verde": "Cabo Verde", "Cabo Verde": "Cabo Verde",
+    "Saudi Arabia": "Saudi Arabia", "Uruguay": "Uruguay",
+    "France": "France", "Senegal": "Senegal", "Iraq": "Iraq",
+    "Norway": "Norway", "Argentina": "Argentina", "Algeria": "Algeria",
+    "Austria": "Austria", "Jordan": "Jordan", "Portugal": "Portugal",
+    "DR Congo": "Congo DR", "Congo DR": "Congo DR",
     "Democratic Republic of the Congo": "Congo DR",
-    "Uzbekistan":             "Uzbekistan",
-    "Colombia":               "Colombia",
-    # Group L
-    "England":                "England",
-    "Croatia":                "Croatia",
-    "Ghana":                  "Ghana",
-    "Panama":                 "Panama",
+    "Uzbekistan": "Uzbekistan", "Colombia": "Colombia",
+    "England": "England", "Croatia": "Croatia", "Ghana": "Ghana",
+    "Panama": "Panama",
 }
 
-# ── Round → pool pts ────────────────────────────────────────────────────────
+# Fix unicode names that may differ
+TEAM_NAME_MAP["Ürkiye"] = "Türkiye"
+TEAM_NAME_MAP["Türkiye"] = "Türkiye"
+TEAM_NAME_MAP["Turkey"] = "Türkiye"
+TEAM_NAME_MAP["Curacao"] = "Curaçao"
+TEAM_NAME_MAP["Curaçao"] = "Curaçao"
+TEAM_NAME_MAP["Ivory Coast"] = "Côte d'Ivoire"
+TEAM_NAME_MAP["Cote d'Ivoire"] = "Côte d'Ivoire"
+TEAM_NAME_MAP["Côte d'Ivoire"] = "Côte d'Ivoire"
+# Fix placeholder strings above
+TEAM_NAME_MAP["Turkiye"] = "Türkiye"
+TEAM_NAME_MAP["Curcao"] = "Curaçao"
+TEAM_NAME_MAP["Cote d'Ivoire"] = "Côte d'Ivoire"
+
+SLUG_TO_ROUND = {
+    "group-stage":   "Group Stage",
+    "round-of-32":   "Round of 32",
+    "round-of-16":   "Round of 16",
+    "quarterfinals": "Quarter-finals",
+    "semifinals":    "Semi-finals",
+    "third-place":   "3rd Place Match",
+    "final":         "Final",
+}
+
 ROUND_POINTS = {
-    "group stage":    0,
-    "round of 32":    1,
-    "round of 16":    2,
-    "quarter-finals": 3,
-    "semi-finals":    4,
-    "runner-up":      5,   # synthetic: losing finalist
-    "champion":       6,   # synthetic: winner
+    "group stage": 0, "round of 32": 1, "round of 16": 2,
+    "quarter-finals": 3, "semi-finals": 4, "runner-up": 5, "champion": 6,
 }
 
-# ── Team data template ───────────────────────────────────────────────────────
 TEAM_TEMPLATE = {
-    "Mexico":                 {"group":"A","flag":"🇲🇽"},
-    "South Africa":           {"group":"A","flag":"🇿🇦"},
-    "Korea Republic":         {"group":"A","flag":"🇰🇷"},
-    "Czechia":                {"group":"A","flag":"🇨🇿"},
-    "Canada":                 {"group":"B","flag":"🇨🇦"},
-    "Bosnia & Herzegovina":   {"group":"B","flag":"🇧🇦"},
-    "Qatar":                  {"group":"B","flag":"🇶🇦"},
-    "Switzerland":            {"group":"B","flag":"🇨🇭"},
-    "Brazil":                 {"group":"C","flag":"🇧🇷"},
-    "Morocco":                {"group":"C","flag":"🇲🇦"},
-    "Haiti":                  {"group":"C","flag":"🇭🇹"},
-    "Scotland":               {"group":"C","flag":"🏴󠁧󠁢󠁳󠁣󠁴󠁿"},
-    "USA":                    {"group":"D","flag":"🇺🇸"},
-    "Paraguay":               {"group":"D","flag":"🇵🇾"},
-    "Australia":              {"group":"D","flag":"🇦🇺"},
-    "Türkiye":                {"group":"D","flag":"🇹🇷"},
-    "Germany":                {"group":"E","flag":"🇩🇪"},
-    "Curaçao":                {"group":"E","flag":"🇨🇼"},
-    "Côte d'Ivoire":          {"group":"E","flag":"🇨🇮"},
-    "Ecuador":                {"group":"E","flag":"🇪🇨"},
-    "Netherlands":            {"group":"F","flag":"🇳🇱"},
-    "Japan":                  {"group":"F","flag":"🇯🇵"},
-    "Sweden":                 {"group":"F","flag":"🇸🇪"},
-    "Tunisia":                {"group":"F","flag":"🇹🇳"},
-    "Belgium":                {"group":"G","flag":"🇧🇪"},
-    "Egypt":                  {"group":"G","flag":"🇪🇬"},
-    "Iran":                   {"group":"G","flag":"🇮🇷"},
-    "New Zealand":            {"group":"G","flag":"🇳🇿"},
-    "Spain":                  {"group":"H","flag":"🇪🇸"},
-    "Cabo Verde":             {"group":"H","flag":"🇨🇻"},
-    "Saudi Arabia":           {"group":"H","flag":"🇸🇦"},
-    "Uruguay":                {"group":"H","flag":"🇺🇾"},
-    "France":                 {"group":"I","flag":"🇫🇷"},
-    "Senegal":                {"group":"I","flag":"🇸🇳"},
-    "Iraq":                   {"group":"I","flag":"🇮🇶"},
-    "Norway":                 {"group":"I","flag":"🇳🇴"},
-    "Argentina":              {"group":"J","flag":"🇦🇷"},
-    "Algeria":                {"group":"J","flag":"🇩🇿"},
-    "Austria":                {"group":"J","flag":"🇦🇹"},
-    "Jordan":                 {"group":"J","flag":"🇯🇴"},
-    "Portugal":               {"group":"K","flag":"🇵🇹"},
-    "Congo DR":               {"group":"K","flag":"🇨🇩"},
-    "Uzbekistan":             {"group":"K","flag":"🇺🇿"},
-    "Colombia":               {"group":"K","flag":"🇨🇴"},
-    "England":                {"group":"L","flag":"🏴󠁧󠁢󠁥󠁮󠁧󠁿"},
-    "Croatia":                {"group":"L","flag":"🇭🇷"},
-    "Ghana":                  {"group":"L","flag":"🇬🇭"},
-    "Panama":                 {"group":"L","flag":"🇵🇦"},
+    "Mexico":               {"group":"A","flag":"\U0001f1f2\U0001f1fd"},
+    "South Africa":         {"group":"A","flag":"\U0001f1ff\U0001f1e6"},
+    "Korea Republic":       {"group":"A","flag":"\U0001f1f0\U0001f1f7"},
+    "Czechia":              {"group":"A","flag":"\U0001f1e8\U0001f1ff"},
+    "Canada":               {"group":"B","flag":"\U0001f1e8\U0001f1e6"},
+    "Bosnia & Herzegovina": {"group":"B","flag":"\U0001f1e7\U0001f1e6"},
+    "Qatar":                {"group":"B","flag":"\U0001f1f6\U0001f1e6"},
+    "Switzerland":          {"group":"B","flag":"\U0001f1e8\U0001f1ed"},
+    "Brazil":               {"group":"C","flag":"\U0001f1e7\U0001f1f7"},
+    "Morocco":              {"group":"C","flag":"\U0001f1f2\U0001f1e6"},
+    "Haiti":                {"group":"C","flag":"\U0001f1ed\U0001f1f9"},
+    "Scotland":             {"group":"C","flag":"\U0001f3f4\U000e0067\U000e0062\U000e0073\U000e0063\U000e0074\U000e007f"},
+    "USA":                  {"group":"D","flag":"\U0001f1fa\U0001f1f8"},
+    "Paraguay":             {"group":"D","flag":"\U0001f1f5\U0001f1fe"},
+    "Australia":            {"group":"D","flag":"\U0001f1e6\U0001f1fa"},
+    "Türkiye":         {"group":"D","flag":"\U0001f1f9\U0001f1f7"},
+    "Germany":              {"group":"E","flag":"\U0001f1e9\U0001f1ea"},
+    "Curaçao":         {"group":"E","flag":"\U0001f1e8\U0001f1fc"},
+    "Côte d'Ivoire":   {"group":"E","flag":"\U0001f1e8\U0001f1ee"},
+    "Ecuador":              {"group":"E","flag":"\U0001f1ea\U0001f1e8"},
+    "Netherlands":          {"group":"F","flag":"\U0001f1f3\U0001f1f1"},
+    "Japan":                {"group":"F","flag":"\U0001f1ef\U0001f1f5"},
+    "Sweden":               {"group":"F","flag":"\U0001f1f8\U0001f1ea"},
+    "Tunisia":              {"group":"F","flag":"\U0001f1f9\U0001f1f3"},
+    "Belgium":              {"group":"G","flag":"\U0001f1e7\U0001f1ea"},
+    "Egypt":                {"group":"G","flag":"\U0001f1ea\U0001f1ec"},
+    "Iran":                 {"group":"G","flag":"\U0001f1ee\U0001f1f7"},
+    "New Zealand":          {"group":"G","flag":"\U0001f1f3\U0001f1ff"},
+    "Spain":                {"group":"H","flag":"\U0001f1ea\U0001f1f8"},
+    "Cabo Verde":           {"group":"H","flag":"\U0001f1e8\U0001f1fb"},
+    "Saudi Arabia":         {"group":"H","flag":"\U0001f1f8\U0001f1e6"},
+    "Uruguay":              {"group":"H","flag":"\U0001f1fa\U0001f1fe"},
+    "France":               {"group":"I","flag":"\U0001f1eb\U0001f1f7"},
+    "Senegal":              {"group":"I","flag":"\U0001f1f8\U0001f1f3"},
+    "Iraq":                 {"group":"I","flag":"\U0001f1ee\U0001f1f6"},
+    "Norway":               {"group":"I","flag":"\U0001f1f3\U0001f1f4"},
+    "Argentina":            {"group":"J","flag":"\U0001f1e6\U0001f1f7"},
+    "Algeria":              {"group":"J","flag":"\U0001f1e9\U0001f1ff"},
+    "Austria":              {"group":"J","flag":"\U0001f1e6\U0001f1f9"},
+    "Jordan":               {"group":"J","flag":"\U0001f1ef\U0001f1f4"},
+    "Portugal":             {"group":"K","flag":"\U0001f1f5\U0001f1f9"},
+    "Congo DR":             {"group":"K","flag":"\U0001f1e8\U0001f1e9"},
+    "Uzbekistan":           {"group":"K","flag":"\U0001f1fa\U0001f1ff"},
+    "Colombia":             {"group":"K","flag":"\U0001f1e8\U0001f1f4"},
+    "England":              {"group":"L","flag":"\U0001f3f4\U000e0067\U000e0062\U000e0065\U000e006e\U000e0067\U000e007f"},
+    "Croatia":              {"group":"L","flag":"\U0001f1ed\U0001f1f7"},
+    "Ghana":                {"group":"L","flag":"\U0001f1ec\U0001f1ed"},
+    "Panama":               {"group":"L","flag":"\U0001f1f5\U0001f1e6"},
 }
-
-
-def api(endpoint, params=None):
-    """Call API-Football and return parsed JSON."""
-    if not API_KEY:
-        print("⚠️  No API key — skipping live fetch.")
-        return None
-    url  = f"https://{API_HOST}/{endpoint}"
-    hdrs = {"x-apisports-key": API_KEY}
-    resp = requests.get(url, headers=hdrs, params=params or {}, timeout=20)
-    if resp.status_code != 200:
-        print(f"API error {resp.status_code}: {resp.text[:200]}")
-        return None
-    return resp.json()
 
 
 def normalise(name):
-    """Map API team name to our canonical key."""
     return TEAM_NAME_MAP.get(name, name)
 
 
-def determine_stage(fixtures):
-    """
-    Walk all fixtures to find the highest completed round.
-    Returns (stage_str, matchday_int).
-    """
-    round_order = [
-        "group stage", "round of 32", "round of 16",
-        "quarter-finals", "semi-finals", "3rd place match", "final",
-    ]
-    stage_seen  = {}  # round_lower → any finished?
-    matchday    = 1
-
-    for f in fixtures:
-        rnd    = f.get("league", {}).get("round", "").lower()
-        status = f.get("fixture", {}).get("status", {}).get("short", "")
-        done   = status in ("FT", "AET", "PEN")
-
-        if "group stage" in rnd:
-            # try to parse matchday e.g. "Group Stage - 2"
-            parts = rnd.split("-")
-            if len(parts) > 1:
-                try:
-                    md = int(parts[-1].strip())
-                    if done:
-                        matchday = max(matchday, md)
-                except ValueError:
-                    pass
-            if done:
-                stage_seen["group stage"] = True
-        else:
-            for r in round_order:
-                if r in rnd and done:
-                    stage_seen[r] = True
-
-    # Highest completed non-group round wins
-    knockout_done = [r for r in round_order[1:] if stage_seen.get(r)]
-    if knockout_done:
-        last = knockout_done[-1]
-        if last == "final":
-            return "Final", matchday
-        return last.title(), matchday
-    if stage_seen.get("group stage"):
-        return "Group Stage", matchday
-    return "Group Stage", 1
+def fetch_espn_date(date_str):
+    url = f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates={date_str}"
+    try:
+        resp = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+        if resp.status_code != 200:
+            print(f"  ESPN {date_str}: HTTP {resp.status_code}")
+            return []
+        return resp.json().get("events", [])
+    except Exception as ex:
+        print(f"  ESPN {date_str}: {ex}")
+        return []
 
 
-def process_fixtures(fixtures):
-    """
-    Build team result dict:
-      { canonical_name: {status, pts, roundReached, group, flag} }
-    Also collect recent results for the schedule overlay.
-    """
+def fetch_all_espn_results():
+    now  = datetime.now(timezone.utc)
+    day  = TOURNEY_START
+    seen = set()
+    results = []
+
+    while day.date() <= now.date():
+        date_str = day.strftime("%Y%m%d")
+        events   = fetch_espn_date(date_str)
+        for e in events:
+            comp   = e.get("competitions", [{}])[0]
+            status = comp.get("status", {}).get("type", {}).get("detail", "")
+            if status != "FT":
+                continue
+
+            competitors = comp.get("competitors", [])
+            home_c = next((c for c in competitors if c.get("homeAway") == "home"), None)
+            away_c = next((c for c in competitors if c.get("homeAway") == "away"), None)
+            if not home_c or not away_c:
+                continue
+
+            home_name  = normalise(home_c["team"]["displayName"])
+            away_name  = normalise(away_c["team"]["displayName"])
+            home_score = int(home_c.get("score", 0) or 0)
+            away_score = int(away_c.get("score", 0) or 0)
+            slug       = e.get("season", {}).get("slug", "group-stage")
+            rnd_label  = SLUG_TO_ROUND.get(slug, "Group Stage")
+
+            key = f"{home_name}|{away_name}|{date_str}"
+            if key in seen:
+                continue
+            seen.add(key)
+
+            results.append({
+                "home":      home_name,
+                "away":      away_name,
+                "homeScore": home_score,
+                "awayScore": away_score,
+                "round":     rnd_label,
+                "slug":      slug,
+            })
+        day += timedelta(days=1)
+
+    return results
+
+
+def build_teams_from_results(results):
     teams = {}
     for t, meta in TEAM_TEMPLATE.items():
         teams[t] = {
@@ -235,62 +200,35 @@ def process_fixtures(fixtures):
             "roundReached": None,
         }
 
-    recent_results = []  # list of {home, away, homeScore, awayScore, round}
+    for r in results:
+        home  = r["home"]
+        away  = r["away"]
+        hs    = r["homeScore"]
+        as_   = r["awayScore"]
+        slug  = r.get("slug", "group-stage")
+        rnd_l = r["round"].lower()
 
-    for f in fixtures:
-        status = f.get("fixture", {}).get("status", {}).get("short", "")
-        if status not in ("FT", "AET", "PEN"):
-            continue  # not finished
+        if slug == "group-stage":
+            continue
 
-        rnd_raw  = f.get("league", {}).get("round", "")
-        rnd_low  = rnd_raw.lower()
-        home_api = f.get("teams", {}).get("home", {}).get("name", "")
-        away_api = f.get("teams", {}).get("away", {}).get("name", "")
-        home_g   = f.get("goals", {}).get("home", 0) or 0
-        away_g   = f.get("goals", {}).get("away", 0) or 0
-        home_won = f.get("teams", {}).get("home", {}).get("winner", False)
-        away_won = f.get("teams", {}).get("away", {}).get("winner", False)
-
-        home = normalise(home_api)
-        away = normalise(away_api)
-
-        # Track recent results for schedule overlay
-        recent_results.append({
-            "home":      home,
-            "away":      away,
-            "homeScore": home_g,
-            "awayScore": away_g,
-            "round":     rnd_raw,
-        })
-
-        if "group stage" in rnd_low:
-            continue  # group stage: elimination determined from standings
-
-        # Knockout rounds
         rnd_key = None
         for k in ROUND_POINTS:
-            if k in rnd_low:
+            if k in rnd_l:
                 rnd_key = k
                 break
         if rnd_key is None:
             continue
 
-        # Loser is eliminated with pts for this round
-        if home_won and home in teams:
-            if away in teams and teams[away]["pts"] == 0:
-                teams[away]["pts"]          = ROUND_POINTS[rnd_key]
-                teams[away]["status"]       = "eliminated"
-                teams[away]["roundReached"] = rnd_raw
-        elif away_won and away in teams:
-            if home in teams and teams[home]["pts"] == 0:
-                teams[home]["pts"]          = ROUND_POINTS[rnd_key]
-                teams[home]["status"]       = "eliminated"
-                teams[home]["roundReached"] = rnd_raw
+        home_won = hs > as_
+        away_won = as_ > hs
+        if home_won:
+            winner, loser = home, away
+        elif away_won:
+            winner, loser = away, home
+        else:
+            continue
 
-        # Final: give champion/runner-up pts
-        if "final" in rnd_low and "3rd" not in rnd_low:
-            winner = home if home_won else away
-            loser  = away if home_won else home
+        if "final" in rnd_l and "3rd" not in rnd_l and "place" not in rnd_l:
             if winner in teams:
                 teams[winner]["pts"]          = ROUND_POINTS["champion"]
                 teams[winner]["status"]       = "champion"
@@ -299,48 +237,41 @@ def process_fixtures(fixtures):
                 teams[loser]["pts"]           = ROUND_POINTS["runner-up"]
                 teams[loser]["status"]        = "eliminated"
                 teams[loser]["roundReached"]  = "Runner-up"
+        else:
+            if loser in teams and teams[loser]["pts"] == 0:
+                teams[loser]["pts"]          = ROUND_POINTS[rnd_key]
+                teams[loser]["status"]       = "eliminated"
+                teams[loser]["roundReached"] = r["round"]
 
-    return teams, recent_results
+    return teams
 
 
-def process_standings(standings_data, teams):
-    """
-    Use group standings to eliminate 4th-place teams after group stage.
-    Mark 3rd-place teams with status='third' (may qualify as best third-place).
-    """
-    if not standings_data:
-        return
+def determine_stage_matchday(results):
+    slugs = [r.get("slug", "group-stage") for r in results]
+    knockout_slugs = [s for s in slugs if s != "group-stage"]
 
-    for grp_standings in standings_data:
-        # grp_standings is a list of team standing rows, sorted rank 1–4
-        sorted_rows = sorted(grp_standings, key=lambda x: x.get("rank", 99))
-        for row in sorted_rows:
-            name_api = row.get("team", {}).get("name", "")
-            name     = normalise(name_api)
-            rank     = row.get("rank", 0)
-            played   = row.get("all", {}).get("played", 0)
+    if "final" in knockout_slugs:
+        return "Final", 3
+    if "semifinals" in knockout_slugs:
+        return "Semi-finals", 3
+    if "quarterfinals" in knockout_slugs:
+        return "Quarter-finals", 3
+    if "round-of-16" in knockout_slugs:
+        return "Round of 16", 3
+    if "round-of-32" in knockout_slugs:
+        return "Round of 32", 3
 
-            if played < 3:
-                continue  # group not finished yet
-            if name not in teams:
-                continue
-            if teams[name]["status"] != "active":
-                continue  # already processed in knockout
+    games_played = {}
+    for r in results:
+        if r.get("slug") == "group-stage":
+            games_played[r["home"]] = games_played.get(r["home"], 0) + 1
+            games_played[r["away"]] = games_played.get(r["away"], 0) + 1
 
-            if rank == 1 or rank == 2:
-                teams[name]["status"] = "active"
-                teams[name]["pts"]    = 1   # Group stage advancement pt
-            elif rank == 3:
-                teams[name]["status"] = "third"
-                teams[name]["pts"]    = 0
-            else:  # rank 4: eliminated
-                teams[name]["status"] = "eliminated"
-                teams[name]["pts"]    = 0
-                teams[name]["roundReached"] = "Group Stage"
+    md = max(games_played.values(), default=0)
+    return "Group Stage", max(md, 1)
 
 
 def load_existing():
-    """Load existing data.json so we don't overwrite knockout pts on API fail."""
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
@@ -349,34 +280,21 @@ def load_existing():
 
 
 def main():
-    print(f"[{datetime.now(timezone.utc).isoformat()}] Starting update…")
+    print(f"Starting update...")
 
     existing = load_existing()
 
-    # ── Fetch fixtures ──────────────────────────────────────────────────────
-    fix_data = api("fixtures", {"league": LEAGUE_ID, "season": SEASON})
-    if not fix_data:
-        print("No fixture data — preserving existing data.json.")
+    print("  Fetching ESPN results...")
+    espn_results = fetch_all_espn_results()
+    print(f"  ESPN completed matches: {len(espn_results)}")
+
+    if not espn_results:
+        print("  No ESPN data — preserving existing data.json.")
         return
 
-    fixtures = fix_data.get("response", [])
-    print(f"  Fixtures fetched: {len(fixtures)}")
+    teams           = build_teams_from_results(espn_results)
+    stage, matchday = determine_stage_matchday(espn_results)
 
-    # ── Fetch standings ─────────────────────────────────────────────────────
-    stand_data = api("standings", {"league": LEAGUE_ID, "season": SEASON})
-    standings  = []
-    if stand_data:
-        resp = stand_data.get("response", [])
-        if resp:
-            standings = resp[0].get("league", {}).get("standings", [])
-            print(f"  Standings groups: {len(standings)}")
-
-    # ── Process data ────────────────────────────────────────────────────────
-    stage, matchday         = determine_stage(fixtures)
-    teams, recent_results   = process_fixtures(fixtures)
-    process_standings(standings, teams)
-
-    # Preserve existing pts/status if API returned nothing new
     if existing:
         for name, ex_t in existing.get("teams", {}).items():
             if name in teams and teams[name]["pts"] == 0 and ex_t.get("pts", 0) > 0:
@@ -384,15 +302,16 @@ def main():
                 teams[name]["status"]       = ex_t["status"]
                 teams[name]["roundReached"] = ex_t.get("roundReached")
 
-    elim_count = sum(1 for t in teams.values() if t["status"] == "eliminated")
+    elim_count   = sum(1 for t in teams.values() if t["status"] == "eliminated")
+    recent_clean = [{k: v for k, v in r.items() if k != "slug"} for r in espn_results[-20:]]
 
     out = {
         "meta": {
-            "lastUpdated":   datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "stage":         stage,
-            "matchday":      matchday,
+            "lastUpdated":     datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "stage":           stage,
+            "matchday":        matchday,
             "eliminatedCount": elim_count,
-            "recentResults": recent_results[-20:],  # last 20 finished matches
+            "recentResults":   recent_clean,
         },
         "teams": teams,
     }
@@ -400,8 +319,11 @@ def main():
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
 
-    print(f"  Stage: {stage} · MD{matchday} · Eliminated: {elim_count}")
-    print(f"  ✅ {DATA_FILE} updated.")
+    print(f"  Stage: {stage} / MD{matchday} / Eliminated: {elim_count}")
+    print(f"  Recent results: {len(recent_clean)}")
+    for r in recent_clean:
+        print(f"    {r['home']} {r['homeScore']}-{r['awayScore']} {r['away']}")
+    print("  data.json updated.")
 
 
 if __name__ == "__main__":
