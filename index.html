@@ -1094,7 +1094,7 @@ async function fetchLiveScores() {
   } catch { /* ESPN unavailable — silent fail */ }
 }
 
-/* ── INIT ───────────────────────────────────────────── */
+/* ── INIT ───────────────────────────────────────────────────── */
 loadData();
 setInterval(loadData, 600000); // refresh every 10 min
 fetchLiveScores();              // check ESPN immediately
