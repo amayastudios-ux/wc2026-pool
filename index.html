@@ -963,7 +963,7 @@ function renderBracket() {
 
 /* ── ELIMINATED ─────────────────────────────────────── */
 function renderElim() {
-  co  const out=Object.entries(TD).filter(([,tm])=>tm.status==='eliminated').sort(([a],[b])=>a.localeCompare(b));
+  const out=Object.entries(TD).filter(([,tm])=>tm.status==='eliminated').sort(([a],[b])=>a.localeCompare(b));
   const body=document.getElementById('elim-body');
   const sub=document.getElementById('elim-sub');
   document.getElementById('elim-ct').textContent=`(${out.length})`;
@@ -1064,9 +1064,6 @@ loadData();
 setInterval(loadData, 600000); // refresh every 10 min
 fetchLiveScores();              // check ESPN immediately
 setInterval(fetchLiveScores, 300000); // re-check every 5 min
-</script>
-</body>
-</html>
 </script>
 </body>
 </html>
