@@ -171,6 +171,11 @@
     /* ── Scoring legend ── */
     .legend { font-size: .68rem; color: var(--faint); text-align: center; margin-top: .4rem; }
 
+    /* ── Language toggle ── */
+    .lang-tog { display:flex; gap:2px; background:var(--surface); border-radius:14px; padding:2px; border:.5px solid var(--border); }
+    .ltbtn { padding:.25rem .6rem; border:none; background:transparent; color:var(--muted); border-radius:12px; cursor:pointer; font-size:.72rem; font-weight:800; font-family:inherit; letter-spacing:.04em; transition:background .1s,color .1s; }
+    .ltbtn.on { background:var(--blue); color:#fff; }
+
     /* ── Live score ── */
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
     .live-dot { display:inline-block; width:7px; height:7px; background:#F87171; border-radius:50%; margin-left:5px; vertical-align:middle; animation:pulse 1.2s ease-in-out infinite; }
@@ -239,33 +244,39 @@
     />
     <div class="hdr-text">
       <h1>World Cup 2026™</h1>
-      <p>Pool tracker &nbsp;·&nbsp; 24 participants &nbsp;·&nbsp; Jun 11 – Jul 19, 2026</p>
+      <p id="hdr-sub">Pool tracker &nbsp;·&nbsp; 24 participants &nbsp;·&nbsp; Jun 11 – Jul 19, 2026</p>
     </div>
-    <div class="hdr-badge" id="stage-badge">Group Stage · MD1</div>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+      <div class="hdr-badge" id="stage-badge">Group Stage · MD1</div>
+      <div class="lang-tog">
+        <button class="ltbtn on" id="btn-en" onclick="setLang('en')">EN</button>
+        <button class="ltbtn" id="btn-es" onclick="setLang('es')">ES</button>
+      </div>
+    </div>
   </header>
 
   <!-- ── Stats ── -->
   <div class="stats">
-    <div class="stat"><div class="stat-val">24</div><div class="stat-lbl">Participants</div></div>
-    <div class="stat"><div class="stat-val" id="s-active" style="color:var(--green)">48</div><div class="stat-lbl">Active Nations</div></div>
-    <div class="stat"><div class="stat-val" id="s-elim"   style="color:var(--red)">0</div><div class="stat-lbl">Eliminated</div></div>
-    <div class="stat"><div class="stat-val" id="s-stage">GS</div><div class="stat-lbl">Current Round</div></div>
+    <div class="stat"><div class="stat-val">24</div><div class="stat-lbl" id="sl-part">Participants</div></div>
+    <div class="stat"><div class="stat-val" id="s-active" style="color:var(--green)">48</div><div class="stat-lbl" id="sl-active">Active Nations</div></div>
+    <div class="stat"><div class="stat-val" id="s-elim"   style="color:var(--red)">0</div><div class="stat-lbl" id="sl-elim">Eliminated</div></div>
+    <div class="stat"><div class="stat-val" id="s-stage">GS</div><div class="stat-lbl" id="sl-round">Current Round</div></div>
   </div>
 
   <!-- ── Tabs ── -->
   <div class="tabs">
-    <button class="tbtn on"  onclick="sw('pool',this)">Pool</button>
-    <button class="tbtn"     onclick="sw('groups',this)">Groups A–L</button>
-    <button class="tbtn"     onclick="sw('sched',this)">Schedule</button>
-    <button class="tbtn"     onclick="sw('bracket',this)">Bracket</button>
-    <button class="tbtn"     onclick="sw('elim',this)">Eliminated <span id="elim-ct">(0)</span></button>
+    <button class="tbtn on" id="tab-pool"    onclick="sw('pool',this)">Pool</button>
+    <button class="tbtn"    id="tab-groups"  onclick="sw('groups',this)">Groups A–L</button>
+    <button class="tbtn"    id="tab-sched"   onclick="sw('sched',this)">Schedule</button>
+    <button class="tbtn"    id="tab-bracket" onclick="sw('bracket',this)">Bracket</button>
+    <button class="tbtn"    id="tab-elim"    onclick="sw('elim',this)">Eliminated <span id="elim-ct">(0)</span></button>
   </div>
 
   <!-- ══ POOL ══ -->
   <div id="t-pool">
     <div class="card">
       <div class="card-hdr">
-        <span class="card-ttl">Pool Standings</span>
+        <span class="card-ttl" id="pool-ttl">Pool Standings</span>
         <span class="card-sub" id="updated-lbl"><i class="ti ti-clock"></i> Auto-updates daily</span>
       </div>
       <!-- Desktop table -->
@@ -273,11 +284,11 @@
         <table>
           <thead><tr>
             <th style="width:36px">#</th>
-            <th>Participant</th>
-            <th>Country 1</th>
-            <th>Country 2</th>
-            <th class="th-c" style="width:52px">Pts</th>
-            <th class="th-c" style="width:100px">Status</th>
+            <th id="th-p">Participant</th>
+            <th id="th-c1">Country 1</th>
+            <th id="th-c2">Country 2</th>
+            <th class="th-c" style="width:52px"  id="th-pts">Pts</th>
+            <th class="th-c" style="width:100px" id="th-st">Status</th>
           </tr></thead>
           <tbody id="pool-body"></tbody>
         </table>
@@ -285,7 +296,7 @@
       <!-- Mobile cards -->
       <div class="pool-cards" id="pool-cards" style="padding:.5rem .5rem .25rem"></div>
     </div>
-    <p class="legend">Scoring: Champion=6 &nbsp;·&nbsp; Runner-up=5 &nbsp;·&nbsp; SF=4 &nbsp;·&nbsp; QF=3 &nbsp;·&nbsp; R16=2 &nbsp;·&nbsp; R32=1 &nbsp;·&nbsp; Group exit=0</p>
+    <p class="legend" id="pool-legend">Scoring: Champion=6 &nbsp;·&nbsp; Runner-up=5 &nbsp;·&nbsp; SF=4 &nbsp;·&nbsp; QF=3 &nbsp;·&nbsp; R16=2 &nbsp;·&nbsp; R32=1 &nbsp;·&nbsp; Group exit=0</p>
   </div>
 
   <!-- ══ GROUPS ══ -->
@@ -296,22 +307,22 @@
   <!-- ══ SCHEDULE ══ -->
   <div id="t-sched" style="display:none">
     <div class="card">
-      <div class="card-hdr"><span class="card-ttl">Matchday 1 of 3 — Group Stage</span><span class="card-sub">All times Eastern</span></div>
+      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Matchday 1 of 3 — Group Stage</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
       <div id="sched-body"></div>
     </div>
     <div class="infobox">
       <i class="ti ti-refresh"></i>
-      <p>Matchday 2 (~Jun 15–22) and Matchday 3 (~Jun 23–27) scores appear automatically each morning once results are in.</p>
+      <p id="sched-info">Matchday 2 (~Jun 15–22) and Matchday 3 (~Jun 23–27) scores appear automatically each morning once results are in.</p>
     </div>
   </div>
 
   <!-- ══ BRACKET ══ -->
   <div id="t-bracket" style="display:none">
     <div class="card">
-      <div class="card-hdr"><span class="card-ttl">Tournament Bracket</span><span class="card-sub">32 teams advance from 12 groups</span></div>
+      <div class="card-hdr"><span class="card-ttl" id="bracket-ttl">Tournament Bracket</span><span class="card-sub" id="bracket-sub">32 teams advance from 12 groups</span></div>
       <div style="padding:1rem">
         <div class="bwrap"><div class="bracket" id="bracket-body"></div></div>
-        <p class="legend" style="margin-top:.75rem">Bracket fills after group stage ends (~Jun 27) &nbsp;·&nbsp; Bronze Final: Jul 18 &nbsp;·&nbsp; Final: Jul 19, MetLife Stadium NJ</p>
+        <p class="legend" id="bracket-leg" style="margin-top:.75rem">Bracket fills after group stage ends (~Jun 27) &nbsp;·&nbsp; Bronze Final: Jul 18 &nbsp;·&nbsp; Final: Jul 19, MetLife Stadium NJ</p>
       </div>
     </div>
   </div>
@@ -320,7 +331,7 @@
   <div id="t-elim" style="display:none">
     <div class="card">
       <div class="card-hdr">
-        <span class="card-ttl">Eliminated Nations</span>
+        <span class="card-ttl" id="elim-ttl">Eliminated Nations</span>
         <span class="card-sub" id="elim-sub">None yet — tournament in progress</span>
       </div>
       <div class="echips" id="elim-body">
@@ -330,13 +341,13 @@
   </div>
 
   <footer class="footer">
-    <p>FIFA World Cup 2026™ Pool Tracker &nbsp;·&nbsp; Data via <a href="https://api-football.com" target="_blank" rel="noopener">API-Football</a> &nbsp;·&nbsp; Updated daily at 7 AM ET</p>
-    <p style="margin-top:.25rem">Private pool — not affiliated with FIFA</p>
+    <p id="footer1">FIFA World Cup 2026™ Pool Tracker &nbsp;·&nbsp; Data via <a href="https://api-football.com" target="_blank" rel="noopener">API-Football</a> &nbsp;·&nbsp; Updated daily at 4 AM PT</p>
+    <p id="footer2" style="margin-top:.25rem">Private pool — not affiliated with FIFA</p>
   </footer>
 </div>
 
 <script>
-/* ── CONSTANTS ─────────────────────────────────────── */
+/* ══ CONSTANTS ════════════════════════════════════════ */
 const PARTICIPANTS = [
   {name:'Roberto',    c1:'Argentina',           c2:'Austria'},
   {name:'Rosa',       c1:'Congo DR',            c2:'Morocco'},
@@ -398,43 +409,43 @@ const GROUP_MAP = {};
 GROUPS.forEach(g => g.teams.forEach(t => GROUP_MAP[t] = g.id));
 
 const SCHEDULE_MD1 = [
-  {date:'Thu · Jun 11',ms:[
-    {t1:'Mexico',          t2:'South Africa',        g:'A',time:'3:00 PM'},
-    {t1:'Korea Republic',  t2:'Czechia',             g:'A',time:'10:00 PM'},
+  {date:'Thu · Jun 11', date_es:'Jue · Jun 11', ms:[
+    {t1:'Mexico',          t2:'South Africa',        g:'A', time:'12:00 PM'},
+    {t1:'Korea Republic',  t2:'Czechia',             g:'A', time:'7:00 PM'},
   ]},
-  {date:'Fri · Jun 12',ms:[
-    {t1:'Canada',          t2:'Bosnia & Herzegovina',g:'B',time:'3:00 PM'},
-    {t1:'USA',             t2:'Paraguay',            g:'D',time:'9:00 PM'},
+  {date:'Fri · Jun 12', date_es:'Vie · Jun 12', ms:[
+    {t1:'Canada',          t2:'Bosnia & Herzegovina',g:'B', time:'12:00 PM'},
+    {t1:'USA',             t2:'Paraguay',            g:'D', time:'6:00 PM'},
   ]},
-  {date:'Sat · Jun 13',ms:[
-    {t1:'Qatar',           t2:'Switzerland',         g:'B',time:'3:00 PM'},
-    {t1:'Brazil',          t2:'Morocco',             g:'C',time:'6:00 PM'},
-    {t1:'Haiti',           t2:'Scotland',            g:'C',time:'9:00 PM'},
+  {date:'Sat · Jun 13', date_es:'Sáb · Jun 13', ms:[
+    {t1:'Qatar',           t2:'Switzerland',         g:'B', time:'12:00 PM'},
+    {t1:'Brazil',          t2:'Morocco',             g:'C', time:'3:00 PM'},
+    {t1:'Haiti',           t2:'Scotland',            g:'C', time:'6:00 PM'},
+    {t1:'Australia',       t2:'Türkiye',             g:'D', time:'9:00 PM'},
   ]},
-  {date:'Sun · Jun 14',ms:[
-    {t1:'Australia',       t2:'Türkiye',             g:'D',time:'12:00 AM'},
-    {t1:'Germany',         t2:'Curaçao',             g:'E',time:'1:00 PM'},
-    {t1:'Netherlands',     t2:'Japan',               g:'F',time:'4:00 PM'},
-    {t1:"Côte d'Ivoire",   t2:'Ecuador',             g:'E',time:'7:00 PM'},
-    {t1:'Sweden',          t2:'Tunisia',             g:'F',time:'10:00 PM'},
+  {date:'Sun · Jun 14', date_es:'Dom · Jun 14', ms:[
+    {t1:'Germany',         t2:'Curaçao',             g:'E', time:'10:00 AM'},
+    {t1:'Netherlands',     t2:'Japan',               g:'F', time:'1:00 PM'},
+    {t1:"Côte d'Ivoire",   t2:'Ecuador',             g:'E', time:'4:00 PM'},
+    {t1:'Sweden',          t2:'Tunisia',             g:'F', time:'7:00 PM'},
   ]},
-  {date:'Mon · Jun 15',ms:[
-    {t1:'Spain',           t2:'Cabo Verde',          g:'H',time:'12:00 PM'},
-    {t1:'Belgium',         t2:'Egypt',               g:'G',time:'3:00 PM'},
-    {t1:'Saudi Arabia',    t2:'Uruguay',             g:'H',time:'6:00 PM'},
-    {t1:'Iran',            t2:'New Zealand',         g:'G',time:'9:00 PM'},
+  {date:'Mon · Jun 15', date_es:'Lun · Jun 15', ms:[
+    {t1:'Spain',           t2:'Cabo Verde',          g:'H', time:'9:00 AM'},
+    {t1:'Belgium',         t2:'Egypt',               g:'G', time:'12:00 PM'},
+    {t1:'Saudi Arabia',    t2:'Uruguay',             g:'H', time:'3:00 PM'},
+    {t1:'Iran',            t2:'New Zealand',         g:'G', time:'6:00 PM'},
   ]},
-  {date:'Tue · Jun 16',ms:[
-    {t1:'France',          t2:'Senegal',             g:'I',time:'3:00 PM'},
-    {t1:'Iraq',            t2:'Norway',              g:'I',time:'6:00 PM'},
-    {t1:'Argentina',       t2:'Algeria',             g:'J',time:'9:00 PM'},
+  {date:'Tue · Jun 16', date_es:'Mar · Jun 16', ms:[
+    {t1:'France',          t2:'Senegal',             g:'I', time:'12:00 PM'},
+    {t1:'Iraq',            t2:'Norway',              g:'I', time:'3:00 PM'},
+    {t1:'Argentina',       t2:'Algeria',             g:'J', time:'6:00 PM'},
+    {t1:'Austria',         t2:'Jordan',              g:'J', time:'9:00 PM'},
   ]},
-  {date:'Wed · Jun 17',ms:[
-    {t1:'Austria',         t2:'Jordan',              g:'J',time:'12:00 AM'},
-    {t1:'Portugal',        t2:'Congo DR',            g:'K',time:'1:00 PM'},
-    {t1:'England',         t2:'Croatia',             g:'L',time:'4:00 PM'},
-    {t1:'Ghana',           t2:'Panama',              g:'L',time:'7:00 PM'},
-    {t1:'Uzbekistan',      t2:'Colombia',            g:'K',time:'10:00 PM'},
+  {date:'Wed · Jun 17', date_es:'Mié · Jun 17', ms:[
+    {t1:'Portugal',        t2:'Congo DR',            g:'K', time:'10:00 AM'},
+    {t1:'England',         t2:'Croatia',             g:'L', time:'1:00 PM'},
+    {t1:'Ghana',           t2:'Panama',              g:'L', time:'4:00 PM'},
+    {t1:'Uzbekistan',      t2:'Colombia',            g:'K', time:'7:00 PM'},
   ]},
 ];
 
@@ -455,7 +466,176 @@ const STAGE_SHORT = {
   'Quarter-finals':'QF','Semi-finals':'SF','Final':'F',
 };
 
-/* ── STATE ─────────────────────────────────────────── */
+/* ══ i18n ═════════════════════════════════════════════ */
+let lang = 'en';
+let currentStage = 'Group Stage';
+let currentMD    = null;
+let lastUpdDate  = null;
+
+const T = {
+  en: {
+    hdrSub:          'Pool tracker · 24 participants · Jun 11 – Jul 19, 2026',
+    participants:    'Participants',
+    activeNations:   'Active Nations',
+    eliminated:      'Eliminated',
+    currentRound:    'Current Round',
+    pool:            'Pool',
+    groups:          'Groups A–L',
+    schedule:        'Schedule',
+    bracket:         'Bracket',
+    eliminatedTab:   'Eliminated',
+    poolStandings:   'Pool Standings',
+    autoUpdates:     'Auto-updates daily',
+    updatedAt:       (d,tm) => `Updated ${d} ${tm}`,
+    participant:     'Participant',
+    country1:        'Country 1',
+    country2:        'Country 2',
+    pts:             'Pts',
+    status:          'Status',
+    bothActive:      'Both active',
+    oneActive:       '1 active',
+    bothOut:         'Both out',
+    out:             'Out',
+    grp:             'Grp',
+    group:           'Group',
+    vs:              'vs',
+    pt:              'PT',
+    ft:              'FT',
+    tbd:             'TBD',
+    more12:          '+12 more',
+    md1:             'Matchday 1 of 3 — Group Stage',
+    allTimes:        'All times Pacific',
+    infoMsg:         'Matchday 2 (~Jun 15–22) and Matchday 3 (~Jun 23–27) scores appear automatically each morning once results are in.',
+    tournamentBracket:'Tournament Bracket',
+    bracketSub:      '32 teams advance from 12 groups',
+    bracketLegend:   'Bracket fills after group stage ends (~Jun 27) · Bronze Final: Jul 18 · Final: Jul 19, MetLife Stadium NJ',
+    eliminatedNations:'Eliminated Nations',
+    noneYet:         'None yet — tournament in progress',
+    noElim:          'No teams eliminated yet. Check back after Matchday 3 (~Jun 27).',
+    nations:         n => `${n} nation${n!==1?'s':''} eliminated`,
+    r32:'Round of 32', r16:'Round of 16', qf:'Quarter-finals', sf:'Semi-finals', fin:'Final',
+    r32sub:'16 matches', r16sub:'8 matches', qfsub:'4 matches', sfsub:'2 matches',
+    scoring:         'Scoring: Champion=6 · Runner-up=5 · SF=4 · QF=3 · R16=2 · R32=1 · Group exit=0',
+    footer1:         'FIFA World Cup 2026™ Pool Tracker &nbsp;·&nbsp; Data via <a href="https://api-football.com" target="_blank" rel="noopener">API-Football</a> &nbsp;·&nbsp; Updated daily at 4 AM PT',
+    footer2:         'Private pool — not affiliated with FIFA',
+    md:              'MD',
+    stageName:       s => s,
+  },
+  es: {
+    hdrSub:          'Seguidor del Pool · 24 participantes · 11 Jun – 19 Jul, 2026',
+    participants:    'Participantes',
+    activeNations:   'Naciones Activas',
+    eliminated:      'Eliminadas',
+    currentRound:    'Ronda Actual',
+    pool:            'Tabla',
+    groups:          'Grupos A–L',
+    schedule:        'Calendario',
+    bracket:         'Cuadro',
+    eliminatedTab:   'Eliminados',
+    poolStandings:   'Tabla de Posiciones',
+    autoUpdates:     'Actualización diaria automática',
+    updatedAt:       (d,tm) => `Actualizado ${d} ${tm}`,
+    participant:     'Participante',
+    country1:        'País 1',
+    country2:        'País 2',
+    pts:             'Pts',
+    status:          'Estado',
+    bothActive:      'Ambos activos',
+    oneActive:       '1 activo',
+    bothOut:         'Ambos fuera',
+    out:             'Fuera',
+    grp:             'Grp',
+    group:           'Grupo',
+    vs:              'vs',
+    pt:              'PT',
+    ft:              'FIN',
+    tbd:             'PD',
+    more12:          '+12 más',
+    md1:             'Jornada 1 de 3 — Fase de Grupos',
+    allTimes:        'Hora del Pacífico',
+    infoMsg:         'Los marcadores de la Jornada 2 (~15–22 Jun) y Jornada 3 (~23–27 Jun) aparecen automáticamente cada mañana una vez que se conocen los resultados.',
+    tournamentBracket:'Cuadro del Torneo',
+    bracketSub:      '32 equipos avanzan desde 12 grupos',
+    bracketLegend:   'El cuadro se completa al terminar la fase de grupos (~27 Jun) · Tercer lugar: 18 Jul · Final: 19 Jul, MetLife Stadium NJ',
+    eliminatedNations:'Naciones Eliminadas',
+    noneYet:         'Ninguno aún — torneo en curso',
+    noElim:          'Ningún equipo eliminado aún. Vuelve después de la Jornada 3 (~27 Jun).',
+    nations:         n => `${n} nación${n!==1?'es':''} eliminada${n!==1?'s':''}`,
+    r32:'Ronda de 32', r16:'Ronda de 16', qf:'Cuartos de Final', sf:'Semifinales', fin:'Final',
+    r32sub:'16 partidos', r16sub:'8 partidos', qfsub:'4 partidos', sfsub:'2 partidos',
+    scoring:         'Puntuación: Campeón=6 · Subcampeón=5 · SF=4 · CF=3 · R16=2 · R32=1 · Fase grupos=0',
+    footer1:         'Seguidor del Pool Mundial 2026™ &nbsp;·&nbsp; Datos via <a href="https://api-football.com" target="_blank" rel="noopener">API-Football</a> &nbsp;·&nbsp; Actualizado a las 4 AM PT',
+    footer2:         'Pool privado — no afiliado con la FIFA',
+    md:              'JD',
+    stageName:       s => ({'Group Stage':'Fase de Grupos','Round of 32':'Ronda de 32','Round of 16':'Ronda de 16','Quarter-finals':'Cuartos de Final','Semi-finals':'Semifinales','Final':'Final'}[s]||s),
+  },
+};
+
+function tr(key, ...args) {
+  const val = T[lang][key];
+  return typeof val === 'function' ? val(...args) : (val ?? key);
+}
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('btn-en').classList.toggle('on', l==='en');
+  document.getElementById('btn-es').classList.toggle('on', l==='es');
+  applyLang();
+}
+
+function updateBadge() {
+  const stageTxt = tr('stageName', currentStage);
+  const mdTxt = currentMD ? ` · ${tr('md')}${currentMD}` : '';
+  document.getElementById('stage-badge').textContent = stageTxt + mdTxt;
+}
+
+function updateUpdatedLbl() {
+  if (!lastUpdDate) {
+    document.getElementById('updated-lbl').innerHTML = `<i class="ti ti-clock"></i> ${tr('autoUpdates')}`;
+    return;
+  }
+  const d  = lastUpdDate.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  const tm = lastUpdDate.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('updated-lbl').innerHTML = `<i class="ti ti-clock"></i> ${tr('updatedAt',d,tm)}`;
+}
+
+function applyLang() {
+  document.getElementById('hdr-sub').textContent    = tr('hdrSub');
+  document.getElementById('sl-part').textContent    = tr('participants');
+  document.getElementById('sl-active').textContent  = tr('activeNations');
+  document.getElementById('sl-elim').textContent    = tr('eliminated');
+  document.getElementById('sl-round').textContent   = tr('currentRound');
+  document.getElementById('tab-pool').textContent   = tr('pool');
+  document.getElementById('tab-groups').textContent = tr('groups');
+  // Keep live dot on Schedule tab if present
+  const sd  = document.getElementById('tab-sched');
+  const dot = sd.querySelector('.live-dot');
+  sd.innerHTML = tr('schedule') + (dot ? ' <span class="live-dot"></span>' : '');
+  document.getElementById('tab-bracket').textContent = tr('bracket');
+  const ecText = document.getElementById('elim-ct').textContent;
+  document.getElementById('tab-elim').innerHTML = `${tr('eliminatedTab')} <span id="elim-ct">${ecText}</span>`;
+  document.getElementById('pool-ttl').textContent    = tr('poolStandings');
+  document.getElementById('th-p').textContent        = tr('participant');
+  document.getElementById('th-c1').textContent       = tr('country1');
+  document.getElementById('th-c2').textContent       = tr('country2');
+  document.getElementById('th-pts').textContent      = tr('pts');
+  document.getElementById('th-st').textContent       = tr('status');
+  document.getElementById('sched-ttl').textContent   = tr('md1');
+  document.getElementById('sched-tz').textContent    = tr('allTimes');
+  document.getElementById('sched-info').textContent  = tr('infoMsg');
+  document.getElementById('bracket-ttl').textContent = tr('tournamentBracket');
+  document.getElementById('bracket-sub').textContent = tr('bracketSub');
+  document.getElementById('bracket-leg').textContent = tr('bracketLegend');
+  document.getElementById('elim-ttl').textContent    = tr('eliminatedNations');
+  document.getElementById('pool-legend').textContent = tr('scoring');
+  document.getElementById('footer1').innerHTML       = tr('footer1');
+  document.getElementById('footer2').textContent     = tr('footer2');
+  updateBadge();
+  updateUpdatedLbl();
+  renderAll();
+}
+
+/* ══ STATE ════════════════════════════════════════════ */
 let TD = {}; // teamData from data.json
 
 /* ── LOAD DATA ──────────────────────────────────────── */
@@ -466,21 +646,20 @@ async function loadData() {
     const j = await r.json();
     TD = j.teams || {};
 
-    const active = Object.values(TD).filter(t=>t.status==='active').length;
-    const elim   = Object.values(TD).filter(t=>t.status==='eliminated').length;
+    const active = Object.values(TD).filter(tm=>tm.status==='active').length;
+    const elim   = Object.values(TD).filter(tm=>tm.status==='eliminated').length;
     document.getElementById('s-active').textContent = active;
     document.getElementById('s-elim').textContent   = elim;
     document.getElementById('elim-ct').textContent  = `(${elim})`;
 
-    const stage = j.meta?.stage || 'Group Stage';
-    const md    = j.meta?.matchday;
-    document.getElementById('s-stage').textContent    = STAGE_SHORT[stage] || stage;
-    document.getElementById('stage-badge').textContent= stage + (md ? ' · MD'+md : '');
+    currentStage = j.meta?.stage || 'Group Stage';
+    currentMD    = j.meta?.matchday;
+    document.getElementById('s-stage').textContent = STAGE_SHORT[currentStage] || currentStage;
+    updateBadge();
 
     if (j.meta?.lastUpdated) {
-      const d = new Date(j.meta.lastUpdated);
-      document.getElementById('updated-lbl').innerHTML =
-        `<i class="ti ti-clock"></i> Updated ${d.toLocaleDateString('en-US',{month:'short',day:'numeric'})} ${d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}`;
+      lastUpdDate = new Date(j.meta.lastUpdated);
+      updateUpdatedLbl();
     }
 
     // Patch scores into schedule from meta.recentResults
@@ -496,8 +675,8 @@ async function loadData() {
     }
   } catch {
     // Fallback: all teams active
-    Object.keys(FLAGS).forEach(t => {
-      TD[t] = {status:'active',pts:0,group:GROUP_MAP[t],flag:FLAGS[t]};
+    Object.keys(FLAGS).forEach(tn => {
+      TD[tn] = {status:'active',pts:0,group:GROUP_MAP[tn],flag:FLAGS[tn]};
     });
   }
   renderAll();
@@ -544,10 +723,10 @@ function renderPool() {
     const both=t1ok&&t2ok;
 
     const statusBadge = both
-      ? `<span class="b b-ok">Both active</span>`
+      ? `<span class="b b-ok">${tr('bothActive')}</span>`
       : (t1ok||t2ok)
-        ? `<span class="b b-1">1 active</span>`
-        : `<span class="b b-out">Both out</span>`;
+        ? `<span class="b b-1">${tr('oneActive')}</span>`
+        : `<span class="b b-out">${tr('bothOut')}</span>`;
 
     const rankCls = rank===0?'rank gold':rank===1?'rank silv':rank===2?'rank brnz':'rank';
 
@@ -557,7 +736,7 @@ function renderPool() {
         <span class="flag">${info.flag}</span>
         <span class="cname ${alive?'':'out'}">${name}</span>
         <span class="b b-grp">${info.group}</span>
-        ${!alive?`<span class="b b-out" style="font-size:.6rem">${info.roundReached||'Out'}</span>`:''}
+        ${!alive?`<span class="b b-out" style="font-size:.6rem">${info.roundReached||tr('out')}</span>`:''}
       </div>`;
     };
 
@@ -581,13 +760,13 @@ function renderPool() {
       <span style="font-size:1rem">${p.t1.flag}</span>
       <span style="${t1alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c1}</span>
       <span class="b b-grp">${p.t1.group}</span>
-      ${!t1alive?`<span class="b b-out" style="font-size:.58rem">${p.t1.roundReached||'Out'}</span>`:''}
+      ${!t1alive?`<span class="b b-out" style="font-size:.58rem">${p.t1.roundReached||tr('out')}</span>`:''}
     </div>`;
     const mc2=`<div class="pcard-country">
       <span style="font-size:1rem">${p.t2.flag}</span>
       <span style="${t2alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c2}</span>
       <span class="b b-grp">${p.t2.group}</span>
-      ${!t2alive?`<span class="b b-out" style="font-size:.58rem">${p.t2.roundReached||'Out'}</span>`:''}
+      ${!t2alive?`<span class="b b-out" style="font-size:.58rem">${p.t2.roundReached||tr('out')}</span>`:''}
     </div>`;
     cards.innerHTML+=`<div class="pcard">
       <div class="pcard-top">
@@ -607,16 +786,16 @@ function renderGroups() {
   const body=document.getElementById('groups-body');
   body.innerHTML='';
   GROUPS.forEach(g=>{
-    const rows=g.teams.map(t=>{
-      const info=ti(t);
+    const rows=g.teams.map(tn=>{
+      const info=ti(tn);
       const out=info.status==='eliminated';
       return `<div class="gteam ${out?'out':''}">
         <span style="font-size:1rem">${info.flag}</span>
-        <span style="${out?'text-decoration:line-through;color:var(--faint)':''};font-size:.8125rem">${t}</span>
-        ${out?'<span class="b b-out" style="margin-left:auto;font-size:.58rem">Out</span>':''}
+        <span style="${out?'text-decoration:line-through;color:var(--faint)':''};font-size:.8125rem">${tn}</span>
+        ${out?`<span class="b b-out" style="margin-left:auto;font-size:.58rem">${tr('out')}</span>`:''}
       </div>`;
     }).join('');
-    body.innerHTML+=`<div class="gcrd"><div class="ghdr">Group ${g.id}</div>${rows}</div>`;
+    body.innerHTML+=`<div class="gcrd"><div class="ghdr">${tr('group')} ${g.id}</div>${rows}</div>`;
   });
 }
 
@@ -625,7 +804,7 @@ function renderSchedule() {
   const body=document.getElementById('sched-body');
   body.innerHTML='';
   SCHEDULE_MD1.forEach(day=>{
-    body.innerHTML+=`<div class="dhdr">${day.date}</div>`;
+    body.innerHTML+=`<div class="dhdr">${lang==='es' ? day.date_es : day.date}</div>`;
     day.ms.forEach(m=>{
       const f1=ti(m.t1).flag, f2=ti(m.t2).flag;
       // Check live scores first
@@ -637,21 +816,21 @@ function renderSchedule() {
         if (lk.state==='in') {
           right=`<span class="mscore-live">${s1}–${s2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
         } else if (lk.state==='post') {
-          right=`<span class="mscore">${s1}–${s2} FT</span>`;
+          right=`<span class="mscore">${s1}–${s2} ${tr('ft')}</span>`;
         } else {
-          right=`<span class="mtime">${m.time} ET</span>`;
+          right=`<span class="mtime">${m.time} ${tr('pt')}</span>`;
         }
       } else if (m.score) {
         right=`<span class="mscore">${m.score}</span>`;
       } else {
-        right=`<span class="mtime">${m.time} ET</span>`;
+        right=`<span class="mtime">${m.time} ${tr('pt')}</span>`;
       }
       body.innerHTML+=`<div class="mrow">
-        <span class="b b-grp" style="flex-shrink:0">Grp ${m.g}</span>
+        <span class="b b-grp" style="flex-shrink:0">${tr('grp')} ${m.g}</span>
         <div class="mteams">
           <span class="flag" style="font-size:1rem">${f1}</span>
           <span style="font-size:.8125rem;font-weight:600">${m.t1}</span>
-          <span class="mvs">vs</span>
+          <span class="mvs">${tr('vs')}</span>
           <span style="font-size:.8125rem;font-weight:600">${m.t2}</span>
           <span class="flag" style="font-size:1rem">${f2}</span>
         </div>
@@ -664,21 +843,22 @@ function renderSchedule() {
 /* ── BRACKET ────────────────────────────────────────── */
 function renderBracket() {
   const RNDS=[
-    {name:'Round of 32',  sub:'16 matches',n:4},
-    {name:'Round of 16',  sub:'8 matches', n:3},
-    {name:'Quarter-finals',sub:'4 matches',n:2},
-    {name:'Semi-finals',  sub:'2 matches', n:1},
-    {name:'Final',        sub:'Jul 19',    n:1},
+    {nk:'r32', sk:'r32sub', n:4},
+    {nk:'r16', sk:'r16sub', n:3},
+    {nk:'qf',  sk:'qfsub',  n:2},
+    {nk:'sf',  sk:'sfsub',  n:1},
+    {nk:'fin', sk:null,     n:1},
   ];
   const body=document.getElementById('bracket-body');
   body.innerHTML='';
   RNDS.forEach((r,ri)=>{
-    let html=`<div class="brnd-ttl">${r.name}<span class="brnd-sub">${r.sub}</span></div>`;
+    const sub = r.sk ? tr(r.sk) : 'Jul 19';
+    let html=`<div class="brnd-ttl">${tr(r.nk)}<span class="brnd-sub">${sub}</span></div>`;
     for(let i=0;i<r.n;i++){
-      html+=`<div class="bm"><div class="bt">⚽ <span>TBD</span></div><div class="bt">⚽ <span>TBD</span></div></div>`;
+      html+=`<div class="bm"><div class="bt">⚽ <span>${tr('tbd')}</span></div><div class="bt">⚽ <span>${tr('tbd')}</span></div></div>`;
     }
-    if(ri===0) html+=`<div style="font-size:.58rem;color:var(--faint);margin-top:.25rem;text-align:center">+12 more</div>`;
-    if(r.name==='Final') html+=`<div style="text-align:center;margin-top:.5rem;font-size:1.5rem">🏆</div>`;
+    if(ri===0) html+=`<div style="font-size:.58rem;color:var(--faint);margin-top:.25rem;text-align:center">${tr('more12')}</div>`;
+    if(ri===4) html+=`<div style="text-align:center;margin-top:.5rem;font-size:1.5rem">🏆</div>`;
     const col=document.createElement('div');
     col.className='brnd'; col.innerHTML=html;
     body.appendChild(col);
@@ -687,27 +867,27 @@ function renderBracket() {
 
 /* ── ELIMINATED ─────────────────────────────────────── */
 function renderElim() {
-  const out=Object.entries(TD).filter(([,t])=>t.status==='eliminated').sort(([a],[b])=>a.localeCompare(b));
+  const out=Object.entries(TD).filter(([,tm])=>tm.status==='eliminated').sort(([a],[b])=>a.localeCompare(b));
   const body=document.getElementById('elim-body');
   const sub=document.getElementById('elim-sub');
   document.getElementById('elim-ct').textContent=`(${out.length})`;
   if(!out.length){
-    body.innerHTML=`<p style="color:var(--faint);font-size:.8rem;padding:.25rem">No teams eliminated yet. Check back after Matchday 3 (~Jun 27).</p>`;
-    sub.textContent='None yet — tournament in progress';
+    body.innerHTML=`<p style="color:var(--faint);font-size:.8rem;padding:.25rem">${tr('noElim')}</p>`;
+    sub.textContent=tr('noneYet');
     return;
   }
-  sub.textContent=`${out.length} nation${out.length!==1?'s':''} eliminated`;
-  body.innerHTML=out.map(([n,t])=>`<div class="echip">
-    <span style="font-size:1rem">${t.flag||FLAGS[n]||'🏳'}</span>
+  sub.textContent=tr('nations',out.length);
+  body.innerHTML=out.map(([n,info])=>`<div class="echip">
+    <span style="font-size:1rem">${info.flag||FLAGS[n]||'🏳'}</span>
     <span class="echip-name">${n}</span>
-    <span class="b b-grp" style="font-size:.58rem">Grp ${t.group||GROUP_MAP[n]||'?'}</span>
+    <span class="b b-grp" style="font-size:.58rem">${tr('grp')} ${info.group||GROUP_MAP[n]||'?'}</span>
   </div>`).join('');
 }
 
 /* ── TABS ───────────────────────────────────────────── */
 function sw(id,btn){
-  ['pool','groups','sched','bracket','elim'].forEach(t=>{
-    document.getElementById('t-'+t).style.display=t===id?'':'none';
+  ['pool','groups','sched','bracket','elim'].forEach(tab=>{
+    document.getElementById('t-'+tab).style.display=tab===id?'':'none';
   });
   document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
@@ -764,13 +944,13 @@ async function fetchLiveScores() {
     renderSchedule();
 
     // Pulse the Schedule tab when live
-    const schedBtn = document.querySelector('.tbtn[onclick*="sched"]');
+    const schedBtn = document.getElementById('tab-sched');
     if (schedBtn) {
       const already = schedBtn.querySelector('.live-dot');
       if (hasLive && !already) {
-        schedBtn.innerHTML = 'Schedule <span class="live-dot"></span>';
+        schedBtn.innerHTML = `${tr('schedule')} <span class="live-dot"></span>`;
       } else if (!hasLive && already) {
-        schedBtn.innerHTML = 'Schedule';
+        schedBtn.textContent = tr('schedule');
       }
     }
 
