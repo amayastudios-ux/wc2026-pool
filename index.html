@@ -191,6 +191,7 @@
     .ta-up   { color:var(--green); font-weight:900; font-size:.72rem; margin-left:2px; line-height:1; }
     .ta-dn   { color:var(--red);   font-weight:900; font-size:.72rem; margin-left:2px; line-height:1; }
     .ta-tie  { color:var(--gold);  font-weight:900; font-size:.72rem; margin-left:2px; line-height:1; }
+    .ta-none { color:var(--faint); font-weight:400; font-size:.72rem; margin-left:2px; line-height:1; }
 
     @media (max-width:480px) {
       .pod-name { font-size:.72rem; }
@@ -304,7 +305,7 @@
 
   <!-- ══ POOL ══ -->
   <div id="t-pool">
-    <div id="podium-wrap" style="margin-bottom:.75rem"></div>
+    <div id="podium-wrap" style="display:none"></div>
     <div class="card">
       <div class="card-hdr">
         <span class="card-ttl" id="pool-ttl">Pool Standings</span>
@@ -669,6 +670,7 @@ function applyLang() {
 /* ══ STATE ════════════════════════════════════════════ */
 let TD     = {}; // teamData from data.json
 let TRENDS = {}; // teamName → 'win' | 'loss' | 'draw'
+let STATS  = {}; // teamName → {w, d, l, gf} from MD results
 
 /* ── LOAD DATA ──────────────────────────────────────── */
 async function loadData() {
@@ -714,6 +716,12 @@ async function loadData() {
         } else {
           TRENDS[res.home] = 'draw'; TRENDS[res.away] = 'draw';
         }
+        if (!STATS[res.home]) STATS[res.home] = {w:0,d:0,l:0,gf:0};
+        if (!STATS[res.away]) STATS[res.away] = {w:0,d:0,l:0,gf:0};
+        STATS[res.home].gf += hs; STATS[res.away].gf += as;
+        if (hs > as)      { STATS[res.home].w++; STATS[res.away].l++; }
+        else if (as > hs) { STATS[res.away].w++; STATS[res.home].l++; }
+        else              { STATS[res.home].d++;  STATS[res.away].d++; }
       });
     }
   } catch {
@@ -774,7 +782,7 @@ function renderPodium() {
     const ini = p.name.substring(0,2).toUpperCase();
     const tr1 = TRENDS[p.c1], tr2 = TRENDS[p.c2];
     const trendHtml = t => {
-      if (!t) return '';
+      if (!t) return '<span class="ta-none">—</span>';
       if (t==='win')  return '<span class="ta-up">↑</span>';
       if (t==='loss') return '<span class="ta-dn">↓</span>';
       return '<span class="ta-tie">→</span>';
@@ -796,7 +804,12 @@ function renderPool() {
     const pts = (t1.pts||0)+(t2.pts||0);
     const both = t1.status!=='eliminated' && t2.status!=='eliminated';
     const one  = t1.status!=='eliminated' || t2.status!=='eliminated';
-    return {...p,t1,t2,pts,_sort:pts*100+(both?20:one?10:0),_i:i};
+    const s1 = STATS[p.c1]||{w:0,d:0,l:0,gf:0};
+    const s2 = STATS[p.c2]||{w:0,d:0,l:0,gf:0};
+    const wins  = s1.w  + s2.w;
+    const draws = s1.d  + s2.d;
+    const gf    = s1.gf + s2.gf;
+    return {...p,t1,t2,pts,wins,draws,gf,_sort:pts*100000+wins*1000+draws*100+gf+(both?20:one?10:0),_i:i};
   }).sort((a,b)=>b._sort-a._sort||a.name.localeCompare(b.name));
 
   const body  = document.getElementById('pool-body');
@@ -823,7 +836,7 @@ function renderPool() {
       if (t==='win')  return '<span class="ta-up"  title="Won last match">↑</span>';
       if (t==='loss') return '<span class="ta-dn"  title="Lost last match">↓</span>';
       if (t==='draw') return '<span class="ta-tie" title="Drew last match">→</span>';
-      return '';
+      return '<span class="ta-none" title="Not played yet">—</span>';
     };
 
     const ccell=(name,info)=>{
