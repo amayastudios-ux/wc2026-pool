@@ -1,58 +1,347 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-10T17:00:00Z",
+    "lastUpdated": "2026-06-12T06:09:19Z",
     "stage": "Group Stage",
     "matchday": 1,
-    "eliminatedCount": 0
+    "eliminatedCount": 0,
+    "recentResults": []
   },
   "teams": {
-    "Mexico":                {"group":"A","flag":"🇲🇽","status":"active","pts":0},
-    "South Africa":          {"group":"A","flag":"🇿🇦","status":"active","pts":0},
-    "Korea Republic":        {"group":"A","flag":"🇰🇷","status":"active","pts":0},
-    "Czechia":               {"group":"A","flag":"🇨🇿","status":"active","pts":0},
-    "Canada":                {"group":"B","flag":"🇨🇦","status":"active","pts":0},
-    "Bosnia & Herzegovina":  {"group":"B","flag":"🇧🇦","status":"active","pts":0},
-    "Qatar":                 {"group":"B","flag":"🇶🇦","status":"active","pts":0},
-    "Switzerland":           {"group":"B","flag":"🇨🇭","status":"active","pts":0},
-    "Brazil":                {"group":"C","flag":"🇧🇷","status":"active","pts":0},
-    "Morocco":               {"group":"C","flag":"🇲🇦","status":"active","pts":0},
-    "Haiti":                 {"group":"C","flag":"🇭🇹","status":"active","pts":0},
-    "Scotland":              {"group":"C","flag":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","status":"active","pts":0},
-    "USA":                   {"group":"D","flag":"🇺🇸","status":"active","pts":0},
-    "Paraguay":              {"group":"D","flag":"🇵🇾","status":"active","pts":0},
-    "Australia":             {"group":"D","flag":"🇦🇺","status":"active","pts":0},
-    "Türkiye":               {"group":"D","flag":"🇹🇷","status":"active","pts":0},
-    "Germany":               {"group":"E","flag":"🇩🇪","status":"active","pts":0},
-    "Curaçao":               {"group":"E","flag":"🇨🇼","status":"active","pts":0},
-    "Côte d'Ivoire":         {"group":"E","flag":"🇨🇮","status":"active","pts":0},
-    "Ecuador":               {"group":"E","flag":"🇪🇨","status":"active","pts":0},
-    "Netherlands":           {"group":"F","flag":"🇳🇱","status":"active","pts":0},
-    "Japan":                 {"group":"F","flag":"🇯🇵","status":"active","pts":0},
-    "Sweden":                {"group":"F","flag":"🇸🇪","status":"active","pts":0},
-    "Tunisia":               {"group":"F","flag":"🇹🇳","status":"active","pts":0},
-    "Belgium":               {"group":"G","flag":"🇧🇪","status":"active","pts":0},
-    "Egypt":                 {"group":"G","flag":"🇪🇬","status":"active","pts":0},
-    "Iran":                  {"group":"G","flag":"🇮🇷","status":"active","pts":0},
-    "New Zealand":           {"group":"G","flag":"🇳🇿","status":"active","pts":0},
-    "Spain":                 {"group":"H","flag":"🇪🇸","status":"active","pts":0},
-    "Cabo Verde":            {"group":"H","flag":"🇨🇻","status":"active","pts":0},
-    "Saudi Arabia":          {"group":"H","flag":"🇸🇦","status":"active","pts":0},
-    "Uruguay":               {"group":"H","flag":"🇺🇾","status":"active","pts":0},
-    "France":                {"group":"I","flag":"🇫🇷","status":"active","pts":0},
-    "Senegal":               {"group":"I","flag":"🇸🇳","status":"active","pts":0},
-    "Iraq":                  {"group":"I","flag":"🇮🇶","status":"active","pts":0},
-    "Norway":                {"group":"I","flag":"🇳🇴","status":"active","pts":0},
-    "Argentina":             {"group":"J","flag":"🇦🇷","status":"active","pts":0},
-    "Algeria":               {"group":"J","flag":"🇩🇿","status":"active","pts":0},
-    "Austria":               {"group":"J","flag":"🇦🇹","status":"active","pts":0},
-    "Jordan":                {"group":"J","flag":"🇯🇴","status":"active","pts":0},
-    "Portugal":              {"group":"K","flag":"🇵🇹","status":"active","pts":0},
-    "Congo DR":              {"group":"K","flag":"🇨🇩","status":"active","pts":0},
-    "Uzbekistan":            {"group":"K","flag":"🇺🇿","status":"active","pts":0},
-    "Colombia":              {"group":"K","flag":"🇨🇴","status":"active","pts":0},
-    "England":               {"group":"L","flag":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","status":"active","pts":0},
-    "Croatia":               {"group":"L","flag":"🇭🇷","status":"active","pts":0},
-    "Ghana":                 {"group":"L","flag":"🇬🇭","status":"active","pts":0},
-    "Panama":                {"group":"L","flag":"🇵🇦","status":"active","pts":0}
+    "Mexico": {
+      "group": "A",
+      "flag": "🇲🇽",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "South Africa": {
+      "group": "A",
+      "flag": "🇿🇦",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Korea Republic": {
+      "group": "A",
+      "flag": "🇰🇷",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Czechia": {
+      "group": "A",
+      "flag": "🇨🇿",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Canada": {
+      "group": "B",
+      "flag": "🇨🇦",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Bosnia & Herzegovina": {
+      "group": "B",
+      "flag": "🇧🇦",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Qatar": {
+      "group": "B",
+      "flag": "🇶🇦",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Switzerland": {
+      "group": "B",
+      "flag": "🇨🇭",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Brazil": {
+      "group": "C",
+      "flag": "🇧🇷",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Morocco": {
+      "group": "C",
+      "flag": "🇲🇦",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Haiti": {
+      "group": "C",
+      "flag": "🇭🇹",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Scotland": {
+      "group": "C",
+      "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "USA": {
+      "group": "D",
+      "flag": "🇺🇸",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Paraguay": {
+      "group": "D",
+      "flag": "🇵🇾",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Australia": {
+      "group": "D",
+      "flag": "🇦🇺",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Türkiye": {
+      "group": "D",
+      "flag": "🇹🇷",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Germany": {
+      "group": "E",
+      "flag": "🇩🇪",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Curaçao": {
+      "group": "E",
+      "flag": "🇨🇼",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Côte d'Ivoire": {
+      "group": "E",
+      "flag": "🇨🇮",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Ecuador": {
+      "group": "E",
+      "flag": "🇪🇨",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Netherlands": {
+      "group": "F",
+      "flag": "🇳🇱",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Japan": {
+      "group": "F",
+      "flag": "🇯🇵",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Sweden": {
+      "group": "F",
+      "flag": "🇸🇪",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Tunisia": {
+      "group": "F",
+      "flag": "🇹🇳",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Belgium": {
+      "group": "G",
+      "flag": "🇧🇪",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Egypt": {
+      "group": "G",
+      "flag": "🇪🇬",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Iran": {
+      "group": "G",
+      "flag": "🇮🇷",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "New Zealand": {
+      "group": "G",
+      "flag": "🇳🇿",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Spain": {
+      "group": "H",
+      "flag": "🇪🇸",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Cabo Verde": {
+      "group": "H",
+      "flag": "🇨🇻",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Saudi Arabia": {
+      "group": "H",
+      "flag": "🇸🇦",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Uruguay": {
+      "group": "H",
+      "flag": "🇺🇾",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "France": {
+      "group": "I",
+      "flag": "🇫🇷",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Senegal": {
+      "group": "I",
+      "flag": "🇸🇳",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Iraq": {
+      "group": "I",
+      "flag": "🇮🇶",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Norway": {
+      "group": "I",
+      "flag": "🇳🇴",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Argentina": {
+      "group": "J",
+      "flag": "🇦🇷",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Algeria": {
+      "group": "J",
+      "flag": "🇩🇿",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Austria": {
+      "group": "J",
+      "flag": "🇦🇹",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Jordan": {
+      "group": "J",
+      "flag": "🇯🇴",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Portugal": {
+      "group": "K",
+      "flag": "🇵🇹",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Congo DR": {
+      "group": "K",
+      "flag": "🇨🇩",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Uzbekistan": {
+      "group": "K",
+      "flag": "🇺🇿",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Colombia": {
+      "group": "K",
+      "flag": "🇨🇴",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "England": {
+      "group": "L",
+      "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Croatia": {
+      "group": "L",
+      "flag": "🇭🇷",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Ghana": {
+      "group": "L",
+      "flag": "🇬🇭",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    },
+    "Panama": {
+      "group": "L",
+      "flag": "🇵🇦",
+      "status": "active",
+      "pts": 0,
+      "roundReached": null
+    }
   }
 }
