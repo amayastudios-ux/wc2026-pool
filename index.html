@@ -171,6 +171,36 @@
     /* ── Scoring legend ── */
     .legend { font-size: .68rem; color: var(--faint); text-align: center; margin-top: .4rem; }
 
+    /* ── Podium ── */
+    .podium-wrap { display:flex; align-items:flex-end; justify-content:center; gap:.625rem; padding:1rem .5rem .75rem; }
+    .pod { display:flex; flex-direction:column; align-items:center; gap:.28rem; border-radius:12px; padding:.75rem .5rem .65rem; flex:1; max-width:190px; text-align:center; transition:transform .15s; }
+    .pod:hover { transform:translateY(-3px); }
+    .pod-1 { background:rgba(200,168,75,.11); border:.5px solid rgba(200,168,75,.45); padding-top:1.25rem; }
+    .pod-2 { background:rgba(160,174,192,.07); border:.5px solid rgba(160,174,192,.3); }
+    .pod-3 { background:rgba(205,127,50,.07); border:.5px solid rgba(205,127,50,.3); }
+    .pod-medal { font-size:1.35rem; }
+    .pod-name  { font-size:.8rem; font-weight:700; line-height:1.2; margin-top:.1rem; word-break:break-word; }
+    .pod-flags { font-size:.9rem; letter-spacing:.1em; }
+    .pod-pts   { font-size:1.4rem; font-weight:800; line-height:1.15; margin-top:.1rem; }
+    .pod-pts-lbl { font-size:.58rem; color:var(--muted); font-weight:400; vertical-align:middle; }
+    .pod-1 .pod-pts { color:#C8A84B; }
+    .pod-2 .pod-pts { color:#A0AEC0; }
+    .pod-3 .pod-pts { color:#CD7F32; }
+
+    /* ── Trend arrows ── */
+    .ta-up   { color:var(--green); font-weight:900; font-size:.72rem; margin-left:2px; line-height:1; }
+    .ta-dn   { color:var(--red);   font-weight:900; font-size:.72rem; margin-left:2px; line-height:1; }
+    .ta-tie  { color:var(--gold);  font-weight:900; font-size:.72rem; margin-left:2px; line-height:1; }
+
+    @media (max-width:480px) {
+      .pod-name { font-size:.72rem; }
+      .pod-pts  { font-size:1.1rem; }
+      .pod-medal { font-size:1.1rem; }
+      .podium-wrap { gap:.375rem; padding:.75rem .25rem .5rem; }
+      .pod { padding:.6rem .3rem .5rem; }
+      .pod-1 { padding-top:1rem; }
+    }
+
     /* ── Language toggle ── */
     .lang-tog { display:flex; gap:2px; background:var(--surface); border-radius:14px; padding:2px; border:.5px solid var(--border); }
     .ltbtn { padding:.25rem .6rem; border:none; background:transparent; color:var(--muted); border-radius:12px; cursor:pointer; font-size:.72rem; font-weight:800; font-family:inherit; letter-spacing:.04em; transition:background .1s,color .1s; }
@@ -274,6 +304,7 @@
 
   <!-- ══ POOL ══ -->
   <div id="t-pool">
+    <div id="podium-wrap" style="margin-bottom:.75rem"></div>
     <div class="card">
       <div class="card-hdr">
         <span class="card-ttl" id="pool-ttl">Pool Standings</span>
@@ -636,7 +667,8 @@ function applyLang() {
 }
 
 /* ══ STATE ════════════════════════════════════════════ */
-let TD = {}; // teamData from data.json
+let TD     = {}; // teamData from data.json
+let TRENDS = {}; // teamName → 'win' | 'loss' | 'draw'
 
 /* ── LOAD DATA ──────────────────────────────────────── */
 async function loadData() {
@@ -662,15 +694,26 @@ async function loadData() {
       updateUpdatedLbl();
     }
 
-    // Patch scores into schedule from meta.recentResults
+    // Patch scores + build trends from meta.recentResults
+    TRENDS = {};
     if (j.meta?.recentResults) {
       j.meta.recentResults.forEach(res => {
+        // Schedule overlay
         SCHEDULE_MD1.forEach(day => day.ms.forEach(m => {
           if ((m.t1===res.home&&m.t2===res.away)||(m.t1===res.away&&m.t2===res.home)) {
             if (m.t1===res.home) m.score = `${res.homeScore}–${res.awayScore}`;
             else m.score = `${res.awayScore}–${res.homeScore}`;
           }
         }));
+        // Trend arrows (last result per team wins — chronological order in array)
+        const hs = Number(res.homeScore), as = Number(res.awayScore);
+        if (hs > as) {
+          TRENDS[res.home] = 'win';  TRENDS[res.away] = 'loss';
+        } else if (as > hs) {
+          TRENDS[res.home] = 'loss'; TRENDS[res.away] = 'win';
+        } else {
+          TRENDS[res.home] = 'draw'; TRENDS[res.away] = 'draw';
+        }
       });
     }
   } catch {
@@ -694,11 +737,56 @@ function ti(name) {
 
 /* ── RENDER ALL ─────────────────────────────────────── */
 function renderAll() {
+  renderPodium();
   renderPool();
   renderGroups();
   renderSchedule();
   renderBracket();
   renderElim();
+}
+
+/* ── PODIUM ─────────────────────────────────────────── */
+function renderPodium() {
+  const wrap = document.getElementById('podium-wrap');
+  if (!wrap) return;
+
+  const sorted = PARTICIPANTS.map((p,i) => {
+    const t1 = ti(p.c1), t2 = ti(p.c2);
+    const pts  = (t1.pts||0)+(t2.pts||0);
+    const both = t1.status!=='eliminated' && t2.status!=='eliminated';
+    const one  = t1.status!=='eliminated'  || t2.status!=='eliminated';
+    return {...p, t1, t2, pts, _sort:pts*100+(both?20:one?10:0), _i:i};
+  }).sort((a,b)=>b._sort-a._sort||a.name.localeCompare(b.name));
+
+  const top3 = sorted.slice(0,3);
+  if (top3.length < 1) { wrap.innerHTML=''; return; }
+
+  // Display order: 2nd (left) · 1st (center, taller) · 3rd (right)
+  const display = [
+    {entry: top3[1], rank:2, cls:'pod-2', medal:'🥈'},
+    {entry: top3[0], rank:1, cls:'pod-1', medal:'🥇'},
+    {entry: top3[2], rank:3, cls:'pod-3', medal:'🥉'},
+  ].filter(d => d.entry);
+
+  wrap.innerHTML = `<div class="podium-wrap">` + display.map(d => {
+    const p = d.entry;
+    const [bg,fg] = AV_COLORS[p._i % AV_COLORS.length];
+    const ini = p.name.substring(0,2).toUpperCase();
+    const tr1 = TRENDS[p.c1], tr2 = TRENDS[p.c2];
+    const trendHtml = t => {
+      if (!t) return '';
+      if (t==='win')  return '<span class="ta-up">↑</span>';
+      if (t==='loss') return '<span class="ta-dn">↓</span>';
+      return '<span class="ta-tie">→</span>';
+    };
+    return `<div class="pod ${d.cls}">
+      <div class="pod-medal">${d.medal}</div>
+      <div class="av" style="background:${bg};color:${fg};width:34px;height:34px;font-size:.65rem;flex-shrink:0">${ini}</div>
+      <div class="pod-name">${p.name}</div>
+      <div class="pod-flags">${p.t1.flag}${trendHtml(tr1)} ${p.t2.flag}${trendHtml(tr2)}</div>
+      <div class="pod-pts">${p.pts} <span class="pod-pts-lbl">pts</span></div>
+    </div>`;
+  }).join('') + `</div>`;
 }
 
 /* ── POOL ───────────────────────────────────────────── */
@@ -730,11 +818,19 @@ function renderPool() {
 
     const rankCls = rank===0?'rank gold':rank===1?'rank silv':rank===2?'rank brnz':'rank';
 
+    const trendArrow = name => {
+      const t = TRENDS[name];
+      if (t==='win')  return '<span class="ta-up"  title="Won last match">↑</span>';
+      if (t==='loss') return '<span class="ta-dn"  title="Lost last match">↓</span>';
+      if (t==='draw') return '<span class="ta-tie" title="Drew last match">→</span>';
+      return '';
+    };
+
     const ccell=(name,info)=>{
       const alive=info.status!=='eliminated';
       return `<div class="cc">
         <span class="flag">${info.flag}</span>
-        <span class="cname ${alive?'':'out'}">${name}</span>
+        <span class="cname ${alive?'':'out'}">${name}</span>${trendArrow(name)}
         <span class="b b-grp">${info.group}</span>
         ${!alive?`<span class="b b-out" style="font-size:.6rem">${info.roundReached||tr('out')}</span>`:''}
       </div>`;
@@ -758,13 +854,13 @@ function renderPool() {
     const rankColor = rank===0?'#C8A84B':rank===1?'#A0AEC0':rank===2?'#CD7F32':'var(--faint)';
     const mc1=`<div class="pcard-country">
       <span style="font-size:1rem">${p.t1.flag}</span>
-      <span style="${t1alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c1}</span>
+      <span style="${t1alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c1}</span>${trendArrow(p.c1)}
       <span class="b b-grp">${p.t1.group}</span>
       ${!t1alive?`<span class="b b-out" style="font-size:.58rem">${p.t1.roundReached||tr('out')}</span>`:''}
     </div>`;
     const mc2=`<div class="pcard-country">
       <span style="font-size:1rem">${p.t2.flag}</span>
-      <span style="${t2alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c2}</span>
+      <span style="${t2alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c2}</span>${trendArrow(p.c2)}
       <span class="b b-grp">${p.t2.group}</span>
       ${!t2alive?`<span class="b b-out" style="font-size:.58rem">${p.t2.roundReached||tr('out')}</span>`:''}
     </div>`;
@@ -867,7 +963,7 @@ function renderBracket() {
 
 /* ── ELIMINATED ─────────────────────────────────────── */
 function renderElim() {
-  const out=Object.entries(TD).filter(([,tm])=>tm.status==='eliminated').sort(([a],[b])=>a.localeCompare(b));
+  co  const out=Object.entries(TD).filter(([,tm])=>tm.status==='eliminated').sort(([a],[b])=>a.localeCompare(b));
   const body=document.getElementById('elim-body');
   const sub=document.getElementById('elim-sub');
   document.getElementById('elim-ct').textContent=`(${out.length})`;
@@ -967,7 +1063,10 @@ async function fetchLiveScores() {
 loadData();
 setInterval(loadData, 600000); // refresh every 10 min
 fetchLiveScores();              // check ESPN immediately
-setInterval(fetchLiveScores, 300000); // re-check every 5 min even if no live game detected
+setInterval(fetchLiveScores, 300000); // re-check every 5 min
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
