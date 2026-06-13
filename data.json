@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-12T20:19:32Z",
+    "lastUpdated": "2026-06-12T23:30:00Z",
     "stage": "Group Stage",
     "matchday": 1,
     "eliminatedCount": 0,
@@ -16,6 +16,13 @@
         "home": "Korea Republic",
         "away": "Czechia",
         "homeScore": 2,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Canada",
+        "away": "Bosnia & Herzegovina",
+        "homeScore": 1,
         "awayScore": 1,
         "round": "Group Stage"
       }

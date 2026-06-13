@@ -732,6 +732,14 @@ async function loadData() {
         else              { STATS[res.home].d++;  STATS[res.away].d++; }
       });
     }
+    // Snapshot base stats so fetchLiveScores can enrich without double-counting
+    BASE_STATS = JSON.parse(JSON.stringify(STATS));
+    BASE_TRENDS = JSON.parse(JSON.stringify(TRENDS));
+    BASE_RESULT_KEYS = new Set();
+    (j.meta?.recentResults || []).forEach(res => {
+      BASE_RESULT_KEYS.add(`${res.home}|${res.away}`);
+      BASE_RESULT_KEYS.add(`${res.away}|${res.home}`);
+    });
   } catch {
     // Fallback: all teams active
     Object.keys(FLAGS).forEach(tn => {
@@ -1029,7 +1037,7 @@ const ESPN_URL = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.worl
 const ESPN_MAP = {
   'Mexico':'Mexico','South Africa':'South Africa','South Korea':'Korea Republic',
   'Czech Republic':'Czechia','Czechia':'Czechia','Canada':'Canada',
-  'Bosnia and Herzegovina':'Bosnia & Herzegovina','Qatar':'Qatar','Switzerland':'Switzerland',
+  'Bosnia and Herzegovina':'Bosnia & Herzegovina','Bosnia-Herzegovina':'Bosnia & Herzegovina','Bosnia & Herzegovina':'Bosnia & Herzegovina','Qatar':'Qatar','Switzerland':'Switzerland',
   'Brazil':'Brazil','Morocco':'Morocco','Haiti':'Haiti','Scotland':'Scotland',
   'United States':'USA','USA':'USA','Paraguay':'Paraguay','Australia':'Australia',
   'Turkey':'Türkiye','Türkiye':'Türkiye','Germany':'Germany','Curacao':'Curaçao',
@@ -1045,6 +1053,69 @@ const ESPN_MAP = {
 };
 let liveScores = {};
 let liveInterval = null;
+let BASE_STATS = {};        // snapshot of STATS after historical fetch (used by live enrichment)
+let BASE_TRENDS = {};       // snapshot of TRENDS after historical fetch
+let BASE_RESULT_KEYS = new Set(); // match keys already in BASE_STATS
+
+/* ── HISTORICAL SCORES ──────────────────────────────── */
+// Fetches all completed match results from ESPN for every day since
+// the tournament started (Jun 11, 2026). Runs on load and every 10 min
+// so no manual data.json updates are needed during the group stage.
+async function fetchAllHistoricalScores() {
+  const TOURNAMENT_START = new Date('2026-06-11T00:00:00Z');
+  const now = new Date();
+  const dates = [];
+  for (let d = new Date(TOURNAMENT_START); d <= now; d.setUTCDate(d.getUTCDate() + 1)) {
+    dates.push(d.toISOString().slice(0,10).replace(/-/g,''));
+  }
+
+  const allResults = [];
+  const seen = new Set();
+  for (const dateStr of dates) {
+    try {
+      const r = await fetch(`${ESPN_URL}?dates=${dateStr}&t=${Date.now()}`);
+      if (!r.ok) continue;
+      const j = await r.json();
+      for (const ev of (j.events || [])) {
+        if (ev.status?.type?.state !== 'post') continue;
+        const comp = ev.competitions?.[0];
+        const home = comp?.competitors?.find(c => c.homeAway === 'home');
+        const away = comp?.competitors?.find(c => c.homeAway === 'away');
+        if (!home || !away) continue;
+        const t1 = ESPN_MAP[home.team?.displayName] || home.team?.displayName;
+        const t2 = ESPN_MAP[away.team?.displayName] || away.team?.displayName;
+        const key = `${t1}|${t2}`;
+        if (seen.has(key)) continue;
+        seen.add(key); seen.add(`${t2}|${t1}`);
+        allResults.push({ t1, t2, hs: Number(home.score||0), as: Number(away.score||0) });
+      }
+    } catch { /* skip unavailable date */ }
+  }
+
+  if (allResults.length === 0) return; // ESPN unavailable — keep recentResults fallback
+
+  // Rebuild STATS and TRENDS completely from all completed games
+  STATS = {}; TRENDS = {};
+  allResults.forEach(({ t1, t2, hs, as: as_ }) => {
+    if (!STATS[t1]) STATS[t1] = {w:0,d:0,l:0,gf:0,ga:0};
+    if (!STATS[t2]) STATS[t2] = {w:0,d:0,l:0,gf:0,ga:0};
+    STATS[t1].gf += hs; STATS[t2].gf += as_;
+    STATS[t1].ga += as_; STATS[t2].ga += hs;
+    if (hs > as_)       { STATS[t1].w++; STATS[t2].l++; }
+    else if (as_ > hs)  { STATS[t2].w++; STATS[t1].l++; }
+    else                { STATS[t1].d++; STATS[t2].d++; }
+    TRENDS[t1] = hs > as_ ? 'win' : as_ > hs ? 'loss' : 'draw';
+    TRENDS[t2] = as_ > hs ? 'win' : hs > as_ ? 'loss' : 'draw';
+  });
+
+  // Update the snapshot used by fetchLiveScores for today's enrichment
+  BASE_STATS = JSON.parse(JSON.stringify(STATS));
+  BASE_TRENDS = JSON.parse(JSON.stringify(TRENDS));
+  BASE_RESULT_KEYS = new Set(seen);
+
+  renderGroups();
+  renderPool();
+}
 
 async function fetchLiveScores() {
   try {
@@ -1074,6 +1145,32 @@ async function fetchLiveScores() {
     liveScores = fresh;
     renderSchedule();
 
+    // Enrich group standings with any ESPN post-game results not yet in data.json
+    const seen = new Set(BASE_RESULT_KEYS);
+    // Reset to base snapshot first to avoid double-counting across repeated calls
+    STATS  = JSON.parse(JSON.stringify(BASE_STATS));
+    TRENDS = JSON.parse(JSON.stringify(BASE_TRENDS));
+    let statsChanged = false;
+    const processed = new Set();
+    Object.values(fresh).forEach(entry => {
+      if (entry.state !== 'post') return;
+      const key = `${entry.t1}|${entry.t2}`;
+      if (seen.has(key) || processed.has(key)) return;
+      processed.add(key); processed.add(`${entry.t2}|${entry.t1}`);
+      const hs = Number(entry.homeScore), as = Number(entry.awayScore);
+      if (!STATS[entry.t1]) STATS[entry.t1] = {w:0,d:0,l:0,gf:0,ga:0};
+      if (!STATS[entry.t2]) STATS[entry.t2] = {w:0,d:0,l:0,gf:0,ga:0};
+      STATS[entry.t1].gf += hs; STATS[entry.t2].gf += as;
+      STATS[entry.t1].ga += as; STATS[entry.t2].ga += hs;
+      if (hs > as)      { STATS[entry.t1].w++; STATS[entry.t2].l++; }
+      else if (as > hs) { STATS[entry.t2].w++; STATS[entry.t1].l++; }
+      else              { STATS[entry.t1].d++;  STATS[entry.t2].d++; }
+      TRENDS[entry.t1] = hs > as ? 'win' : as > hs ? 'loss' : 'draw';
+      TRENDS[entry.t2] = as > hs ? 'win' : hs > as ? 'loss' : 'draw';
+      statsChanged = true;
+    });
+    if (statsChanged) { renderGroups(); renderPool(); }
+
     // Pulse the Schedule tab when live
     const schedBtn = document.getElementById('tab-sched');
     if (schedBtn) {
@@ -1096,9 +1193,11 @@ async function fetchLiveScores() {
 
 /* ── INIT ───────────────────────────────────────────────────── */
 loadData();
-setInterval(loadData, 600000); // refresh every 10 min
-fetchLiveScores();              // check ESPN immediately
-setInterval(fetchLiveScores, 300000); // re-check every 5 min
+setInterval(loadData, 600000); // refresh team metadata every 10 min
+fetchAllHistoricalScores();     // build full standings from all past days immediately
+setInterval(fetchAllHistoricalScores, 600000); // refresh historical every 10 min
+fetchLiveScores();              // check for in-progress/today's games immediately
+setInterval(fetchLiveScores, 60000); // live poll every 60 s
 </script>
 </body>
 </html>
