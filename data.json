@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-12T22:41:36Z",
+    "lastUpdated": "2026-06-13T04:21:02Z",
     "stage": "Group Stage",
     "matchday": 1,
     "eliminatedCount": 0,
@@ -23,6 +23,13 @@
         "home": "Canada",
         "away": "Bosnia-Herzegovina",
         "homeScore": 1,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "USA",
+        "away": "Paraguay",
+        "homeScore": 4,
         "awayScore": 1,
         "round": "Group Stage"
       }
