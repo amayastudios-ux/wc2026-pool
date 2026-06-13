@@ -2,7 +2,7 @@ name: Update World Cup Results
 
 on:
   schedule:
-    - cron: '0 */3 * * *'  # every 3 hours (results appear ~3h after each match)
+    - cron: '0 5 * * *'  # once daily at 5 AM UTC (site auto-fetches live from ESPN in browser)
   workflow_dispatch:         # allow manual trigger from GitHub UI
 
 permissions:
