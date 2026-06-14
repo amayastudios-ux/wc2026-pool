@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-13T04:21:02Z",
+    "lastUpdated": "2026-06-14T08:41:45Z",
     "stage": "Group Stage",
     "matchday": 1,
     "eliminatedCount": 0,
@@ -21,7 +21,7 @@
       },
       {
         "home": "Canada",
-        "away": "Bosnia & Herzegovina",
+        "away": "Bosnia-Herzegovina",
         "homeScore": 1,
         "awayScore": 1,
         "round": "Group Stage"
@@ -31,6 +31,34 @@
         "away": "Paraguay",
         "homeScore": 4,
         "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Qatar",
+        "away": "Switzerland",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Brazil",
+        "away": "Morocco",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Haiti",
+        "away": "Scotland",
+        "homeScore": 0,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Australia",
+        "away": "Türkiye",
+        "homeScore": 2,
+        "awayScore": 0,
         "round": "Group Stage"
       }
     ]
