@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-14T08:41:45Z",
+    "lastUpdated": "2026-06-15T10:55:42Z",
     "stage": "Group Stage",
     "matchday": 1,
     "eliminatedCount": 0,
@@ -59,6 +59,34 @@
         "away": "Türkiye",
         "homeScore": 2,
         "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Germany",
+        "away": "Curaçao",
+        "homeScore": 7,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Netherlands",
+        "away": "Japan",
+        "homeScore": 2,
+        "awayScore": 2,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Côte d'Ivoire",
+        "away": "Ecuador",
+        "homeScore": 1,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Sweden",
+        "away": "Tunisia",
+        "homeScore": 5,
+        "awayScore": 1,
         "round": "Group Stage"
       }
     ]
