@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-15T10:55:42Z",
+    "lastUpdated": "2026-06-16T10:09:15Z",
     "stage": "Group Stage",
     "matchday": 1,
     "eliminatedCount": 0,
@@ -87,6 +87,34 @@
         "away": "Tunisia",
         "homeScore": 5,
         "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Spain",
+        "away": "Cabo Verde",
+        "homeScore": 0,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Belgium",
+        "away": "Egypt",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Saudi Arabia",
+        "away": "Uruguay",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Iran",
+        "away": "New Zealand",
+        "homeScore": 2,
+        "awayScore": 2,
         "round": "Group Stage"
       }
     ]
