@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-17T09:51:58Z",
+    "lastUpdated": "2026-06-18T09:14:51Z",
     "stage": "Group Stage",
     "matchday": 1,
     "eliminatedCount": 0,
@@ -143,6 +143,34 @@
         "away": "Jordan",
         "homeScore": 3,
         "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Portugal",
+        "away": "Congo DR",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "England",
+        "away": "Croatia",
+        "homeScore": 4,
+        "awayScore": 2,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Ghana",
+        "away": "Panama",
+        "homeScore": 1,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Uzbekistan",
+        "away": "Colombia",
+        "homeScore": 1,
+        "awayScore": 3,
         "round": "Group Stage"
       }
     ]
