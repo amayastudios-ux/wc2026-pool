@@ -1,8 +1,8 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-18T09:14:51Z",
+    "lastUpdated": "2026-06-19T09:28:29Z",
     "stage": "Group Stage",
-    "matchday": 1,
+    "matchday": 2,
     "eliminatedCount": 0,
     "recentResults": [
       {
@@ -171,6 +171,34 @@
         "away": "Colombia",
         "homeScore": 1,
         "awayScore": 3,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Czechia",
+        "away": "South Africa",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Switzerland",
+        "away": "Bosnia-Herzegovina",
+        "homeScore": 4,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Canada",
+        "away": "Qatar",
+        "homeScore": 6,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Mexico",
+        "away": "Korea Republic",
+        "homeScore": 1,
+        "awayScore": 0,
         "round": "Group Stage"
       }
     ]
