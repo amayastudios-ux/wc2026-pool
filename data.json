@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-19T09:28:29Z",
+    "lastUpdated": "2026-06-20T08:22:14Z",
     "stage": "Group Stage",
     "matchday": 2,
     "eliminatedCount": 0,
@@ -199,6 +199,34 @@
         "away": "Korea Republic",
         "homeScore": 1,
         "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "USA",
+        "away": "Australia",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Scotland",
+        "away": "Morocco",
+        "homeScore": 0,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Brazil",
+        "away": "Haiti",
+        "homeScore": 3,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Türkiye",
+        "away": "Paraguay",
+        "homeScore": 0,
+        "awayScore": 1,
         "round": "Group Stage"
       }
     ]
