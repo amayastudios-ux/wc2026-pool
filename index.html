@@ -285,7 +285,7 @@
       <p id="hdr-sub">Pool tracker &nbsp;·&nbsp; 24 participants &nbsp;·&nbsp; Jun 11 – Jul 19, 2026</p>
     </div>
     <div style="margin-left:auto;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-      <div class="hdr-badge" id="stage-badge">Group Stage · MD1</div>
+      <div class="hdr-badge" id="stage-badge">Group Stage · MD2</div>
       <div class="lang-tog">
         <button class="ltbtn on" id="btn-en" onclick="setLang('en')">EN</button>
         <button class="ltbtn" id="btn-es" onclick="setLang('es')">ES</button>
@@ -346,12 +346,12 @@
   <!-- ══ SCHEDULE ══ -->
   <div id="t-sched" style="display:none">
     <div class="card">
-      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Matchday 1 of 3 — Group Stage</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
+      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Matchday 2 In Progress — Group Stage</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
       <div id="sched-body"></div>
     </div>
     <div class="infobox">
       <i class="ti ti-refresh"></i>
-      <p id="sched-info">Matchday 2 (~Jun 15–22) and Matchday 3 (~Jun 23–27) scores appear automatically each morning once results are in.</p>
+      <p id="sched-info">Matchday 3 (~Jun 25–27) scores appear automatically each morning once results are in.</p>
     </div>
   </div>
 
@@ -449,42 +449,81 @@ GROUPS.forEach(g => g.teams.forEach(t => GROUP_MAP[t] = g.id));
 
 const SCHEDULE_MD1 = [
   {date:'Thu · Jun 11', date_es:'Jue · Jun 11', ms:[
-    {t1:'Mexico',          t2:'South Africa',        g:'A', time:'12:00 PM'},
-    {t1:'Korea Republic',  t2:'Czechia',             g:'A', time:'7:00 PM'},
+    {t1:'Mexico',          t2:'South Africa',        g:'A', time:'12:00 PM', score:'2–0'},
+    {t1:'Korea Republic',  t2:'Czechia',             g:'A', time:'7:00 PM',  score:'2–1'},
   ]},
   {date:'Fri · Jun 12', date_es:'Vie · Jun 12', ms:[
-    {t1:'Canada',          t2:'Bosnia & Herzegovina',g:'B', time:'12:00 PM'},
-    {t1:'USA',             t2:'Paraguay',            g:'D', time:'6:00 PM'},
+    {t1:'Canada',          t2:'Bosnia & Herzegovina',g:'B', time:'12:00 PM', score:'1–1'},
+    {t1:'USA',             t2:'Paraguay',            g:'D', time:'6:00 PM',  score:'4–1'},
   ]},
   {date:'Sat · Jun 13', date_es:'Sáb · Jun 13', ms:[
-    {t1:'Qatar',           t2:'Switzerland',         g:'B', time:'12:00 PM'},
-    {t1:'Brazil',          t2:'Morocco',             g:'C', time:'3:00 PM'},
-    {t1:'Haiti',           t2:'Scotland',            g:'C', time:'6:00 PM'},
-    {t1:'Australia',       t2:'Türkiye',             g:'D', time:'9:00 PM'},
+    {t1:'Qatar',           t2:'Switzerland',         g:'B', time:'12:00 PM', score:'1–1'},
+    {t1:'Brazil',          t2:'Morocco',             g:'C', time:'3:00 PM',  score:'1–1'},
+    {t1:'Haiti',           t2:'Scotland',            g:'C', time:'6:00 PM',  score:'0–1'},
+    {t1:'Australia',       t2:'Türkiye',             g:'D', time:'9:00 PM',  score:'2–0'},
   ]},
   {date:'Sun · Jun 14', date_es:'Dom · Jun 14', ms:[
-    {t1:'Germany',         t2:'Curaçao',             g:'E', time:'10:00 AM'},
-    {t1:'Netherlands',     t2:'Japan',               g:'F', time:'1:00 PM'},
-    {t1:"Côte d'Ivoire",   t2:'Ecuador',             g:'E', time:'4:00 PM'},
-    {t1:'Sweden',          t2:'Tunisia',             g:'F', time:'7:00 PM'},
+    {t1:'Germany',         t2:'Curaçao',             g:'E', time:'10:00 AM', score:'7–1'},
+    {t1:'Netherlands',     t2:'Japan',               g:'F', time:'1:00 PM',  score:'2–2'},
+    {t1:"Côte d'Ivoire",   t2:'Ecuador',             g:'E', time:'4:00 PM',  score:'1–0'},
+    {t1:'Sweden',          t2:'Tunisia',             g:'F', time:'7:00 PM',  score:'5–1'},
   ]},
   {date:'Mon · Jun 15', date_es:'Lun · Jun 15', ms:[
-    {t1:'Spain',           t2:'Cabo Verde',          g:'H', time:'9:00 AM'},
-    {t1:'Belgium',         t2:'Egypt',               g:'G', time:'12:00 PM'},
-    {t1:'Saudi Arabia',    t2:'Uruguay',             g:'H', time:'3:00 PM'},
-    {t1:'Iran',            t2:'New Zealand',         g:'G', time:'6:00 PM'},
+    {t1:'Spain',           t2:'Cabo Verde',          g:'H', time:'9:00 AM',  score:'0–0'},
+    {t1:'Belgium',         t2:'Egypt',               g:'G', time:'12:00 PM', score:'1–1'},
+    {t1:'Saudi Arabia',    t2:'Uruguay',             g:'H', time:'3:00 PM',  score:'1–1'},
+    {t1:'Iran',            t2:'New Zealand',         g:'G', time:'6:00 PM',  score:'2–2'},
   ]},
   {date:'Tue · Jun 16', date_es:'Mar · Jun 16', ms:[
-    {t1:'France',          t2:'Senegal',             g:'I', time:'12:00 PM'},
-    {t1:'Iraq',            t2:'Norway',              g:'I', time:'3:00 PM'},
-    {t1:'Argentina',       t2:'Algeria',             g:'J', time:'6:00 PM'},
-    {t1:'Austria',         t2:'Jordan',              g:'J', time:'9:00 PM'},
+    {t1:'France',          t2:'Senegal',             g:'I', time:'12:00 PM', score:'3–1'},
+    {t1:'Iraq',            t2:'Norway',              g:'I', time:'3:00 PM',  score:'1–4'},
+    {t1:'Argentina',       t2:'Algeria',             g:'J', time:'6:00 PM',  score:'3–0'},
+    {t1:'Austria',         t2:'Jordan',              g:'J', time:'9:00 PM',  score:'3–1'},
   ]},
   {date:'Wed · Jun 17', date_es:'Mié · Jun 17', ms:[
-    {t1:'Portugal',        t2:'Congo DR',            g:'K', time:'10:00 AM'},
-    {t1:'England',         t2:'Croatia',             g:'L', time:'1:00 PM'},
-    {t1:'Ghana',           t2:'Panama',              g:'L', time:'4:00 PM'},
-    {t1:'Uzbekistan',      t2:'Colombia',            g:'K', time:'7:00 PM'},
+    {t1:'Portugal',        t2:'Congo DR',            g:'K', time:'10:00 AM', score:'1–1'},
+    {t1:'England',         t2:'Croatia',             g:'L', time:'1:00 PM',  score:'4–2'},
+    {t1:'Ghana',           t2:'Panama',              g:'L', time:'4:00 PM',  score:'1–0'},
+    {t1:'Uzbekistan',      t2:'Colombia',            g:'K', time:'7:00 PM',  score:'1–3'},
+  ]},
+];
+
+const SCHEDULE_MD2 = [
+  {date:'Thu · Jun 18', date_es:'Jue · Jun 18', ms:[
+    {t1:'South Africa',           t2:'Czechia',              g:'A', time:'9:00 AM',  score:'1–1'},
+    {t1:'Mexico',                 t2:'Korea Republic',        g:'A', time:'12:00 PM', score:'1–0'},
+    {t1:'Canada',                 t2:'Qatar',                 g:'B', time:'3:00 PM',  score:'6–0'},
+    {t1:'Switzerland',            t2:'Bosnia & Herzegovina',  g:'B', time:'6:00 PM',  score:'4–1'},
+  ]},
+  {date:'Fri · Jun 19', date_es:'Vie · Jun 19', ms:[
+    {t1:'Morocco',                t2:'Scotland',              g:'C', time:'9:00 AM',  score:'1–0'},
+    {t1:'Brazil',                 t2:'Haiti',                 g:'C', time:'12:00 PM', score:'3–0'},
+    {t1:'USA',                    t2:'Australia',             g:'D', time:'3:00 PM',  score:'2–0'},
+    {t1:'Türkiye',                t2:'Paraguay',              g:'D', time:'6:00 PM',  score:'0–1'},
+  ]},
+  {date:'Sat · Jun 20', date_es:'Sáb · Jun 20', ms:[
+    {t1:'Germany',                t2:"Côte d'Ivoire",         g:'E', time:'9:00 AM',  score:'2–1'},
+    {t1:'Ecuador',                t2:'Curaçao',               g:'E', time:'12:00 PM', score:'0–0'},
+    {t1:'Netherlands',            t2:'Sweden',                g:'F', time:'3:00 PM',  score:'5–1'},
+    {t1:'Japan',                  t2:'Tunisia',               g:'F', time:'6:00 PM',  score:'4–0'},
+  ]},
+  {date:'Sun · Jun 21', date_es:'Dom · Jun 21', ms:[
+    {t1:'Spain',                  t2:'Saudi Arabia',          g:'H', time:'9:00 AM'},
+    {t1:'Belgium',                t2:'Iran',                  g:'G', time:'12:00 PM'},
+    {t1:'Uruguay',                t2:'Cabo Verde',            g:'H', time:'3:00 PM'},
+    {t1:'New Zealand',            t2:'Egypt',                 g:'G', time:'6:00 PM'},
+  ]},
+  {date:'Mon · Jun 22', date_es:'Lun · Jun 22', ms:[
+    {t1:'Argentina',              t2:'Austria',               g:'J', time:'10:00 AM'},
+    {t1:'France',                 t2:'Iraq',                  g:'I', time:'2:00 PM'},
+    {t1:'Norway',                 t2:'Senegal',               g:'I', time:'5:00 PM'},
+    {t1:'Jordan',                 t2:'Algeria',               g:'J', time:'8:00 PM'},
+  ]},
+  {date:'Tue · Jun 23', date_es:'Mar · Jun 23', ms:[
+    {t1:'Portugal',               t2:'Uzbekistan',            g:'K', time:'10:00 AM'},
+    {t1:'England',                t2:'Ghana',                 g:'L', time:'1:00 PM'},
+    {t1:'Panama',                 t2:'Croatia',               g:'L', time:'4:00 PM'},
+    {t1:'Colombia',               t2:'Congo DR',              g:'K', time:'7:00 PM'},
   ]},
 ];
 
@@ -542,9 +581,9 @@ const T = {
     ft:              'FT',
     tbd:             'TBD',
     more12:          '+12 more',
-    md1:             'Matchday 1 of 3 — Group Stage',
+    md1:             'Matchday 2 In Progress — Group Stage',
     allTimes:        'All times Pacific',
-    infoMsg:         'Matchday 2 (~Jun 15–22) and Matchday 3 (~Jun 23–27) scores appear automatically each morning once results are in.',
+    infoMsg:         'Matchday 3 (~Jun 25–27) scores appear automatically each morning once results are in.',
     tournamentBracket:'Tournament Bracket',
     bracketSub:      '32 teams advance from 12 groups',
     bracketLegend:   'Bracket fills after group stage ends (~Jun 27) · Bronze Final: Jul 18 · Final: Jul 19, MetLife Stadium NJ',
@@ -590,9 +629,9 @@ const T = {
     ft:              'FIN',
     tbd:             'PD',
     more12:          '+12 más',
-    md1:             'Jornada 1 de 3 — Fase de Grupos',
+    md1:             'Jornada 2 En Curso — Fase de Grupos',
     allTimes:        'Hora del Pacífico',
-    infoMsg:         'Los marcadores de la Jornada 2 (~15–22 Jun) y Jornada 3 (~23–27 Jun) aparecen automáticamente cada mañana una vez que se conocen los resultados.',
+    infoMsg:         'Los marcadores de la Jornada 3 (~25–27 Jun) aparecen automáticamente cada mañana una vez que se conocen los resultados.',
     tournamentBracket:'Cuadro del Torneo',
     bracketSub:      '32 equipos avanzan desde 12 grupos',
     bracketLegend:   'El cuadro se completa al terminar la fase de grupos (~27 Jun) · Tercer lugar: 18 Jul · Final: 19 Jul, MetLife Stadium NJ',
@@ -707,8 +746,8 @@ async function loadData() {
     TRENDS = {}; STATS = {};
     if (j.meta?.recentResults) {
       j.meta.recentResults.forEach(res => {
-        // Schedule overlay
-        SCHEDULE_MD1.forEach(day => day.ms.forEach(m => {
+        // Schedule overlay — patch both MD1 and MD2
+        [...SCHEDULE_MD1, ...SCHEDULE_MD2].forEach(day => day.ms.forEach(m => {
           if ((m.t1===res.home&&m.t2===res.away)||(m.t1===res.away&&m.t2===res.home)) {
             if (m.t1===res.home) m.score = `${res.homeScore}–${res.awayScore}`;
             else m.score = `${res.awayScore}–${res.homeScore}`;
@@ -942,11 +981,14 @@ function renderGroups() {
 function renderSchedule() {
   const body=document.getElementById('sched-body');
   body.innerHTML='';
-  SCHEDULE_MD1.forEach(day=>{
+
+  const mdBanner = (label) =>
+    `<div class="dhdr" style="background:rgba(34,197,94,.12);color:var(--green);font-weight:800;font-size:.68rem;letter-spacing:.1em;padding:.55rem 1rem">${label}</div>`;
+
+  const renderDay = (day) => {
     body.innerHTML+=`<div class="dhdr">${lang==='es' ? day.date_es : day.date}</div>`;
     day.ms.forEach(m=>{
       const f1=ti(m.t1).flag, f2=ti(m.t2).flag;
-      // Check live scores first
       const lk = liveScores[`${m.t1}|${m.t2}`] || liveScores[`${m.t2}|${m.t1}`];
       let right;
       if (lk) {
@@ -960,7 +1002,7 @@ function renderSchedule() {
           right=`<span class="mtime">${m.time} ${tr('pt')}</span>`;
         }
       } else if (m.score) {
-        right=`<span class="mscore">${m.score}</span>`;
+        right=`<span class="mscore">${m.score} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
       } else {
         right=`<span class="mtime">${m.time} ${tr('pt')}</span>`;
       }
@@ -976,7 +1018,13 @@ function renderSchedule() {
         ${right}
       </div>`;
     });
-  });
+  };
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 1 — Jun 11–17 · Completada' : '▸ MATCHDAY 1 — Jun 11–17 · Complete');
+  SCHEDULE_MD1.forEach(renderDay);
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 2 — Jun 18–23 · En Curso' : '▸ MATCHDAY 2 — Jun 18–23 · In Progress');
+  SCHEDULE_MD2.forEach(renderDay);
 }
 
 /* ── BRACKET ────────────────────────────────────────── */
