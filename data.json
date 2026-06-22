@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-21T08:57:49Z",
+    "lastUpdated": "2026-06-22T10:39:36Z",
     "stage": "Group Stage",
     "matchday": 2,
     "eliminatedCount": 0,
@@ -255,6 +255,34 @@
         "away": "Japan",
         "homeScore": 0,
         "awayScore": 4,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Spain",
+        "away": "Saudi Arabia",
+        "homeScore": 4,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Belgium",
+        "away": "Iran",
+        "homeScore": 0,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Uruguay",
+        "away": "Cabo Verde",
+        "homeScore": 2,
+        "awayScore": 2,
+        "round": "Group Stage"
+      },
+      {
+        "home": "New Zealand",
+        "away": "Egypt",
+        "homeScore": 1,
+        "awayScore": 3,
         "round": "Group Stage"
       }
     ]
