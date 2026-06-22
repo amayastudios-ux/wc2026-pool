@@ -447,6 +447,16 @@ const GROUPS = [
 const GROUP_MAP = {};
 GROUPS.forEach(g => g.teams.forEach(t => GROUP_MAP[t] = g.id));
 
+// ── Static elimination fallback ──────────────────────────
+// Keeps mobile cards correct even if data.json fetch fails
+// (e.g. local-file open on iOS Safari). update_results.py
+// keeps this in sync via data.json; we mirror it here.
+const ELIM_STATUS = {
+  'Haiti':   'Group Stage',
+  'Türkiye': 'Group Stage',
+  'Tunisia': 'Group Stage',
+};
+
 const SCHEDULE_MD1 = [
   {date:'Thu · Jun 11', date_es:'Jue · Jun 11', ms:[
     {t1:'Mexico',          t2:'South Africa',        g:'A', time:'12:00 PM', score:'2–0'},
@@ -790,12 +800,18 @@ async function loadData() {
 
 function ti(name) {
   const b = TD[name] || {};
-  return {
-    status:'active', pts:0,
+  const result = {
+    status:'active', pts:0, roundReached:null,
     ...b,
     group: b.group || GROUP_MAP[name] || '?',
     flag:  b.flag  || FLAGS[name]     || '🏳',
   };
+  // Fallback: if data.json failed to load or is stale, use hardcoded list
+  if (ELIM_STATUS[name] && result.status !== 'eliminated') {
+    result.status = 'eliminated';
+    result.roundReached = result.roundReached || ELIM_STATUS[name];
+  }
+  return result;
 }
 
 /* ── RENDER ALL ─────────────────────────────────────── */
@@ -921,17 +937,18 @@ function renderPool() {
     // ── Mobile card ──
     const t1alive=p.t1.status!=='eliminated', t2alive=p.t2.status!=='eliminated';
     const rankColor = rank===0?'#C8A84B':rank===1?'#A0AEC0':rank===2?'#CD7F32':'var(--faint)';
-    const mc1=`<div class="pcard-country">
-      <span style="font-size:1rem">${p.t1.flag}</span>
-      <span style="${t1alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c1}</span>${trendArrow(p.c1)}
+    const elimRowStyle = 'background:rgba(248,113,113,.10);border-radius:6px;padding:.3rem .45rem;margin-left:-4px;border:.5px solid rgba(248,113,113,.2)';
+    const mc1=`<div class="pcard-country" ${!t1alive?`style="${elimRowStyle}"`:''}>
+      <span style="font-size:1rem;${t1alive?'':'opacity:.7'}">${p.t1.flag}</span>
+      <span style="flex:1;min-width:0;${t1alive?'':'text-decoration:line-through;color:var(--red);opacity:.75'}">${p.c1}</span>${trendArrow(p.c1)}
       <span class="b b-grp">${p.t1.group}</span>
-      ${!t1alive?`<span class="b b-out" style="font-size:.58rem">${p.t1.roundReached||tr('out')}</span>`:''}
+      ${!t1alive?`<span class="b b-out" style="font-size:.62rem;padding:.18rem .55rem">${p.t1.roundReached||tr('out')}</span>`:''}
     </div>`;
-    const mc2=`<div class="pcard-country">
-      <span style="font-size:1rem">${p.t2.flag}</span>
-      <span style="${t2alive?'':'text-decoration:line-through;color:var(--faint)'}">${p.c2}</span>${trendArrow(p.c2)}
+    const mc2=`<div class="pcard-country" ${!t2alive?`style="${elimRowStyle}"`:''}>
+      <span style="font-size:1rem;${t2alive?'':'opacity:.7'}">${p.t2.flag}</span>
+      <span style="flex:1;min-width:0;${t2alive?'':'text-decoration:line-through;color:var(--red);opacity:.75'}">${p.c2}</span>${trendArrow(p.c2)}
       <span class="b b-grp">${p.t2.group}</span>
-      ${!t2alive?`<span class="b b-out" style="font-size:.58rem">${p.t2.roundReached||tr('out')}</span>`:''}
+      ${!t2alive?`<span class="b b-out" style="font-size:.62rem;padding:.18rem .55rem">${p.t2.roundReached||tr('out')}</span>`:''}
     </div>`;
     cards.innerHTML+=`<div class="pcard">
       <div class="pcard-top">

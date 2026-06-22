@@ -3,7 +3,7 @@
     "lastUpdated": "2026-06-22T10:39:36Z",
     "stage": "Group Stage",
     "matchday": 2,
-    "eliminatedCount": 0,
+    "eliminatedCount": 3,
     "recentResults": [
       {
         "home": "Mexico",
@@ -452,9 +452,9 @@
     "Tunisia": {
       "group": "F",
       "flag": "🇹🇳",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Belgium": {
       "group": "G",
