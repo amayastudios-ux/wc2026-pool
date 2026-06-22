@@ -361,7 +361,7 @@
     "Haiti": {
       "group": "C",
       "flag": "🇭🇹",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
       "roundReached": null
     },
@@ -396,7 +396,7 @@
     "Türkiye": {
       "group": "D",
       "flag": "🇹🇷",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
       "roundReached": null
     },
