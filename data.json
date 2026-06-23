@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-22T10:39:36Z",
+    "lastUpdated": "2026-06-23T08:29:49Z",
     "stage": "Group Stage",
     "matchday": 2,
-    "eliminatedCount": 3,
+    "eliminatedCount": 0,
     "recentResults": [
       {
         "home": "Mexico",
@@ -284,6 +284,34 @@
         "homeScore": 1,
         "awayScore": 3,
         "round": "Group Stage"
+      },
+      {
+        "home": "Argentina",
+        "away": "Austria",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "France",
+        "away": "Iraq",
+        "homeScore": 3,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Norway",
+        "away": "Senegal",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Jordan",
+        "away": "Algeria",
+        "homeScore": 1,
+        "awayScore": 2,
+        "round": "Group Stage"
       }
     ]
   },
@@ -361,7 +389,7 @@
     "Haiti": {
       "group": "C",
       "flag": "🇭🇹",
-      "status": "eliminated",
+      "status": "active",
       "pts": 0,
       "roundReached": null
     },
@@ -396,7 +424,7 @@
     "Türkiye": {
       "group": "D",
       "flag": "🇹🇷",
-      "status": "eliminated",
+      "status": "active",
       "pts": 0,
       "roundReached": null
     },
@@ -452,9 +480,9 @@
     "Tunisia": {
       "group": "F",
       "flag": "🇹🇳",
-      "status": "eliminated",
+      "status": "active",
       "pts": 0,
-      "roundReached": "Group Stage"
+      "roundReached": null
     },
     "Belgium": {
       "group": "G",
