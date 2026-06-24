@@ -2,8 +2,8 @@
   "meta": {
     "lastUpdated": "2026-06-24T08:22:53Z",
     "stage": "Group Stage",
-    "matchday": 2,
-    "eliminatedCount": 0,
+    "matchday": 3,
+    "eliminatedCount": 3,
     "recentResults": [
       {
         "home": "Mexico",
@@ -417,9 +417,9 @@
     "Haiti": {
       "group": "C",
       "flag": "🇭🇹",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Scotland": {
       "group": "C",
@@ -452,9 +452,9 @@
     "Türkiye": {
       "group": "D",
       "flag": "🇹🇷",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Germany": {
       "group": "E",
@@ -508,9 +508,9 @@
     "Tunisia": {
       "group": "F",
       "flag": "🇹🇳",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Belgium": {
       "group": "G",

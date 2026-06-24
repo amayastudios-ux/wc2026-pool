@@ -285,7 +285,7 @@
       <p id="hdr-sub">Pool tracker &nbsp;·&nbsp; 24 participants &nbsp;·&nbsp; Jun 11 – Jul 19, 2026</p>
     </div>
     <div style="margin-left:auto;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-      <div class="hdr-badge" id="stage-badge">Group Stage · MD2</div>
+      <div class="hdr-badge" id="stage-badge">Group Stage · MD3</div>
       <div class="lang-tog">
         <button class="ltbtn on" id="btn-en" onclick="setLang('en')">EN</button>
         <button class="ltbtn" id="btn-es" onclick="setLang('es')">ES</button>
@@ -346,12 +346,12 @@
   <!-- ══ SCHEDULE ══ -->
   <div id="t-sched" style="display:none">
     <div class="card">
-      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Matchday 2 In Progress — Group Stage</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
+      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Matchday 3 In Progress — Group Stage</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
       <div id="sched-body"></div>
     </div>
     <div class="infobox">
       <i class="ti ti-refresh"></i>
-      <p id="sched-info">Matchday 3 (~Jun 25–27) scores appear automatically each morning once results are in.</p>
+      <p id="sched-info">Matchday 3 runs Jun 24–27. Scores update automatically each morning once results are in.</p>
     </div>
   </div>
 
@@ -374,7 +374,7 @@
         <span class="card-sub" id="elim-sub">None yet — tournament in progress</span>
       </div>
       <div class="echips" id="elim-body">
-        <p style="color:var(--faint);font-size:.8rem;padding:.25rem">No teams eliminated yet. Check back after Matchday 3 (~Jun 27).</p>
+        <p style="color:var(--faint);font-size:.8rem;padding:.25rem">No teams eliminated yet. Check back after Matchday 3 (Jun 27).</p>
       </div>
     </div>
   </div>
@@ -498,6 +498,41 @@ const SCHEDULE_MD1 = [
   ]},
 ];
 
+const SCHEDULE_MD3 = [
+  {date:'Wed · Jun 24', date_es:'Mié · Jun 24', ms:[
+    {t1:'Switzerland',          t2:'Canada',              g:'B', time:'12:00 PM'},
+    {t1:'Bosnia & Herzegovina', t2:'Qatar',               g:'B', time:'12:00 PM'},
+    {t1:'Scotland',             t2:'Brazil',              g:'C', time:'3:00 PM'},
+    {t1:'Morocco',              t2:'Haiti',               g:'C', time:'3:00 PM'},
+    {t1:'Czechia',              t2:'Mexico',              g:'A', time:'5:00 PM'},
+    {t1:'South Africa',         t2:'Korea Republic',      g:'A', time:'5:00 PM'},
+  ]},
+  {date:'Thu · Jun 25', date_es:'Jue · Jun 25', ms:[
+    {t1:'Ecuador',              t2:'Germany',             g:'E', time:'1:00 PM'},
+    {t1:'Curaçao',              t2:"Côte d'Ivoire",       g:'E', time:'1:00 PM'},
+    {t1:'Japan',                t2:'Sweden',              g:'F', time:'4:00 PM'},
+    {t1:'Tunisia',              t2:'Netherlands',         g:'F', time:'4:00 PM'},
+    {t1:'Türkiye',              t2:'USA',                 g:'D', time:'7:00 PM'},
+    {t1:'Paraguay',             t2:'Australia',           g:'D', time:'7:00 PM'},
+  ]},
+  {date:'Fri · Jun 26', date_es:'Vie · Jun 26', ms:[
+    {t1:'Norway',               t2:'France',              g:'I', time:'12:00 PM'},
+    {t1:'Senegal',              t2:'Iraq',                g:'I', time:'12:00 PM'},
+    {t1:'Cabo Verde',           t2:'Saudi Arabia',        g:'H', time:'5:00 PM'},
+    {t1:'Uruguay',              t2:'Spain',               g:'H', time:'5:00 PM'},
+    {t1:'Egypt',                t2:'Iran',                g:'G', time:'8:00 PM'},
+    {t1:'New Zealand',          t2:'Belgium',             g:'G', time:'8:00 PM'},
+  ]},
+  {date:'Sat · Jun 27', date_es:'Sáb · Jun 27', ms:[
+    {t1:'Panama',               t2:'England',             g:'L', time:'2:00 PM'},
+    {t1:'Croatia',              t2:'Ghana',               g:'L', time:'2:00 PM'},
+    {t1:'Colombia',             t2:'Portugal',            g:'K', time:'4:30 PM'},
+    {t1:'Congo DR',             t2:'Uzbekistan',          g:'K', time:'4:30 PM'},
+    {t1:'Algeria',              t2:'Austria',             g:'J', time:'7:00 PM'},
+    {t1:'Jordan',               t2:'Argentina',           g:'J', time:'7:00 PM'},
+  ]},
+];
+
 const SCHEDULE_MD2 = [
   {date:'Thu · Jun 18', date_es:'Jue · Jun 18', ms:[
     {t1:'South Africa',           t2:'Czechia',              g:'A', time:'9:00 AM',  score:'1–1'},
@@ -591,15 +626,15 @@ const T = {
     ft:              'FT',
     tbd:             'TBD',
     more12:          '+12 more',
-    md1:             'Matchday 2 In Progress — Group Stage',
+    md1:             'Matchday 3 In Progress — Group Stage',
     allTimes:        'All times Pacific',
-    infoMsg:         'Matchday 3 (~Jun 25–27) scores appear automatically each morning once results are in.',
+    infoMsg:         'Matchday 3 runs Jun 24–27. Scores update automatically each morning once results are in.',
     tournamentBracket:'Tournament Bracket',
     bracketSub:      '32 teams advance from 12 groups',
     bracketLegend:   'Bracket fills after group stage ends (~Jun 27) · Bronze Final: Jul 18 · Final: Jul 19, MetLife Stadium NJ',
     eliminatedNations:'Eliminated Nations',
     noneYet:         'None yet — tournament in progress',
-    noElim:          'No teams eliminated yet. Check back after Matchday 3 (~Jun 27).',
+    noElim:          'No teams eliminated yet. Check back after Matchday 3 (Jun 27).',
     nations:         n => `${n} nation${n!==1?'s':''} eliminated`,
     r32:'Round of 32', r16:'Round of 16', qf:'Quarter-finals', sf:'Semi-finals', fin:'Final',
     r32sub:'16 matches', r16sub:'8 matches', qfsub:'4 matches', sfsub:'2 matches',
@@ -736,6 +771,13 @@ async function loadData() {
     const j = await r.json();
     TD = j.teams || {};
 
+    // Apply hardcoded ELIM_STATUS overrides so eliminated teams always show
+    Object.entries(ELIM_STATUS).forEach(([name, round]) => {
+      if (TD[name]) {
+        TD[name].status = 'eliminated';
+        TD[name].roundReached = TD[name].roundReached || round;
+      }
+    });
     const active = Object.values(TD).filter(tm=>tm.status==='active').length;
     const elim   = Object.values(TD).filter(tm=>tm.status==='eliminated').length;
     document.getElementById('s-active').textContent = active;
@@ -756,8 +798,8 @@ async function loadData() {
     TRENDS = {}; STATS = {};
     if (j.meta?.recentResults) {
       j.meta.recentResults.forEach(res => {
-        // Schedule overlay — patch both MD1 and MD2
-        [...SCHEDULE_MD1, ...SCHEDULE_MD2].forEach(day => day.ms.forEach(m => {
+        // Schedule overlay — patch MD1, MD2, and MD3
+        [...SCHEDULE_MD1, ...SCHEDULE_MD2, ...SCHEDULE_MD3].forEach(day => day.ms.forEach(m => {
           if ((m.t1===res.home&&m.t2===res.away)||(m.t1===res.away&&m.t2===res.home)) {
             if (m.t1===res.home) m.score = `${res.homeScore}–${res.awayScore}`;
             else m.score = `${res.awayScore}–${res.homeScore}`;
@@ -1040,8 +1082,11 @@ function renderSchedule() {
   body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 1 — Jun 11–17 · Completada' : '▸ MATCHDAY 1 — Jun 11–17 · Complete');
   SCHEDULE_MD1.forEach(renderDay);
 
-  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 2 — Jun 18–23 · En Curso' : '▸ MATCHDAY 2 — Jun 18–23 · In Progress');
+  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 2 — Jun 18–23 · Completada' : '▸ MATCHDAY 2 — Jun 18–23 · Complete');
   SCHEDULE_MD2.forEach(renderDay);
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 3 — Jun 24–27 · En Curso' : '▸ MATCHDAY 3 — Jun 24–27 · In Progress');
+  SCHEDULE_MD3.forEach(renderDay);
 }
 
 /* ── BRACKET ────────────────────────────────────────── */
