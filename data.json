@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-23T08:29:49Z",
+    "lastUpdated": "2026-06-24T08:22:53Z",
     "stage": "Group Stage",
     "matchday": 2,
     "eliminatedCount": 0,
@@ -311,6 +311,34 @@
         "away": "Algeria",
         "homeScore": 1,
         "awayScore": 2,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Portugal",
+        "away": "Uzbekistan",
+        "homeScore": 5,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "England",
+        "away": "Ghana",
+        "homeScore": 0,
+        "awayScore": 0,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Panama",
+        "away": "Croatia",
+        "homeScore": 0,
+        "awayScore": 1,
+        "round": "Group Stage"
+      },
+      {
+        "home": "Colombia",
+        "away": "Congo DR",
+        "homeScore": 1,
+        "awayScore": 0,
         "round": "Group Stage"
       }
     ]
