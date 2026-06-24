@@ -234,17 +234,19 @@ def fetch_espn_standings():
             team_disp = display(internal)
             stats = {s["name"]: s.get("value", 0) or 0 for s in e.get("stats", [])}
             ranked.append({
-                "team":   team_disp,
-                "pts":    int(stats.get("points", 0)),
-                "gd":     int(stats.get("pointDifferential", 0)),
-                "gf":     int(stats.get("pointsFor", 0)),
-                "ga":     int(stats.get("pointsAgainst", 0)),
-                "played": int(stats.get("gamesPlayed", 0)),
-                "w":      int(stats.get("wins", 0)),
-                "d":      int(stats.get("ties", 0)),
-                "l":      int(stats.get("losses", 0)),
-                "_rank":  int(stats.get("rank", 99)),
-                "_key":   internal,
+                "team":      team_disp,
+                "pts":       int(stats.get("points", 0)),
+                "gd":        int(stats.get("pointDifferential", 0)),
+                "gf":        int(stats.get("pointsFor", 0)),
+                "ga":        int(stats.get("pointsAgainst", 0)),
+                "played":    int(stats.get("gamesPlayed", 0)),
+                "w":         int(stats.get("wins", 0)),
+                "d":         int(stats.get("ties", 0)),
+                "l":         int(stats.get("losses", 0)),
+                "_rank":     int(stats.get("rank", 99)),
+                "_key":      internal,
+                "_advanced": int(stats.get("advanced", 0)),
+                "_elim":     int(stats.get("eliminated", 0)),
             })
         ranked.sort(key=lambda x: x["_rank"])
         for t in ranked:
@@ -301,12 +303,16 @@ def determine_qualifiers(standings):
         get_key = lambda t: t.get("_key", t["team"])
         get_flag = lambda t: TEAM_FLAG.get(get_key(t), "")
 
-        if len(ranked) >= 1 and ranked[0]["played"] == 3:
+        # confirmed = played all 3 games OR ESPN flagged as mathematically advanced
+        def confirmed(t):
+            return t["played"] == 3 or t.get("_advanced", 0) == 1
+
+        if len(ranked) >= 1 and confirmed(ranked[0]):
             t = ranked[0]
             winners.append({"team": t["team"], "group": grp, "flag": get_flag(t),
                              "pts": t["pts"], "gd": t["gd"], "gf": t["gf"]})
 
-        if len(ranked) >= 2 and ranked[1]["played"] == 3:
+        if len(ranked) >= 2 and confirmed(ranked[1]):
             t = ranked[1]
             runnersup.append({"team": t["team"], "group": grp, "flag": get_flag(t),
                                "pts": t["pts"], "gd": t["gd"], "gf": t["gf"]})
@@ -422,6 +428,15 @@ def apply_group_eliminations(teams, standings, qualifiers):
             teams[name]["status"]       = "eliminated"
             teams[name]["roundReached"] = "Group Stage"
 
+    # ESPN-flagged mathematically eliminated (group stage)
+    for grp, ranked in standings.items():
+        for t in ranked:
+            if t.get("_elim", 0) == 1:
+                name = t["team"]
+                if name in teams and teams[name]["status"] == "active":
+                    teams[name]["status"]       = "eliminated"
+                    teams[name]["roundReached"] = "Group Stage"
+
     # Hardcoded admin-confirmed eliminations
     for name in HARDCODED_ELIMINATED:
         if name in teams:
@@ -449,6 +464,13 @@ def determine_stage_matchday(results, standings):
             (t["played"] for grp in standings.values() for t in grp),
             default=0
         )
+        # MD3 window is Jun 24-27; floor matchday at 3 if we're in that window
+        # and at least MD2 is done (max_played >= 2)
+        today = datetime.now(timezone.utc).date()
+        md3_start = datetime(2026, 6, 24, tzinfo=timezone.utc).date()
+        md3_end   = datetime(2026, 6, 27, tzinfo=timezone.utc).date()
+        if md3_start <= today <= md3_end and max_played >= 2:
+            max_played = max(max_played, 3)
         return "Group Stage", max(max_played, 1)
 
     games = {}

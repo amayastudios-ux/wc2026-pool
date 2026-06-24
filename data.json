@@ -1,8 +1,8 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-24T16:52:19Z",
+    "lastUpdated": "2026-06-24T17:04:20Z",
     "stage": "Group Stage",
-    "matchday": 2,
+    "matchday": 3,
     "eliminatedCount": 3,
     "recentResults": [
       {
@@ -946,12 +946,70 @@
     ]
   },
   "qualifiers": {
-    "winners": [],
-    "runnersup": [],
+    "winners": [
+      {
+        "team": "Mexico",
+        "group": "A",
+        "flag": "🇲🇽",
+        "pts": 6,
+        "gd": 3,
+        "gf": 3
+      },
+      {
+        "team": "USA",
+        "group": "D",
+        "flag": "🇺🇸",
+        "pts": 6,
+        "gd": 5,
+        "gf": 6
+      },
+      {
+        "team": "Germany",
+        "group": "E",
+        "flag": "🇩🇪",
+        "pts": 6,
+        "gd": 7,
+        "gf": 9
+      },
+      {
+        "team": "France",
+        "group": "I",
+        "flag": "🇫🇷",
+        "pts": 6,
+        "gd": 5,
+        "gf": 6
+      },
+      {
+        "team": "Argentina",
+        "group": "J",
+        "flag": "🇦🇷",
+        "pts": 6,
+        "gd": 5,
+        "gf": 5
+      },
+      {
+        "team": "Colombia",
+        "group": "K",
+        "flag": "🇨🇴",
+        "pts": 6,
+        "gd": 3,
+        "gf": 4
+      }
+    ],
+    "runnersup": [
+      {
+        "team": "Norway",
+        "group": "I",
+        "flag": "🇳🇴",
+        "pts": 6,
+        "gd": 4,
+        "gf": 7
+      }
+    ],
     "third_qualified": [],
     "third_eliminated": [],
     "math_eliminated": [],
-    "r32_count": 0
+    "r32_count": 7
   },
   "teams": {
     "Mexico": {
