@@ -759,9 +759,11 @@ function applyLang() {
 }
 
 /* ══ STATE ════════════════════════════════════════════ */
-let TD     = {}; // teamData from data.json
-let TRENDS = {}; // teamName → 'win' | 'loss' | 'draw'
-let STATS  = {}; // teamName → {w, d, l, gf} from MD results
+let TD         = {}; // teamData from data.json
+let TRENDS     = {}; // teamName → 'win' | 'loss' | 'draw'
+let STATS      = {}; // teamName → {w, d, l, gf} from MD results
+let QUALIFIERS = {}; // qualifiers from data.json (winners, runnersup, third_qualified)
+let STANDINGS  = {}; // group standings from data.json
 
 /* ── LOAD DATA ──────────────────────────────────────── */
 async function loadData() {
@@ -769,7 +771,9 @@ async function loadData() {
     const r = await fetch('data.json?t=' + Date.now());
     if (!r.ok) throw new Error('no data.json');
     const j = await r.json();
-    TD = j.teams || {};
+    TD         = j.teams      || {};
+    QUALIFIERS = j.qualifiers || {};
+    STANDINGS  = j.standings  || {};
 
     // Apply hardcoded ELIM_STATUS overrides so eliminated teams always show
     Object.entries(ELIM_STATUS).forEach(([name, round]) => {
@@ -1091,25 +1095,98 @@ function renderSchedule() {
 
 /* ── BRACKET ────────────────────────────────────────── */
 function renderBracket() {
-  const RNDS=[
-    {nk:'r32', sk:'r32sub', n:4},
-    {nk:'r16', sk:'r16sub', n:3},
-    {nk:'qf',  sk:'qfsub',  n:2},
-    {nk:'sf',  sk:'sfsub',  n:1},
-    {nk:'fin', sk:null,     n:1},
-  ];
-  const body=document.getElementById('bracket-body');
-  body.innerHTML='';
-  RNDS.forEach((r,ri)=>{
-    const sub = r.sk ? tr(r.sk) : 'Jul 19';
-    let html=`<div class="brnd-ttl">${tr(r.nk)}<span class="brnd-sub">${sub}</span></div>`;
-    for(let i=0;i<r.n;i++){
-      html+=`<div class="bm"><div class="bt">⚽ <span>${tr('tbd')}</span></div><div class="bt">⚽ <span>${tr('tbd')}</span></div></div>`;
+  const body = document.getElementById('bracket-body');
+  body.innerHTML = '';
+
+  const winners   = QUALIFIERS.winners          || [];
+  const runnersup = QUALIFIERS.runnersup         || [];
+  const thirds    = QUALIFIERS.third_qualified   || [];
+  const r32count  = winners.length + runnersup.length + thirds.length;
+
+  // ── Round of 32 qualifier grid ──────────────────────
+  const r32col = document.createElement('div');
+  r32col.className = 'brnd';
+
+  const r32label = lang==='es' ? 'Ronda de 32' : 'Round of 32';
+  const r32sub   = lang==='es' ? `${r32count} de 32 clasificados` : `${r32count} / 32 qualified`;
+  let r32html = `<div class="brnd-ttl">${r32label}<span class="brnd-sub">${r32sub}</span></div>`;
+
+  function qChip(q, label) {
+    const flag = q.flag || (TD[q.team] || {}).flag || '🏳';
+    const lbl  = `<span style="font-size:.55rem;opacity:.55;margin-left:.2rem">${label}</span>`;
+    return `<div class="bt" style="justify-content:flex-start;gap:.4rem;padding:.35rem .6rem">
+      <span style="font-size:.95rem">${flag}</span>
+      <span style="font-size:.78rem;font-weight:700">${q.team}</span>${lbl}
+    </div>`;
+  }
+
+  if (r32count === 0) {
+    r32html += `<div style="color:var(--faint);font-size:.78rem;padding:.5rem;text-align:center">${lang==='es'?'Completo al terminar MD3 (~27 Jun)':'Fills after MD3 ends (~Jun 27)'}</div>`;
+  } else {
+    if (winners.length) {
+      r32html += `<div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--green);padding:.4rem .6rem .15rem;opacity:.8">${lang==='es'?'▸ PRIMEROS DE GRUPO':'▸ GROUP WINNERS'} (${winners.length})</div>`;
+      winners.forEach(q => { r32html += qChip(q, `1${q.group}`); });
     }
-    if(ri===0) html+=`<div style="font-size:.58rem;color:var(--faint);margin-top:.25rem;text-align:center">${tr('more12')}</div>`;
-    if(ri===4) html+=`<div style="text-align:center;margin-top:.5rem;font-size:1.5rem">🏆</div>`;
-    const col=document.createElement('div');
-    col.className='brnd'; col.innerHTML=html;
+    if (runnersup.length) {
+      r32html += `<div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--blue-lt);padding:.4rem .6rem .15rem;opacity:.8">${lang==='es'?'▸ SEGUNDOS DE GRUPO':'▸ RUNNERS-UP'} (${runnersup.length})</div>`;
+      runnersup.forEach(q => { r32html += qChip(q, `2${q.group}`); });
+    }
+    if (thirds.length) {
+      r32html += `<div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--yellow,#FBBF24);padding:.4rem .6rem .15rem;opacity:.8">${lang==='es'?'▸ MEJORES TERCEROS':'▸ BEST 3RD-PLACE'} (${thirds.length}/8)</div>`;
+      thirds.forEach(q => { r32html += qChip(q, `3${q.group} · ${q.pts}pts`); });
+    }
+    // Empty slots for remaining spots
+    const remaining = 32 - r32count;
+    if (remaining > 0) {
+      r32html += `<div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--faint);padding:.4rem .6rem .15rem">${lang==='es'?'▸ PENDIENTE':'▸ PENDING'} (${remaining})</div>`;
+      for (let i = 0; i < Math.min(remaining, 4); i++) {
+        r32html += `<div class="bt" style="opacity:.35"><span style="font-size:.85rem">⚽</span> <span style="font-size:.78rem">${tr('tbd')}</span></div>`;
+      }
+      if (remaining > 4) {
+        r32html += `<div style="font-size:.58rem;color:var(--faint);text-align:center;padding:.2rem">+${remaining - 4} more pending</div>`;
+      }
+    }
+  }
+  r32col.innerHTML = r32html;
+  body.appendChild(r32col);
+
+  // ── Knockout rounds (R16 → Final) ──────────────────
+  const RNDS = [
+    {nk:'r16', sk:'r16sub', n:3, date:'Jul 1–6'},
+    {nk:'qf',  sk:'qfsub',  n:2, date:'Jul 9–11'},
+    {nk:'sf',  sk:'sfsub',  n:1, date:'Jul 14–15'},
+    {nk:'fin', sk:null,     n:1, date:'Jul 19'},
+  ];
+  RNDS.forEach((r, ri) => {
+    const sub = r.sk ? tr(r.sk) : r.date;
+    let html = `<div class="brnd-ttl">${tr(r.nk)}<span class="brnd-sub">${sub}</span></div>`;
+
+    // Check if any teams have reached this round in TD
+    const roundKey = {r16:'Round of 16', qf:'Quarter-finals', sf:'Semi-finals', fin:'Final'}[r.nk];
+    const roundTeams = Object.entries(TD).filter(([,t]) =>
+      t.roundReached === roundKey || (r.nk==='fin' && (t.status==='champion'||t.roundReached==='Runner-up'))
+    );
+
+    if (roundTeams.length >= 2) {
+      for (let i = 0; i < roundTeams.length - 1; i += 2) {
+        const [n1, t1] = roundTeams[i];
+        const [n2, t2] = roundTeams[i+1] || [null, null];
+        html += `<div class="bm">
+          <div class="bt"><span style="font-size:.9rem">${t1.flag||FLAGS[n1]||'🏳'}</span> <span style="font-size:.78rem;font-weight:700">${n1}</span></div>
+          ${n2 ? `<div class="bt"><span style="font-size:.9rem">${t2.flag||FLAGS[n2]||'🏳'}</span> <span style="font-size:.78rem;font-weight:700">${n2}</span></div>` : `<div class="bt" style="opacity:.35">⚽ <span>${tr('tbd')}</span></div>`}
+        </div>`;
+      }
+    } else {
+      for (let i = 0; i < r.n; i++) {
+        html += `<div class="bm">
+          <div class="bt" style="opacity:.35">⚽ <span style="font-size:.78rem">${tr('tbd')}</span></div>
+          <div class="bt" style="opacity:.35">⚽ <span style="font-size:.78rem">${tr('tbd')}</span></div>
+        </div>`;
+      }
+    }
+    if (ri === 3) html += `<div style="text-align:center;margin-top:.5rem;font-size:1.5rem">🏆</div>`;
+    const col = document.createElement('div');
+    col.className = 'brnd'; col.innerHTML = html;
     body.appendChild(col);
   });
 }
