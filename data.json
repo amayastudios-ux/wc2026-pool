@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-24T17:04:20Z",
+    "lastUpdated": "2026-06-25T08:23:58Z",
     "stage": "Group Stage",
     "matchday": 3,
-    "eliminatedCount": 3,
+    "eliminatedCount": 5,
     "recentResults": [
       {
         "home": "Mexico",
@@ -388,6 +388,54 @@
         "awayScore": 0,
         "round": "Group Stage",
         "slug": "group-stage"
+      },
+      {
+        "home": "Bosnia & Herzegovina",
+        "away": "Qatar",
+        "homeScore": 3,
+        "awayScore": 1,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Switzerland",
+        "away": "Canada",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Morocco",
+        "away": "Haiti",
+        "homeScore": 4,
+        "awayScore": 2,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Scotland",
+        "away": "Brazil",
+        "homeScore": 0,
+        "awayScore": 3,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Czechia",
+        "away": "Mexico",
+        "homeScore": 0,
+        "awayScore": 3,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "South Africa",
+        "away": "Korea Republic",
+        "homeScore": 1,
+        "awayScore": 0,
+        "round": "Group Stage",
+        "slug": "group-stage"
       }
     ]
   },
@@ -395,139 +443,139 @@
     "A": [
       {
         "team": "Mexico",
-        "pts": 6,
-        "gd": 3,
-        "gf": 3,
+        "pts": 9,
+        "gd": 6,
+        "gf": 6,
         "ga": 0,
-        "played": 2,
-        "w": 2,
+        "played": 3,
+        "w": 3,
         "d": 0,
         "l": 0
+      },
+      {
+        "team": "South Africa",
+        "pts": 4,
+        "gd": -1,
+        "gf": 2,
+        "ga": 3,
+        "played": 3,
+        "w": 1,
+        "d": 1,
+        "l": 1
       },
       {
         "team": "Korea Republic",
         "pts": 3,
-        "gd": 0,
+        "gd": -1,
         "gf": 2,
-        "ga": 2,
-        "played": 2,
+        "ga": 3,
+        "played": 3,
         "w": 1,
         "d": 0,
-        "l": 1
+        "l": 2
       },
       {
         "team": "Czechia",
         "pts": 1,
-        "gd": -1,
+        "gd": -4,
         "gf": 2,
-        "ga": 3,
-        "played": 2,
+        "ga": 6,
+        "played": 3,
         "w": 0,
         "d": 1,
-        "l": 1
-      },
-      {
-        "team": "South Africa",
-        "pts": 1,
-        "gd": -2,
-        "gf": 1,
-        "ga": 3,
-        "played": 2,
-        "w": 0,
-        "d": 1,
-        "l": 1
+        "l": 2
       }
     ],
     "B": [
       {
-        "team": "Canada",
-        "pts": 4,
-        "gd": 6,
+        "team": "Switzerland",
+        "pts": 7,
+        "gd": 4,
         "gf": 7,
-        "ga": 1,
-        "played": 2,
-        "w": 1,
+        "ga": 3,
+        "played": 3,
+        "w": 2,
         "d": 1,
         "l": 0
       },
       {
-        "team": "Switzerland",
+        "team": "Canada",
         "pts": 4,
-        "gd": 3,
-        "gf": 5,
-        "ga": 2,
-        "played": 2,
+        "gd": 5,
+        "gf": 8,
+        "ga": 3,
+        "played": 3,
         "w": 1,
         "d": 1,
-        "l": 0
+        "l": 1
       },
       {
         "team": "Bosnia & Herzegovina",
-        "pts": 1,
-        "gd": -3,
-        "gf": 2,
-        "ga": 5,
-        "played": 2,
-        "w": 0,
+        "pts": 4,
+        "gd": -1,
+        "gf": 5,
+        "ga": 6,
+        "played": 3,
+        "w": 1,
         "d": 1,
         "l": 1
       },
       {
         "team": "Qatar",
         "pts": 1,
-        "gd": -6,
-        "gf": 1,
-        "ga": 7,
-        "played": 2,
+        "gd": -8,
+        "gf": 2,
+        "ga": 10,
+        "played": 3,
         "w": 0,
         "d": 1,
-        "l": 1
+        "l": 2
       }
     ],
     "C": [
       {
         "team": "Brazil",
-        "pts": 4,
-        "gd": 3,
-        "gf": 4,
+        "pts": 7,
+        "gd": 6,
+        "gf": 7,
         "ga": 1,
-        "played": 2,
-        "w": 1,
+        "played": 3,
+        "w": 2,
         "d": 1,
         "l": 0
       },
       {
         "team": "Morocco",
-        "pts": 4,
-        "gd": 1,
-        "gf": 2,
-        "ga": 1,
-        "played": 2,
-        "w": 1,
+        "pts": 7,
+        "gd": 3,
+        "gf": 6,
+        "ga": 3,
+        "played": 3,
+        "w": 2,
         "d": 1,
         "l": 0
       },
       {
         "team": "Scotland",
         "pts": 3,
-        "gd": 0,
+        "gd": -3,
         "gf": 1,
-        "ga": 1,
-        "played": 2,
+        "ga": 4,
+        "played": 3,
         "w": 1,
         "d": 0,
-        "l": 1
+        "l": 2
       },
       {
         "team": "Haiti",
         "pts": 0,
-        "gd": -4,
-        "gf": 0,
-        "ga": 4,
-        "played": 2,
+        "gd": -6,
+        "gf": 2,
+        "ga": 8,
+        "played": 3,
         "w": 0,
         "d": 0,
-        "l": 2
+        "l": 3
       }
     ],
     "D": [
@@ -951,9 +999,25 @@
         "team": "Mexico",
         "group": "A",
         "flag": "🇲🇽",
-        "pts": 6,
-        "gd": 3,
-        "gf": 3
+        "pts": 9,
+        "gd": 6,
+        "gf": 6
+      },
+      {
+        "team": "Switzerland",
+        "group": "B",
+        "flag": "🇨🇭",
+        "pts": 7,
+        "gd": 4,
+        "gf": 7
+      },
+      {
+        "team": "Brazil",
+        "group": "C",
+        "flag": "🇧🇷",
+        "pts": 7,
+        "gd": 6,
+        "gf": 7
       },
       {
         "team": "USA",
@@ -998,6 +1062,30 @@
     ],
     "runnersup": [
       {
+        "team": "South Africa",
+        "group": "A",
+        "flag": "🇿🇦",
+        "pts": 4,
+        "gd": -1,
+        "gf": 2
+      },
+      {
+        "team": "Canada",
+        "group": "B",
+        "flag": "🇨🇦",
+        "pts": 4,
+        "gd": 5,
+        "gf": 8
+      },
+      {
+        "team": "Morocco",
+        "group": "C",
+        "flag": "🇲🇦",
+        "pts": 7,
+        "gd": 3,
+        "gf": 6
+      },
+      {
         "team": "Norway",
         "group": "I",
         "flag": "🇳🇴",
@@ -1008,8 +1096,12 @@
     ],
     "third_qualified": [],
     "third_eliminated": [],
-    "math_eliminated": [],
-    "r32_count": 7
+    "math_eliminated": [
+      "Czechia",
+      "Qatar",
+      "Haiti"
+    ],
+    "r32_count": 12
   },
   "teams": {
     "Mexico": {
@@ -1036,9 +1128,9 @@
     "Czechia": {
       "group": "A",
       "flag": "🇨🇿",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Canada": {
       "group": "B",
@@ -1057,9 +1149,9 @@
     "Qatar": {
       "group": "B",
       "flag": "🇶🇦",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Switzerland": {
       "group": "B",
