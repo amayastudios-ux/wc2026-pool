@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-25T08:23:58Z",
+    "lastUpdated": "2026-06-26T08:30:40Z",
     "stage": "Group Stage",
     "matchday": 3,
-    "eliminatedCount": 5,
+    "eliminatedCount": 6,
     "recentResults": [
       {
         "home": "Mexico",
@@ -436,6 +436,54 @@
         "awayScore": 0,
         "round": "Group Stage",
         "slug": "group-stage"
+      },
+      {
+        "home": "Curaçao",
+        "away": "Côte d'Ivoire",
+        "homeScore": 0,
+        "awayScore": 2,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Ecuador",
+        "away": "Germany",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Japan",
+        "away": "Sweden",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Tunisia",
+        "away": "Netherlands",
+        "homeScore": 1,
+        "awayScore": 3,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Paraguay",
+        "away": "Australia",
+        "homeScore": 0,
+        "awayScore": 0,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Türkiye",
+        "away": "USA",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Group Stage",
+        "slug": "group-stage"
       }
     ]
   },
@@ -582,44 +630,44 @@
       {
         "team": "USA",
         "pts": 6,
-        "gd": 5,
-        "gf": 6,
-        "ga": 1,
-        "played": 2,
+        "gd": 4,
+        "gf": 8,
+        "ga": 4,
+        "played": 3,
         "w": 2,
         "d": 0,
-        "l": 0
+        "l": 1
       },
       {
         "team": "Australia",
-        "pts": 3,
+        "pts": 4,
         "gd": 0,
         "gf": 2,
         "ga": 2,
-        "played": 2,
+        "played": 3,
         "w": 1,
-        "d": 0,
+        "d": 1,
         "l": 1
       },
       {
         "team": "Paraguay",
-        "pts": 3,
+        "pts": 4,
         "gd": -2,
         "gf": 2,
         "ga": 4,
-        "played": 2,
+        "played": 3,
         "w": 1,
-        "d": 0,
+        "d": 1,
         "l": 1
       },
       {
         "team": "Türkiye",
-        "pts": 0,
-        "gd": -3,
-        "gf": 0,
-        "ga": 3,
-        "played": 2,
-        "w": 0,
+        "pts": 3,
+        "gd": -2,
+        "gf": 3,
+        "ga": 5,
+        "played": 3,
+        "w": 1,
         "d": 0,
         "l": 2
       }
@@ -628,92 +676,92 @@
       {
         "team": "Germany",
         "pts": 6,
-        "gd": 7,
-        "gf": 9,
-        "ga": 2,
-        "played": 2,
+        "gd": 6,
+        "gf": 10,
+        "ga": 4,
+        "played": 3,
         "w": 2,
         "d": 0,
-        "l": 0
+        "l": 1
       },
       {
         "team": "Côte d'Ivoire",
-        "pts": 3,
-        "gd": 0,
-        "gf": 2,
+        "pts": 6,
+        "gd": 2,
+        "gf": 4,
         "ga": 2,
-        "played": 2,
-        "w": 1,
+        "played": 3,
+        "w": 2,
         "d": 0,
         "l": 1
       },
       {
         "team": "Ecuador",
-        "pts": 1,
-        "gd": -1,
-        "gf": 0,
-        "ga": 1,
-        "played": 2,
-        "w": 0,
+        "pts": 4,
+        "gd": 0,
+        "gf": 2,
+        "ga": 2,
+        "played": 3,
+        "w": 1,
         "d": 1,
         "l": 1
       },
       {
         "team": "Curaçao",
         "pts": 1,
-        "gd": -6,
+        "gd": -8,
         "gf": 1,
-        "ga": 7,
-        "played": 2,
+        "ga": 9,
+        "played": 3,
         "w": 0,
         "d": 1,
-        "l": 1
+        "l": 2
       }
     ],
     "F": [
       {
         "team": "Netherlands",
-        "pts": 4,
-        "gd": 4,
-        "gf": 7,
-        "ga": 3,
-        "played": 2,
-        "w": 1,
+        "pts": 7,
+        "gd": 6,
+        "gf": 10,
+        "ga": 4,
+        "played": 3,
+        "w": 2,
         "d": 1,
         "l": 0
       },
       {
         "team": "Japan",
-        "pts": 4,
+        "pts": 5,
         "gd": 4,
-        "gf": 6,
-        "ga": 2,
-        "played": 2,
+        "gf": 7,
+        "ga": 3,
+        "played": 3,
         "w": 1,
-        "d": 1,
+        "d": 2,
         "l": 0
       },
       {
         "team": "Sweden",
-        "pts": 3,
+        "pts": 4,
         "gd": 0,
-        "gf": 6,
-        "ga": 6,
-        "played": 2,
+        "gf": 7,
+        "ga": 7,
+        "played": 3,
         "w": 1,
-        "d": 0,
+        "d": 1,
         "l": 1
       },
       {
         "team": "Tunisia",
         "pts": 0,
-        "gd": -8,
-        "gf": 1,
-        "ga": 9,
-        "played": 2,
+        "gd": -10,
+        "gf": 2,
+        "ga": 12,
+        "played": 3,
         "w": 0,
         "d": 0,
-        "l": 2
+        "l": 3
       }
     ],
     "G": [
@@ -1024,16 +1072,24 @@
         "group": "D",
         "flag": "🇺🇸",
         "pts": 6,
-        "gd": 5,
-        "gf": 6
+        "gd": 4,
+        "gf": 8
       },
       {
         "team": "Germany",
         "group": "E",
         "flag": "🇩🇪",
         "pts": 6,
-        "gd": 7,
-        "gf": 9
+        "gd": 6,
+        "gf": 10
+      },
+      {
+        "team": "Netherlands",
+        "group": "F",
+        "flag": "🇳🇱",
+        "pts": 7,
+        "gd": 6,
+        "gf": 10
       },
       {
         "team": "France",
@@ -1086,6 +1142,30 @@
         "gf": 6
       },
       {
+        "team": "Australia",
+        "group": "D",
+        "flag": "🇦🇺",
+        "pts": 4,
+        "gd": 0,
+        "gf": 2
+      },
+      {
+        "team": "Côte d'Ivoire",
+        "group": "E",
+        "flag": "🇨🇮",
+        "pts": 6,
+        "gd": 2,
+        "gf": 4
+      },
+      {
+        "team": "Japan",
+        "group": "F",
+        "flag": "🇯🇵",
+        "pts": 5,
+        "gd": 4,
+        "gf": 7
+      },
+      {
         "team": "Norway",
         "group": "I",
         "flag": "🇳🇴",
@@ -1099,9 +1179,12 @@
     "math_eliminated": [
       "Czechia",
       "Qatar",
-      "Haiti"
+      "Haiti",
+      "Türkiye",
+      "Curaçao",
+      "Tunisia"
     ],
-    "r32_count": 12
+    "r32_count": 16
   },
   "teams": {
     "Mexico": {
@@ -1226,9 +1309,9 @@
     "Curaçao": {
       "group": "E",
       "flag": "🇨🇼",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Côte d'Ivoire": {
       "group": "E",
