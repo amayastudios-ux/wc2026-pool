@@ -285,7 +285,7 @@
       <p id="hdr-sub">Pool tracker &nbsp;·&nbsp; 24 participants &nbsp;·&nbsp; Jun 11 – Jul 19, 2026</p>
     </div>
     <div style="margin-left:auto;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-      <div class="hdr-badge" id="stage-badge">Group Stage · MD3</div>
+      <div class="hdr-badge" id="stage-badge">Round of 32</div>
       <div class="lang-tog">
         <button class="ltbtn on" id="btn-en" onclick="setLang('en')">EN</button>
         <button class="ltbtn" id="btn-es" onclick="setLang('es')">ES</button>
@@ -346,7 +346,7 @@
   <!-- ══ SCHEDULE ══ -->
   <div id="t-sched" style="display:none">
     <div class="card">
-      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Matchday 3 In Progress — Group Stage</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
+      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Round of 32 — Jun 28–Jul 3 · Group Stage Complete</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
       <div id="sched-body"></div>
     </div>
     <div class="infobox">
@@ -533,6 +533,39 @@ const SCHEDULE_MD3 = [
   ]},
 ];
 
+// Round of 32 — Jun 28–Jul 3, 2026
+// b1/b2 are bracket codes: '1X'=Group X Winner, '2X'=Group X Runner-up, '3rd-XXXXX'=Best 3rd from those groups
+const SCHEDULE_R32 = [
+  {date:'Sun · Jun 28', date_es:'Dom · Jun 28', ms:[
+    {b1:'2B', b2:'2A', time:'12:00 PM', venue:'SoFi Stadium, CA'},
+  ]},
+  {date:'Mon · Jun 29', date_es:'Lun · Jun 29', ms:[
+    {b1:'1C', b2:'2F', time:'10:00 AM', venue:'NRG Stadium, TX'},
+    {b1:'1E', b2:'3rd-ABCDF', time:'1:30 PM', venue:'Gillette Stadium, MA'},
+    {b1:'1F', b2:'2C', time:'6:00 PM', venue:'Estadio BBVA, MX'},
+  ]},
+  {date:'Tue · Jun 30', date_es:'Mar · Jun 30', ms:[
+    {b1:'2E', b2:'2I', time:'10:00 AM', venue:'AT&T Stadium, TX'},
+    {b1:'1I', b2:'3rd-CDFGH', time:'2:00 PM', venue:'MetLife Stadium, NJ'},
+    {b1:'1A', b2:'3rd-CEFHI', time:'6:00 PM', venue:'Estadio Banorte, MX'},
+  ]},
+  {date:'Wed · Jul 1', date_es:'Mié · Jul 1', ms:[
+    {b1:'1L', b2:'3rd-EHIJK', time:'9:00 AM', venue:'Mercedes-Benz Stadium, GA'},
+    {b1:'1G', b2:'3rd-AEHIJ', time:'1:00 PM', venue:'Lumen Field, WA'},
+    {b1:'1D', b2:'3rd-BEFIJ', time:'5:00 PM', venue:"Levi's Stadium, CA"},
+  ]},
+  {date:'Thu · Jul 2', date_es:'Jue · Jul 2', ms:[
+    {b1:'1H', b2:'2J', time:'12:00 PM', venue:'SoFi Stadium, CA'},
+    {b1:'2K', b2:'2L', time:'4:00 PM', venue:'BMO Field, Toronto'},
+    {b1:'1B', b2:'3rd-EFGIJ', time:'8:00 PM', venue:'BC Place, Vancouver'},
+  ]},
+  {date:'Fri · Jul 3', date_es:'Vie · Jul 3', ms:[
+    {b1:'2D', b2:'2G', time:'11:00 AM', venue:'AT&T Stadium, TX'},
+    {b1:'1J', b2:'2H', time:'3:00 PM', venue:'Hard Rock Stadium, FL'},
+    {b1:'1K', b2:'3rd-DEIJL', time:'6:30 PM', venue:'Arrowhead Stadium, MO'},
+  ]},
+];
+
 const SCHEDULE_MD2 = [
   {date:'Thu · Jun 18', date_es:'Jue · Jun 18', ms:[
     {t1:'South Africa',           t2:'Czechia',              g:'A', time:'9:00 AM',  score:'1–1'},
@@ -626,9 +659,9 @@ const T = {
     ft:              'FT',
     tbd:             'TBD',
     more12:          '+12 more',
-    md1:             'Matchday 3 In Progress — Group Stage',
+    md1:             'Round of 32 — Jun 28–Jul 3 · Group Stage Complete',
     allTimes:        'All times Pacific',
-    infoMsg:         'Matchday 3 runs Jun 24–27. Scores update automatically each morning once results are in.',
+    infoMsg:         'Round of 32 runs Jun 28–Jul 3. Team matchups resolve once qualifiers are final. Scores update live.',
     tournamentBracket:'Tournament Bracket',
     bracketSub:      '32 teams advance from 12 groups',
     bracketLegend:   'Bracket fills after group stage ends (~Jun 27) · Bronze Final: Jul 18 · Final: Jul 19, MetLife Stadium NJ',
@@ -674,9 +707,9 @@ const T = {
     ft:              'FIN',
     tbd:             'PD',
     more12:          '+12 más',
-    md1:             'Jornada 2 En Curso — Fase de Grupos',
+    md1:             'Ronda de 32 — 28 Jun–3 Jul · Fase de Grupos Completa',
     allTimes:        'Hora del Pacífico',
-    infoMsg:         'Los marcadores de la Jornada 3 (~25–27 Jun) aparecen automáticamente cada mañana una vez que se conocen los resultados.',
+    infoMsg:         'La Ronda de 32 se juega del 28 Jun al 3 Jul. Los equipos se muestran cuando los clasificados son definitivos. Marcadores en directo.',
     tournamentBracket:'Cuadro del Torneo',
     bracketSub:      '32 equipos avanzan desde 12 grupos',
     bracketLegend:   'El cuadro se completa al terminar la fase de grupos (~27 Jun) · Tercer lugar: 18 Jul · Final: 19 Jul, MetLife Stadium NJ',
@@ -1041,18 +1074,47 @@ function renderGroups() {
 }
 
 /* ── SCHEDULE ───────────────────────────────────────── */
+// Converts a bracket code like '1A', '2B', '3rd-ABCDF' to a readable label
+function bracketLabel(code) {
+  if (!code) return '?';
+  if (code.startsWith('3rd-')) {
+    const gs = code.slice(4).split('').join('/');
+    return lang==='es' ? `Mejor 3° ${gs}` : `Best 3rd ${gs}`;
+  }
+  if (code[0]==='1') return lang==='es' ? `1° Grp ${code[1]}` : `Grp ${code[1]} Winner`;
+  if (code[0]==='2') return lang==='es' ? `2° Grp ${code[1]}` : `Grp ${code[1]} 2nd`;
+  return code;
+}
+
+// Build bracket code → real team name map from QUALIFIERS
+function buildR32Map() {
+  const map = {};
+  (QUALIFIERS.winners   || []).forEach(q => { map[`1${q.group}`] = q.team; });
+  (QUALIFIERS.runnersup || []).forEach(q => { map[`2${q.group}`] = q.team; });
+  return map;
+}
+
+// Score lookup checking live feed first, then historical results
+function scoreEntry(t1, t2) {
+  return liveScores[`${t1}|${t2}`] || liveScores[`${t2}|${t1}`] ||
+         historicalScores[`${t1}|${t2}`] || historicalScores[`${t2}|${t1}`] || null;
+}
+
 function renderSchedule() {
   const body=document.getElementById('sched-body');
   body.innerHTML='';
 
-  const mdBanner = (label) =>
-    `<div class="dhdr" style="background:rgba(34,197,94,.12);color:var(--green);font-weight:800;font-size:.68rem;letter-spacing:.1em;padding:.55rem 1rem">${label}</div>`;
+  const mdBanner = (label, color) => {
+    const bg   = color==='gold' ? 'rgba(251,191,36,.13)' : 'rgba(34,197,94,.12)';
+    const clr  = color==='gold' ? '#FBBF24' : 'var(--green)';
+    return `<div class="dhdr" style="background:${bg};color:${clr};font-weight:800;font-size:.68rem;letter-spacing:.1em;padding:.55rem 1rem">${label}</div>`;
+  };
 
   const renderDay = (day) => {
     body.innerHTML+=`<div class="dhdr">${lang==='es' ? day.date_es : day.date}</div>`;
     day.ms.forEach(m=>{
       const f1=ti(m.t1).flag, f2=ti(m.t2).flag;
-      const lk = liveScores[`${m.t1}|${m.t2}`] || liveScores[`${m.t2}|${m.t1}`];
+      const lk = scoreEntry(m.t1, m.t2);
       let right;
       if (lk) {
         const s1 = lk.t1===m.t1 ? lk.homeScore : lk.awayScore;
@@ -1060,7 +1122,7 @@ function renderSchedule() {
         if (lk.state==='in') {
           right=`<span class="mscore-live">${s1}–${s2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
         } else if (lk.state==='post') {
-          right=`<span class="mscore">${s1}–${s2} ${tr('ft')}</span>`;
+          right=`<span class="mscore">${s1}–${s2} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
         } else {
           right=`<span class="mtime">${m.time} ${tr('pt')}</span>`;
         }
@@ -1083,14 +1145,67 @@ function renderSchedule() {
     });
   };
 
+  // R32 uses bracket codes until QUALIFIERS resolves real team names
+  const r32Map = buildR32Map();
+  const renderR32Day = (day) => {
+    body.innerHTML += `<div class="dhdr">${lang==='es' ? day.date_es : day.date}</div>`;
+    day.ms.forEach(m => {
+      const team1 = r32Map[m.b1] || null;
+      const team2 = r32Map[m.b2] || null;
+      const f1    = team1 ? ti(team1).flag : '⚽';
+      const f2    = team2 ? ti(team2).flag : '⚽';
+      const name1 = team1 || bracketLabel(m.b1);
+      const name2 = team2 || bracketLabel(m.b2);
+      const lk    = team1 && team2 ? scoreEntry(team1, team2) : null;
+      let right;
+      if (lk) {
+        const s1 = lk.t1===team1 ? lk.homeScore : lk.awayScore;
+        const s2 = lk.t1===team1 ? lk.awayScore : lk.homeScore;
+        if (lk.state==='in') {
+          right = `<span class="mscore-live">${s1}–${s2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
+        } else if (lk.state==='post') {
+          right = `<span class="mscore">${s1}–${s2} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+        } else {
+          right = `<span class="mtime">${m.time} ${tr('pt')}</span>`;
+        }
+      } else if (m.score) {
+        right = `<span class="mscore">${m.score} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+      } else {
+        right = `<span class="mtime">${m.time} ${tr('pt')}</span>`;
+      }
+      const venueHtml = m.venue
+        ? `<span style="font-size:.6rem;color:var(--faint);white-space:nowrap;flex-shrink:0">📍 ${m.venue}</span>`
+        : '';
+      body.innerHTML += `<div class="mrow" style="flex-wrap:wrap;row-gap:.2rem">
+        <span class="b b-grp" style="flex-shrink:0;background:rgba(251,191,36,.15);color:#FBBF24;border-color:rgba(251,191,36,.3)">R32</span>
+        <div class="mteams">
+          <span class="flag" style="font-size:1rem">${f1}</span>
+          <span style="font-size:.8125rem;font-weight:600;${!team1?'opacity:.55':''}">
+            ${name1}
+          </span>
+          <span class="mvs">${tr('vs')}</span>
+          <span style="font-size:.8125rem;font-weight:600;${!team2?'opacity:.55':''}">
+            ${name2}
+          </span>
+          <span class="flag" style="font-size:1rem">${f2}</span>
+        </div>
+        ${right}
+        ${venueHtml}
+      </div>`;
+    });
+  };
+
   body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 1 — Jun 11–17 · Completada' : '▸ MATCHDAY 1 — Jun 11–17 · Complete');
   SCHEDULE_MD1.forEach(renderDay);
 
   body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 2 — Jun 18–23 · Completada' : '▸ MATCHDAY 2 — Jun 18–23 · Complete');
   SCHEDULE_MD2.forEach(renderDay);
 
-  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 3 — Jun 24–27 · En Curso' : '▸ MATCHDAY 3 — Jun 24–27 · In Progress');
+  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 3 — Jun 24–27 · Completada' : '▸ MATCHDAY 3 — Jun 24–27 · Complete');
   SCHEDULE_MD3.forEach(renderDay);
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ RONDA DE 32 — Jun 28–Jul 3 · En Curso' : '▸ ROUND OF 32 — Jun 28–Jul 3 · In Progress', 'gold');
+  SCHEDULE_R32.forEach(renderR32Day);
 }
 
 /* ── BRACKET ────────────────────────────────────────── */
@@ -1239,6 +1354,7 @@ const ESPN_MAP = {
   'England':'England','Croatia':'Croatia','Ghana':'Ghana','Panama':'Panama',
 };
 let liveScores = {};
+let historicalScores = {}; // all completed match scores from fetchAllHistoricalScores
 let liveInterval = null;
 let BASE_STATS = {};        // snapshot of STATS after historical fetch (used by live enrichment)
 let BASE_TRENDS = {};       // snapshot of TRENDS after historical fetch
@@ -1283,6 +1399,7 @@ async function fetchAllHistoricalScores() {
 
   // Rebuild STATS and TRENDS completely from all completed games
   STATS = {}; TRENDS = {};
+  const freshHist = {};
   allResults.forEach(({ t1, t2, hs, as: as_ }) => {
     if (!STATS[t1]) STATS[t1] = {w:0,d:0,l:0,gf:0,ga:0};
     if (!STATS[t2]) STATS[t2] = {w:0,d:0,l:0,gf:0,ga:0};
@@ -1293,7 +1410,12 @@ async function fetchAllHistoricalScores() {
     else                { STATS[t1].d++; STATS[t2].d++; }
     TRENDS[t1] = hs > as_ ? 'win' : as_ > hs ? 'loss' : 'draw';
     TRENDS[t2] = as_ > hs ? 'win' : hs > as_ ? 'loss' : 'draw';
+    // Store for schedule score display
+    const entry = { t1, t2, homeScore: hs, awayScore: as_, state: 'post' };
+    freshHist[`${t1}|${t2}`] = entry;
+    freshHist[`${t2}|${t1}`] = entry;
   });
+  historicalScores = freshHist;
 
   // Update the snapshot used by fetchLiveScores for today's enrichment
   BASE_STATS = JSON.parse(JSON.stringify(STATS));
@@ -1302,6 +1424,7 @@ async function fetchAllHistoricalScores() {
 
   renderGroups();
   renderPool();
+  renderSchedule(); // refresh schedule with any newly-fetched scores
 }
 
 async function fetchLiveScores() {
