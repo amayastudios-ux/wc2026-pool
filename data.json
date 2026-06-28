@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-27T07:50:28Z",
+    "lastUpdated": "2026-06-28T08:22:01Z",
     "stage": "Group Stage",
     "matchday": 3,
-    "eliminatedCount": 9,
+    "eliminatedCount": 16,
     "recentResults": [
       {
         "home": "Mexico",
@@ -532,6 +532,54 @@
         "awayScore": 5,
         "round": "Group Stage",
         "slug": "group-stage"
+      },
+      {
+        "home": "Croatia",
+        "away": "Ghana",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Panama",
+        "away": "England",
+        "homeScore": 0,
+        "awayScore": 2,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Colombia",
+        "away": "Portugal",
+        "homeScore": 0,
+        "awayScore": 0,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Congo DR",
+        "away": "Uzbekistan",
+        "homeScore": 3,
+        "awayScore": 1,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Algeria",
+        "away": "Austria",
+        "homeScore": 3,
+        "awayScore": 3,
+        "round": "Group Stage",
+        "slug": "group-stage"
+      },
+      {
+        "home": "Jordan",
+        "away": "Argentina",
+        "homeScore": 1,
+        "awayScore": 3,
+        "round": "Group Stage",
+        "slug": "group-stage"
       }
     ]
   },
@@ -953,139 +1001,139 @@
     "J": [
       {
         "team": "Argentina",
-        "pts": 6,
-        "gd": 5,
-        "gf": 5,
-        "ga": 0,
-        "played": 2,
-        "w": 2,
+        "pts": 9,
+        "gd": 7,
+        "gf": 8,
+        "ga": 1,
+        "played": 3,
+        "w": 3,
         "d": 0,
         "l": 0
       },
       {
         "team": "Austria",
-        "pts": 3,
+        "pts": 4,
         "gd": 0,
-        "gf": 3,
-        "ga": 3,
-        "played": 2,
+        "gf": 6,
+        "ga": 6,
+        "played": 3,
         "w": 1,
-        "d": 0,
+        "d": 1,
         "l": 1
       },
       {
         "team": "Algeria",
-        "pts": 3,
+        "pts": 4,
         "gd": -2,
-        "gf": 2,
-        "ga": 4,
-        "played": 2,
+        "gf": 5,
+        "ga": 7,
+        "played": 3,
         "w": 1,
-        "d": 0,
+        "d": 1,
         "l": 1
       },
       {
         "team": "Jordan",
         "pts": 0,
-        "gd": -3,
-        "gf": 2,
-        "ga": 5,
-        "played": 2,
+        "gd": -5,
+        "gf": 3,
+        "ga": 8,
+        "played": 3,
         "w": 0,
         "d": 0,
-        "l": 2
+        "l": 3
       }
     ],
     "K": [
       {
         "team": "Colombia",
-        "pts": 6,
+        "pts": 7,
         "gd": 3,
         "gf": 4,
         "ga": 1,
-        "played": 2,
+        "played": 3,
         "w": 2,
-        "d": 0,
-        "l": 0
-      },
-      {
-        "team": "Portugal",
-        "pts": 4,
-        "gd": 5,
-        "gf": 6,
-        "ga": 1,
-        "played": 2,
-        "w": 1,
         "d": 1,
         "l": 0
       },
       {
+        "team": "Portugal",
+        "pts": 5,
+        "gd": 5,
+        "gf": 6,
+        "ga": 1,
+        "played": 3,
+        "w": 1,
+        "d": 2,
+        "l": 0
+      },
+      {
         "team": "Congo DR",
-        "pts": 1,
-        "gd": -1,
-        "gf": 1,
-        "ga": 2,
-        "played": 2,
-        "w": 0,
+        "pts": 4,
+        "gd": 1,
+        "gf": 4,
+        "ga": 3,
+        "played": 3,
+        "w": 1,
         "d": 1,
         "l": 1
       },
       {
         "team": "Uzbekistan",
         "pts": 0,
-        "gd": -7,
-        "gf": 1,
-        "ga": 8,
-        "played": 2,
+        "gd": -9,
+        "gf": 2,
+        "ga": 11,
+        "played": 3,
         "w": 0,
         "d": 0,
-        "l": 2
+        "l": 3
       }
     ],
     "L": [
       {
         "team": "England",
-        "pts": 4,
-        "gd": 2,
-        "gf": 4,
+        "pts": 7,
+        "gd": 4,
+        "gf": 6,
         "ga": 2,
-        "played": 2,
-        "w": 1,
-        "d": 1,
-        "l": 0
-      },
-      {
-        "team": "Ghana",
-        "pts": 4,
-        "gd": 1,
-        "gf": 1,
-        "ga": 0,
-        "played": 2,
-        "w": 1,
+        "played": 3,
+        "w": 2,
         "d": 1,
         "l": 0
       },
       {
         "team": "Croatia",
-        "pts": 3,
-        "gd": -1,
-        "gf": 3,
-        "ga": 4,
-        "played": 2,
-        "w": 1,
+        "pts": 6,
+        "gd": 0,
+        "gf": 5,
+        "ga": 5,
+        "played": 3,
+        "w": 2,
         "d": 0,
+        "l": 1
+      },
+      {
+        "team": "Ghana",
+        "pts": 4,
+        "gd": 0,
+        "gf": 2,
+        "ga": 2,
+        "played": 3,
+        "w": 1,
+        "d": 1,
         "l": 1
       },
       {
         "team": "Panama",
         "pts": 0,
-        "gd": -2,
+        "gd": -4,
         "gf": 0,
-        "ga": 2,
-        "played": 2,
+        "ga": 4,
+        "played": 3,
         "w": 0,
         "d": 0,
-        "l": 2
+        "l": 3
       }
     ]
   },
@@ -1167,15 +1215,15 @@
         "team": "Argentina",
         "group": "J",
         "flag": "🇦🇷",
-        "pts": 6,
-        "gd": 5,
-        "gf": 5
+        "pts": 9,
+        "gd": 7,
+        "gf": 8
       },
       {
         "team": "Colombia",
         "group": "K",
         "flag": "🇨🇴",
-        "pts": 6,
+        "pts": 7,
         "gd": 3,
         "gf": 4
       },
@@ -1183,9 +1231,9 @@
         "team": "England",
         "group": "L",
         "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-        "pts": 4,
-        "gd": 2,
-        "gf": 4
+        "pts": 7,
+        "gd": 4,
+        "gf": 6
       }
     ],
     "runnersup": [
@@ -1262,24 +1310,130 @@
         "gf": 8
       },
       {
+        "team": "Austria",
+        "group": "J",
+        "flag": "🇦🇹",
+        "pts": 4,
+        "gd": 0,
+        "gf": 6
+      },
+      {
         "team": "Portugal",
         "group": "K",
         "flag": "🇵🇹",
-        "pts": 4,
+        "pts": 5,
         "gd": 5,
         "gf": 6
+      },
+      {
+        "team": "Croatia",
+        "group": "L",
+        "flag": "🇭🇷",
+        "pts": 6,
+        "gd": 0,
+        "gf": 5
+      }
+    ],
+    "third_qualified": [
+      {
+        "team": "Congo DR",
+        "group": "K",
+        "flag": "🇨🇩",
+        "pts": 4,
+        "gd": 1,
+        "gf": 4
+      },
+      {
+        "team": "Sweden",
+        "group": "F",
+        "flag": "🇸🇪",
+        "pts": 4,
+        "gd": 0,
+        "gf": 7
+      },
+      {
+        "team": "Ecuador",
+        "group": "E",
+        "flag": "🇪🇨",
+        "pts": 4,
+        "gd": 0,
+        "gf": 2
       },
       {
         "team": "Ghana",
         "group": "L",
         "flag": "🇬🇭",
         "pts": 4,
-        "gd": 1,
-        "gf": 1
+        "gd": 0,
+        "gf": 2
+      },
+      {
+        "team": "Bosnia & Herzegovina",
+        "group": "B",
+        "flag": "🇧🇦",
+        "pts": 4,
+        "gd": -1,
+        "gf": 5
+      },
+      {
+        "team": "Algeria",
+        "group": "J",
+        "flag": "🇩🇿",
+        "pts": 4,
+        "gd": -2,
+        "gf": 5
+      },
+      {
+        "team": "Paraguay",
+        "group": "D",
+        "flag": "🇵🇾",
+        "pts": 4,
+        "gd": -2,
+        "gf": 2
+      },
+      {
+        "team": "Senegal",
+        "group": "I",
+        "flag": "🇸🇳",
+        "pts": 3,
+        "gd": 2,
+        "gf": 8
       }
     ],
-    "third_qualified": [],
-    "third_eliminated": [],
+    "third_eliminated": [
+      {
+        "team": "Iran",
+        "group": "G",
+        "flag": "🇮🇷",
+        "pts": 3,
+        "gd": 0,
+        "gf": 3
+      },
+      {
+        "team": "Korea Republic",
+        "group": "A",
+        "flag": "🇰🇷",
+        "pts": 3,
+        "gd": -1,
+        "gf": 2
+      },
+      {
+        "team": "Scotland",
+        "group": "C",
+        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        "pts": 3,
+        "gd": -3,
+        "gf": 1
+      },
+      {
+        "team": "Uruguay",
+        "group": "H",
+        "flag": "🇺🇾",
+        "pts": 2,
+        "gd": -1,
+        "gf": 3
+      }
+    ],
     "math_eliminated": [
       "Czechia",
       "Qatar",
@@ -1288,9 +1442,12 @@
       "Curaçao",
       "Tunisia",
       "New Zealand",
-      "Iraq"
+      "Iraq",
+      "Jordan",
+      "Uzbekistan",
+      "Panama"
     ],
-    "r32_count": 23
+    "r32_count": 32
   },
   "teams": {
     "Mexico": {
@@ -1310,9 +1467,9 @@
     "Korea Republic": {
       "group": "A",
       "flag": "🇰🇷",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Czechia": {
       "group": "A",
@@ -1373,9 +1530,9 @@
     "Scotland": {
       "group": "C",
       "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "USA": {
       "group": "D",
@@ -1478,9 +1635,9 @@
     "Iran": {
       "group": "G",
       "flag": "🇮🇷",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "New Zealand": {
       "group": "G",
@@ -1513,9 +1670,9 @@
     "Uruguay": {
       "group": "H",
       "flag": "🇺🇾",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "France": {
       "group": "I",
@@ -1569,9 +1726,9 @@
     "Jordan": {
       "group": "J",
       "flag": "🇯🇴",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Portugal": {
       "group": "K",
@@ -1590,9 +1747,9 @@
     "Uzbekistan": {
       "group": "K",
       "flag": "🇺🇿",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     },
     "Colombia": {
       "group": "K",
@@ -1625,9 +1782,9 @@
     "Panama": {
       "group": "L",
       "flag": "🇵🇦",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Group Stage"
     }
   }
 }
