@@ -534,36 +534,49 @@ const SCHEDULE_MD3 = [
 ];
 
 // Round of 32 — Jun 28–Jul 3, 2026
-// b1/b2 are bracket codes: '1X'=Group X Winner, '2X'=Group X Runner-up, '3rd-XXXXX'=Best 3rd from those groups
+// t1/t2 = resolved real team names; b1/b2 = bracket codes (kept for reference)
 const SCHEDULE_R32 = [
   {date:'Sun · Jun 28', date_es:'Dom · Jun 28', ms:[
-    {b1:'2B', b2:'2A', time:'12:00 PM', venue:'SoFi Stadium, CA'},
+    {b1:'2B', b2:'2A', t1:'Canada', t2:'South Africa', mid:73, time:'12:00 PM', venue:'SoFi Stadium, CA'},
   ]},
   {date:'Mon · Jun 29', date_es:'Lun · Jun 29', ms:[
-    {b1:'1C', b2:'2F', time:'10:00 AM', venue:'NRG Stadium, TX'},
-    {b1:'1E', b2:'3rd-ABCDF', time:'1:30 PM', venue:'Gillette Stadium, MA'},
-    {b1:'1F', b2:'2C', time:'6:00 PM', venue:'Estadio BBVA, MX'},
+    {b1:'1C', b2:'2F', t1:'Brazil',      t2:'Japan',    mid:76, time:'10:00 AM', venue:'NRG Stadium, TX'},
+    {b1:'1E', b2:'3rd-ABCDF', t1:'Germany',   t2:'Paraguay', mid:74, time:'1:30 PM',  venue:'Gillette Stadium, MA'},
+    {b1:'1F', b2:'2C',        t1:'Netherlands',t2:'Morocco',  mid:75, time:'6:00 PM',  venue:'Estadio BBVA, MX'},
   ]},
   {date:'Tue · Jun 30', date_es:'Mar · Jun 30', ms:[
-    {b1:'2E', b2:'2I', time:'10:00 AM', venue:'AT&T Stadium, TX'},
-    {b1:'1I', b2:'3rd-CDFGH', time:'2:00 PM', venue:'MetLife Stadium, NJ'},
-    {b1:'1A', b2:'3rd-CEFHI', time:'6:00 PM', venue:'Estadio Banorte, MX'},
+    {b1:'2E', b2:'2I',        t1:"Côte d'Ivoire",t2:'Norway',  mid:78, time:'10:00 AM', venue:'AT&T Stadium, TX'},
+    {b1:'1I', b2:'3rd-CDFGH', t1:'France',       t2:'Sweden',  mid:77, time:'2:00 PM',  venue:'MetLife Stadium, NJ'},
+    {b1:'1A', b2:'3rd-CEFHI', t1:'Mexico',       t2:'Ecuador', mid:79, time:'6:00 PM',  venue:'Estadio Banorte, MX'},
   ]},
   {date:'Wed · Jul 1', date_es:'Mié · Jul 1', ms:[
-    {b1:'1L', b2:'3rd-EHIJK', time:'9:00 AM', venue:'Mercedes-Benz Stadium, GA'},
-    {b1:'1G', b2:'3rd-AEHIJ', time:'1:00 PM', venue:'Lumen Field, WA'},
-    {b1:'1D', b2:'3rd-BEFIJ', time:'5:00 PM', venue:"Levi's Stadium, CA"},
+    {b1:'1L', b2:'3rd-EHIJK', t1:'England', t2:'Congo DR',           mid:80, time:'9:00 AM',  venue:'Mercedes-Benz Stadium, GA'},
+    {b1:'1G', b2:'3rd-AEHIJ', t1:'Belgium', t2:'Senegal',            mid:82, time:'1:00 PM',  venue:'Lumen Field, WA'},
+    {b1:'1D', b2:'3rd-BEFIJ', t1:'USA',     t2:'Bosnia & Herzegovina', mid:81, time:'5:00 PM', venue:"Levi's Stadium, CA"},
   ]},
   {date:'Thu · Jul 2', date_es:'Jue · Jul 2', ms:[
-    {b1:'1H', b2:'2J', time:'12:00 PM', venue:'SoFi Stadium, CA'},
-    {b1:'2K', b2:'2L', time:'4:00 PM', venue:'BMO Field, Toronto'},
-    {b1:'1B', b2:'3rd-EFGIJ', time:'8:00 PM', venue:'BC Place, Vancouver'},
+    {b1:'1H', b2:'2J',        t1:'Spain',       t2:'Austria',  mid:84, time:'12:00 PM', venue:'SoFi Stadium, CA'},
+    {b1:'2K', b2:'2L',        t1:'Portugal',    t2:'Croatia',  mid:83, time:'4:00 PM',  venue:'BMO Field, Toronto'},
+    {b1:'1B', b2:'3rd-EFGIJ', t1:'Switzerland', t2:'Algeria',  mid:85, time:'8:00 PM',  venue:'BC Place, Vancouver'},
   ]},
   {date:'Fri · Jul 3', date_es:'Vie · Jul 3', ms:[
-    {b1:'2D', b2:'2G', time:'11:00 AM', venue:'AT&T Stadium, TX'},
-    {b1:'1J', b2:'2H', time:'3:00 PM', venue:'Hard Rock Stadium, FL'},
-    {b1:'1K', b2:'3rd-DEIJL', time:'6:30 PM', venue:'Arrowhead Stadium, MO'},
+    {b1:'2D', b2:'2G',        t1:'Australia', t2:'Egypt',      mid:88, time:'11:00 AM', venue:'AT&T Stadium, TX'},
+    {b1:'1J', b2:'2H',        t1:'Argentina', t2:'Cabo Verde', mid:86, time:'3:00 PM',  venue:'Hard Rock Stadium, FL'},
+    {b1:'1K', b2:'3rd-DEIJL', t1:'Colombia',  t2:'Ghana',      mid:87, time:'6:30 PM',  venue:'Arrowhead Stadium, MO'},
   ]},
+];
+
+// Round of 16 bracket — Jul 4–7, 2026
+// m1/m2 = source R32 match IDs; t1a/t1b = possible teams from m1, t2a/t2b = from m2
+const R16_PAIRS = [
+  {mid:90, m1:73, m2:75, t1a:'Canada',    t1b:'South Africa', t2a:'Netherlands',  t2b:'Morocco',  date:'Sat · Jul 4', date_es:'Sáb · Jul 4'},
+  {mid:89, m1:74, m2:77, t1a:'Germany',   t1b:'Paraguay',     t2a:'France',        t2b:'Sweden',   date:'Sat · Jul 4', date_es:'Sáb · Jul 4'},
+  {mid:91, m1:76, m2:78, t1a:'Brazil',    t1b:'Japan',        t2a:"Côte d'Ivoire", t2b:'Norway',   date:'Sun · Jul 5', date_es:'Dom · Jul 5'},
+  {mid:92, m1:79, m2:80, t1a:'Mexico',    t1b:'Ecuador',      t2a:'England',       t2b:'Congo DR', date:'Sun · Jul 5', date_es:'Dom · Jul 5'},
+  {mid:93, m1:83, m2:84, t1a:'Portugal',  t1b:'Croatia',      t2a:'Spain',         t2b:'Austria',  date:'Mon · Jul 6', date_es:'Lun · Jul 6'},
+  {mid:94, m1:81, m2:82, t1a:'USA',       t1b:'Bosnia & Herzegovina', t2a:'Belgium', t2b:'Senegal', date:'Mon · Jul 6', date_es:'Lun · Jul 6'},
+  {mid:95, m1:86, m2:88, t1a:'Argentina', t1b:'Cabo Verde',   t2a:'Australia',     t2b:'Egypt',    date:'Tue · Jul 7', date_es:'Mar · Jul 7'},
+  {mid:96, m1:87, m2:85, t1a:'Colombia',  t1b:'Ghana',        t2a:'Switzerland',   t2b:'Algeria',  date:'Tue · Jul 7', date_es:'Mar · Jul 7'},
 ];
 
 const SCHEDULE_MD2 = [
@@ -1100,38 +1113,51 @@ function scoreEntry(t1, t2) {
          historicalScores[`${t1}|${t2}`] || historicalScores[`${t2}|${t1}`] || null;
 }
 
+// Return winner name from a completed R32 match, or null if not decided yet
+function r32Winner(t1, t2) {
+  const lk = scoreEntry(t1, t2);
+  if (!lk || lk.state !== 'post') return null;
+  const s1 = Number(lk.t1 === t1 ? lk.homeScore : lk.awayScore);
+  const s2 = Number(lk.t1 === t1 ? lk.awayScore : lk.homeScore);
+  return s1 > s2 ? t1 : s2 > s1 ? t2 : null; // null = draw (resolved by ET/PKs in final score)
+}
+
 function renderSchedule() {
-  const body=document.getElementById('sched-body');
-  body.innerHTML='';
+  const body = document.getElementById('sched-body');
+  body.innerHTML = '';
 
   const mdBanner = (label, color) => {
-    const bg   = color==='gold' ? 'rgba(251,191,36,.13)' : 'rgba(34,197,94,.12)';
-    const clr  = color==='gold' ? '#FBBF24' : 'var(--green)';
+    const bg  = color==='gold' ? 'rgba(251,191,36,.13)'
+              : color==='blue' ? 'rgba(96,165,250,.12)'
+              : 'rgba(34,197,94,.12)';
+    const clr = color==='gold' ? '#FBBF24'
+              : color==='blue' ? '#60A5FA'
+              : 'var(--green)';
     return `<div class="dhdr" style="background:${bg};color:${clr};font-weight:800;font-size:.68rem;letter-spacing:.1em;padding:.55rem 1rem">${label}</div>`;
   };
 
   const renderDay = (day) => {
-    body.innerHTML+=`<div class="dhdr">${lang==='es' ? day.date_es : day.date}</div>`;
-    day.ms.forEach(m=>{
-      const f1=ti(m.t1).flag, f2=ti(m.t2).flag;
+    body.innerHTML += `<div class="dhdr">${lang==='es' ? day.date_es : day.date}</div>`;
+    day.ms.forEach(m => {
+      const f1 = ti(m.t1).flag, f2 = ti(m.t2).flag;
       const lk = scoreEntry(m.t1, m.t2);
       let right;
       if (lk) {
         const s1 = lk.t1===m.t1 ? lk.homeScore : lk.awayScore;
         const s2 = lk.t1===m.t1 ? lk.awayScore : lk.homeScore;
         if (lk.state==='in') {
-          right=`<span class="mscore-live">${s1}–${s2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
+          right = `<span class="mscore-live">${s1}–${s2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
         } else if (lk.state==='post') {
-          right=`<span class="mscore">${s1}–${s2} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+          right = `<span class="mscore">${s1}–${s2} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
         } else {
-          right=`<span class="mtime">${m.time} ${tr('pt')}</span>`;
+          right = `<span class="mtime">${m.time} ${tr('pt')}</span>`;
         }
       } else if (m.score) {
-        right=`<span class="mscore">${m.score} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+        right = `<span class="mscore">${m.score} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
       } else {
-        right=`<span class="mtime">${m.time} ${tr('pt')}</span>`;
+        right = `<span class="mtime">${m.time} ${tr('pt')}</span>`;
       }
-      body.innerHTML+=`<div class="mrow">
+      body.innerHTML += `<div class="mrow">
         <span class="b b-grp" style="flex-shrink:0">${tr('grp')} ${m.g}</span>
         <div class="mteams">
           <span class="flag" style="font-size:1rem">${f1}</span>
@@ -1145,13 +1171,13 @@ function renderSchedule() {
     });
   };
 
-  // R32 uses bracket codes until QUALIFIERS resolves real team names
+  // R32 — now uses hardcoded t1/t2 real team names, b1/b2 as fallback
   const r32Map = buildR32Map();
   const renderR32Day = (day) => {
     body.innerHTML += `<div class="dhdr">${lang==='es' ? day.date_es : day.date}</div>`;
     day.ms.forEach(m => {
-      const team1 = r32Map[m.b1] || null;
-      const team2 = r32Map[m.b2] || null;
+      const team1 = m.t1 || r32Map[m.b1] || null;
+      const team2 = m.t2 || r32Map[m.b2] || null;
       const f1    = team1 ? ti(team1).flag : '⚽';
       const f2    = team2 ? ti(team2).flag : '⚽';
       const name1 = team1 || bracketLabel(m.b1);
@@ -1180,13 +1206,9 @@ function renderSchedule() {
         <span class="b b-grp" style="flex-shrink:0;background:rgba(251,191,36,.15);color:#FBBF24;border-color:rgba(251,191,36,.3)">R32</span>
         <div class="mteams">
           <span class="flag" style="font-size:1rem">${f1}</span>
-          <span style="font-size:.8125rem;font-weight:600;${!team1?'opacity:.55':''}">
-            ${name1}
-          </span>
+          <span style="font-size:.8125rem;font-weight:600">${name1}</span>
           <span class="mvs">${tr('vs')}</span>
-          <span style="font-size:.8125rem;font-weight:600;${!team2?'opacity:.55':''}">
-            ${name2}
-          </span>
+          <span style="font-size:.8125rem;font-weight:600">${name2}</span>
           <span class="flag" style="font-size:1rem">${f2}</span>
         </div>
         ${right}
@@ -1195,17 +1217,74 @@ function renderSchedule() {
     });
   };
 
-  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 1 — Jun 11–17 · Completada' : '▸ MATCHDAY 1 — Jun 11–17 · Complete');
-  SCHEDULE_MD1.forEach(renderDay);
+  // R16 preview — shows winning teams advancing once R32 matches complete
+  const renderR16Preview = () => {
+    // Group by date, preserving order
+    const dateOrder = [];
+    const byDate = {};
+    R16_PAIRS.forEach(p => {
+      const dk = lang==='es' ? p.date_es : p.date;
+      if (!byDate[dk]) { byDate[dk] = []; dateOrder.push(dk); }
+      byDate[dk].push(p);
+    });
+    dateOrder.forEach(dk => {
+      body.innerHTML += `<div class="dhdr">${dk}</div>`;
+      byDate[dk].forEach(p => {
+        const w1 = r32Winner(p.t1a, p.t1b);  // winner of R32 m1
+        const w2 = r32Winner(p.t2a, p.t2b);  // winner of R32 m2
+        const flag1 = w1 ? ti(w1).flag : '⚽';
+        const flag2 = w2 ? ti(w2).flag : '⚽';
+        const name1 = w1 || `${p.t1a}/${p.t1b}`;
+        const name2 = w2 || `${p.t2a}/${p.t2b}`;
+        const lk = w1 && w2 ? scoreEntry(w1, w2) : null;
+        let right;
+        if (lk) {
+          const s1 = lk.t1===w1 ? lk.homeScore : lk.awayScore;
+          const s2 = lk.t1===w1 ? lk.awayScore : lk.homeScore;
+          if (lk.state==='in') {
+            right = `<span class="mscore-live">${s1}–${s2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
+          } else if (lk.state==='post') {
+            right = `<span class="mscore">${s1}–${s2} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+          } else {
+            right = `<span class="mtime" style="opacity:.5">TBD</span>`;
+          }
+        } else {
+          right = `<span class="mtime" style="opacity:.5">TBD</span>`;
+        }
+        body.innerHTML += `<div class="mrow" style="flex-wrap:wrap;row-gap:.2rem">
+          <span class="b b-grp" style="flex-shrink:0;background:rgba(96,165,250,.12);color:#60A5FA;border-color:rgba(96,165,250,.3)">R16</span>
+          <div class="mteams">
+            <span class="flag" style="font-size:1rem">${flag1}</span>
+            <span style="font-size:.8125rem;font-weight:600;${!w1?'opacity:.5':''}"">${name1}</span>
+            <span class="mvs">${tr('vs')}</span>
+            <span style="font-size:.8125rem;font-weight:600;${!w2?'opacity:.5':''}"">${name2}</span>
+            <span class="flag" style="font-size:1rem">${flag2}</span>
+          </div>
+          ${right}
+        </div>`;
+      });
+    });
+  };
 
-  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 2 — Jun 18–23 · Completada' : '▸ MATCHDAY 2 — Jun 18–23 · Complete');
-  SCHEDULE_MD2.forEach(renderDay);
+  // ── ORDER: R32 → R16 preview → Group Stage (MD3→MD1) ──
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ RONDA DE 32 — Jun 28–Jul 3 · En Curso' : '▸ ROUND OF 32 — Jun 28–Jul 3 · In Progress', 'gold');
+  SCHEDULE_R32.forEach(renderR32Day);
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ RONDA DE 16 — Jul 4–7 · Próximamente' : '▸ ROUND OF 16 — Jul 4–7 · Upcoming', 'blue');
+  renderR16Preview();
+
+  // Group Stage divider
+  body.innerHTML += `<div class="dhdr" style="font-size:.68rem;font-weight:800;letter-spacing:.08em;opacity:.5;margin-top:.25rem;padding:.55rem 1rem">── ${lang==='es'?'FASE DE GRUPOS — RESULTADOS':'GROUP STAGE — RESULTS'} ──</div>`;
 
   body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 3 — Jun 24–27 · Completada' : '▸ MATCHDAY 3 — Jun 24–27 · Complete');
   SCHEDULE_MD3.forEach(renderDay);
 
-  body.innerHTML += mdBanner(lang==='es' ? '▸ RONDA DE 32 — Jun 28–Jul 3 · En Curso' : '▸ ROUND OF 32 — Jun 28–Jul 3 · In Progress', 'gold');
-  SCHEDULE_R32.forEach(renderR32Day);
+  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 2 — Jun 18–23 · Completada' : '▸ MATCHDAY 2 — Jun 18–23 · Complete');
+  SCHEDULE_MD2.forEach(renderDay);
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ JORNADA 1 — Jun 11–17 · Completada' : '▸ MATCHDAY 1 — Jun 11–17 · Complete');
+  SCHEDULE_MD1.forEach(renderDay);
 }
 
 /* ── BRACKET ────────────────────────────────────────── */
@@ -1352,6 +1431,23 @@ const ESPN_MAP = {
   'Portugal':'Portugal','DR Congo':'Congo DR','Congo DR':'Congo DR',
   'Uzbekistan':'Uzbekistan','Colombia':'Colombia',
   'England':'England','Croatia':'Croatia','Ghana':'Ghana','Panama':'Panama',
+  // R32 ESPN bracket placeholder display names (before real teams are set)
+  'Group A 2nd Place':'South Africa','Group B 2nd Place':'Canada',
+  'Group C Winner':'Brazil','Group F 2nd Place':'Japan',
+  'Group E Winner':'Germany','Third Place Group A/B/C/D/F':'Paraguay',
+  'Group F Winner':'Netherlands','Group C 2nd Place':'Morocco',
+  'Group E 2nd Place':"Côte d'Ivoire",'Group I 2nd Place':'Norway',
+  'Group I Winner':'France','Third Place Group C/D/F/G/H':'Sweden',
+  'Group A Winner':'Mexico','Third Place Group C/E/F/H/I':'Ecuador',
+  'Group L Winner':'England','Third Place Group E/H/I/J/K':'Congo DR',
+  'Group G Winner':'Belgium','Third Place Group A/E/H/I/J':'Senegal',
+  'Group D Winner':'USA','Third Place Group B/E/F/I/J':'Bosnia & Herzegovina',
+  'Group H Winner':'Spain','Group J 2nd Place':'Austria',
+  'Group K 2nd Place':'Portugal','Group L 2nd Place':'Croatia',
+  'Group B Winner':'Switzerland','Third Place Group E/F/G/I/J':'Algeria',
+  'Group D 2nd Place':'Australia','Group G 2nd Place':'Egypt',
+  'Group J Winner':'Argentina','Group H 2nd Place':'Cabo Verde',
+  'Group K Winner':'Colombia','Third Place Group D/E/I/J/L':'Ghana',
 };
 let liveScores = {};
 let historicalScores = {}; // all completed match scores from fetchAllHistoricalScores
