@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-28T08:22:01Z",
-    "stage": "Group Stage",
+    "lastUpdated": "2026-06-29T09:26:50Z",
+    "stage": "Round of 32",
     "matchday": 3,
-    "eliminatedCount": 16,
+    "eliminatedCount": 17,
     "recentResults": [
       {
         "home": "Mexico",
@@ -580,6 +580,14 @@
         "awayScore": 3,
         "round": "Group Stage",
         "slug": "group-stage"
+      },
+      {
+        "home": "South Africa",
+        "away": "Canada",
+        "homeScore": 0,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
       }
     ]
   },
@@ -1460,9 +1468,9 @@
     "South Africa": {
       "group": "A",
       "flag": "🇿🇦",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Korea Republic": {
       "group": "A",
