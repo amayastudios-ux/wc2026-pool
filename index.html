@@ -912,6 +912,14 @@ function ti(name) {
     result.status = 'eliminated';
     result.roundReached = result.roundReached || ELIM_STATUS[name];
   }
+  // Knockout round elimination — detected live from score data (R32, R16, QF…)
+  if (result.status !== 'eliminated') {
+    const kr = knockoutStatus(name);
+    if (kr) {
+      result.status = 'eliminated';
+      result.roundReached = kr;
+    }
+  }
   return result;
 }
 
@@ -1122,17 +1130,62 @@ function scoreEntry(t1, t2) {
          historicalScores[`${t1}|${t2}`] || historicalScores[`${t2}|${t1}`] || null;
 }
 
-// Return winner of any completed match (R32, R16, QF …) or null if not yet decided
+// Return winner of any completed match (R32, R16, QF …) or null if not yet decided.
+// Handles extra time / penalty shootouts via ESPN's winner flag for tied scores.
 function matchWinner(t1, t2) {
   if (!t1 || !t2) return null;
   const lk = scoreEntry(t1, t2);
   if (!lk || lk.state !== 'post') return null;
-  const s1 = Number(lk.t1 === t1 ? lk.homeScore : lk.awayScore);
-  const s2 = Number(lk.t1 === t1 ? lk.awayScore : lk.homeScore);
-  return s1 > s2 ? t1 : s2 > s1 ? t2 : null; // null = draw resolved by ET/PKs (score reflects final)
+  const isHome1 = lk.t1 === t1;
+  const s1 = Number(isHome1 ? lk.homeScore : lk.awayScore);
+  const s2 = Number(isHome1 ? lk.awayScore : lk.homeScore);
+  if (s1 !== s2) return s1 > s2 ? t1 : t2;
+  // Tied score (ET/PKs) — use winner flag stored from ESPN
+  const hw = isHome1 ? lk.homeWinner : lk.awayWinner;
+  const aw = isHome1 ? lk.awayWinner : lk.homeWinner;
+  if (hw) return t1;
+  if (aw) return t2;
+  return null; // truly unknown (e.g. still processing)
 }
 // Alias so existing call-sites keep working
 const r32Winner = matchWinner;
+
+// Determine if a team was eliminated in a knockout round.
+// Returns the round label (e.g. 'Round of 32') or null if still active.
+function knockoutStatus(name) {
+  // R32 — direct team entries
+  for (const day of SCHEDULE_R32) {
+    for (const m of day.ms) {
+      if (m.t1 === name || m.t2 === name) {
+        const w = matchWinner(m.t1, m.t2);
+        if (w && w !== name) return 'Round of 32';
+      }
+    }
+  }
+  // R16 — team must have won their R32 match first
+  for (const p of R16_PAIRS) {
+    const w1 = matchWinner(p.t1a, p.t1b);
+    const w2 = matchWinner(p.t2a, p.t2b);
+    if ((w1 === name || w2 === name) && w1 && w2) {
+      const rw = matchWinner(w1, w2);
+      if (rw && rw !== name) return 'Round of 16';
+    }
+  }
+  // QF — team must have won their R16 match
+  for (const p of QF_PAIRS) {
+    // resolve the two teams that feed each QF slot
+    const r16a = R16_PAIRS.find(r => r.mid === p.m1);
+    const r16b = R16_PAIRS.find(r => r.mid === p.m2);
+    if (!r16a || !r16b) continue;
+    const qa1 = matchWinner(matchWinner(r16a.t1a, r16a.t1b) || '', matchWinner(r16a.t2a, r16a.t2b) || '');
+    const qa2 = matchWinner(matchWinner(r16b.t1a, r16b.t1b) || '', matchWinner(r16b.t2a, r16b.t2b) || '');
+    if ((qa1 === name || qa2 === name) && qa1 && qa2) {
+      const qw = matchWinner(qa1, qa2);
+      if (qw && qw !== name) return 'Quarter-finals';
+    }
+  }
+  return null;
+}
 
 function renderSchedule() {
   const body = document.getElementById('sched-body');
@@ -1465,7 +1518,11 @@ function renderBracket() {
 
 /* ── ELIMINATED ─────────────────────────────────────── */
 function renderElim() {
-  const out=Object.entries(TD).filter(([,tm])=>tm.status==='eliminated').sort(([a],[b])=>a.localeCompare(b));
+  // Use ti() so R32/R16/QF eliminations are included alongside group-stage ones
+  const out = Object.keys(TD)
+    .map(n => [n, ti(n)])
+    .filter(([, tm]) => tm.status === 'eliminated')
+    .sort(([a], [b]) => a.localeCompare(b));
   const body=document.getElementById('elim-body');
   const sub=document.getElementById('elim-sub');
   document.getElementById('elim-ct').textContent=`(${out.length})`;
@@ -1479,6 +1536,7 @@ function renderElim() {
     <span style="font-size:1rem">${info.flag||FLAGS[n]||'🏳'}</span>
     <span class="echip-name">${n}</span>
     <span class="b b-grp" style="font-size:.58rem">${tr('grp')} ${info.group||GROUP_MAP[n]||'?'}</span>
+    ${info.roundReached?`<span class="b b-out" style="font-size:.58rem;opacity:.75">${info.roundReached}</span>`:''}
   </div>`).join('');
 }
 
@@ -1564,7 +1622,7 @@ async function fetchAllHistoricalScores() {
         const key = `${t1}|${t2}`;
         if (seen.has(key)) continue;
         seen.add(key); seen.add(`${t2}|${t1}`);
-        allResults.push({ t1, t2, hs: Number(home.score||0), as: Number(away.score||0) });
+        allResults.push({ t1, t2, hs: Number(home.score||0), as: Number(away.score||0), hw: home.winner===true, aw: away.winner===true });
       }
     } catch { /* skip unavailable date */ }
   }
@@ -1585,7 +1643,7 @@ async function fetchAllHistoricalScores() {
     TRENDS[t1] = hs > as_ ? 'win' : as_ > hs ? 'loss' : 'draw';
     TRENDS[t2] = as_ > hs ? 'win' : hs > as_ ? 'loss' : 'draw';
     // Store for schedule score display
-    const entry = { t1, t2, homeScore: hs, awayScore: as_, state: 'post' };
+    const entry = { t1, t2, homeScore: hs, awayScore: as_, state: 'post', homeWinner: r.hw, awayWinner: r.aw };
     freshHist[`${t1}|${t2}`] = entry;
     freshHist[`${t2}|${t1}`] = entry;
   });
@@ -1620,7 +1678,7 @@ async function fetchLiveScores() {
       if (!home || !away) return;
       const t1 = ESPN_MAP[home.team?.displayName] || home.team?.displayName;
       const t2 = ESPN_MAP[away.team?.displayName] || away.team?.displayName;
-      const entry = { t1, t2, homeScore: home.score||'0', awayScore: away.score||'0', clock, state };
+      const entry = { t1, t2, homeScore: home.score||'0', awayScore: away.score||'0', clock, state, homeWinner: home.winner===true, awayWinner: away.winner===true };
       fresh[`${t1}|${t2}`] = entry;
       fresh[`${t2}|${t1}`] = entry;
       if (state === 'in') hasLive = true;
