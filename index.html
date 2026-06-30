@@ -448,13 +448,31 @@ const GROUP_MAP = {};
 GROUPS.forEach(g => g.teams.forEach(t => GROUP_MAP[t] = g.id));
 
 // ── Static elimination fallback ──────────────────────────
-// Keeps mobile cards correct even if data.json fetch fails
-// (e.g. local-file open on iOS Safari). update_results.py
-// keeps this in sync via data.json; we mirror it here.
+// Comprehensive list of all confirmed eliminations.
+// Used even when ESPN API or data.json is unavailable.
 const ELIM_STATUS = {
-  'Haiti':   'Group Stage',
-  'Türkiye': 'Group Stage',
-  'Tunisia': 'Group Stage',
+  // Group Stage eliminations (all 16 teams)
+  'Korea Republic':'Group Stage','Czechia':'Group Stage',
+  'Qatar':'Group Stage','Haiti':'Group Stage','Scotland':'Group Stage',
+  'Türkiye':'Group Stage','Curaçao':'Group Stage','Tunisia':'Group Stage',
+  'Iran':'Group Stage','New Zealand':'Group Stage',
+  'Saudi Arabia':'Group Stage','Uruguay':'Group Stage',
+  'Iraq':'Group Stage','Jordan':'Group Stage',
+  'Uzbekistan':'Group Stage','Panama':'Group Stage',
+  // Round of 32 eliminations — update as matches complete
+  'South Africa':'Round of 32','Japan':'Round of 32',
+  'Germany':'Round of 32','Netherlands':'Round of 32',
+  "Côte d'Ivoire":'Round of 32',
+};
+
+// ── Static R32 match winners (fallback when ESPN unavailable) ──
+// Handles ties decided by penalty shootout (homeWinner/awayWinner may be null in ESPN)
+const STATIC_WINNERS = {
+  'Canada|South Africa':'Canada',   'South Africa|Canada':'Canada',
+  'Brazil|Japan':'Brazil',          'Japan|Brazil':'Brazil',
+  'Germany|Paraguay':'Paraguay',    'Paraguay|Germany':'Paraguay',
+  'Netherlands|Morocco':'Morocco',  'Morocco|Netherlands':'Morocco',
+  "Côte d'Ivoire|Norway":'Norway',  "Norway|Côte d'Ivoire":'Norway',
 };
 
 const SCHEDULE_MD1 = [
@@ -535,24 +553,26 @@ const SCHEDULE_MD3 = [
 
 // Round of 32 — Jun 28–Jul 3, 2026
 // t1/t2 = resolved real team names; b1/b2 = bracket codes (kept for reference)
+// score = static fallback displayed when ESPN API unavailable
+// pk = true when match decided by penalty shootout (display "(PKs)" suffix)
 const SCHEDULE_R32 = [
   {date:'Sun · Jun 28', date_es:'Dom · Jun 28', ms:[
-    {b1:'2B', b2:'2A', t1:'Canada', t2:'South Africa', mid:73, time:'12:00 PM', venue:'SoFi Stadium, CA'},
+    {b1:'2B', b2:'2A', t1:'Canada', t2:'South Africa', mid:73, time:'12:00 PM', venue:'SoFi Stadium, CA', score:'1–0'},
   ]},
   {date:'Mon · Jun 29', date_es:'Lun · Jun 29', ms:[
-    {b1:'1C', b2:'2F', t1:'Brazil',      t2:'Japan',    mid:76, time:'10:00 AM', venue:'NRG Stadium, TX'},
-    {b1:'1E', b2:'3rd-ABCDF', t1:'Germany',   t2:'Paraguay', mid:74, time:'1:30 PM',  venue:'Gillette Stadium, MA'},
-    {b1:'1F', b2:'2C',        t1:'Netherlands',t2:'Morocco',  mid:75, time:'6:00 PM',  venue:'Estadio BBVA, MX'},
+    {b1:'1C', b2:'2F', t1:'Brazil',       t2:'Japan',    mid:76, time:'10:00 AM', venue:'NRG Stadium, TX',       score:'2–1'},
+    {b1:'1E', b2:'3rd-ABCDF', t1:'Germany',    t2:'Paraguay', mid:74, time:'1:30 PM',  venue:'Gillette Stadium, MA',  score:'1–1', pk:true, pkWinner:'Paraguay'},
+    {b1:'1F', b2:'2C',        t1:'Netherlands', t2:'Morocco',  mid:75, time:'6:00 PM',  venue:'Estadio BBVA, MX',      score:'1–1', pk:true, pkWinner:'Morocco'},
   ]},
   {date:'Tue · Jun 30', date_es:'Mar · Jun 30', ms:[
-    {b1:'2E', b2:'2I',        t1:"Côte d'Ivoire",t2:'Norway',  mid:78, time:'10:00 AM', venue:'AT&T Stadium, TX'},
-    {b1:'1I', b2:'3rd-CDFGH', t1:'France',       t2:'Sweden',  mid:77, time:'2:00 PM',  venue:'MetLife Stadium, NJ'},
-    {b1:'1A', b2:'3rd-CEFHI', t1:'Mexico',       t2:'Ecuador', mid:79, time:'6:00 PM',  venue:'Estadio Banorte, MX'},
+    {b1:'2E', b2:'2I',        t1:"Côte d'Ivoire", t2:'Norway',  mid:78, time:'10:00 AM', venue:'AT&T Stadium, TX', score:'1–2'},
+    {b1:'1I', b2:'3rd-CDFGH', t1:'France',        t2:'Sweden',  mid:77, time:'2:00 PM',  venue:'MetLife Stadium, NJ'},
+    {b1:'1A', b2:'3rd-CEFHI', t1:'Mexico',        t2:'Ecuador', mid:79, time:'6:00 PM',  venue:'Estadio Banorte, MX'},
   ]},
   {date:'Wed · Jul 1', date_es:'Mié · Jul 1', ms:[
-    {b1:'1L', b2:'3rd-EHIJK', t1:'England', t2:'Congo DR',           mid:80, time:'9:00 AM',  venue:'Mercedes-Benz Stadium, GA'},
-    {b1:'1G', b2:'3rd-AEHIJ', t1:'Belgium', t2:'Senegal',            mid:82, time:'1:00 PM',  venue:'Lumen Field, WA'},
-    {b1:'1D', b2:'3rd-BEFIJ', t1:'USA',     t2:'Bosnia & Herzegovina', mid:81, time:'5:00 PM', venue:"Levi's Stadium, CA"},
+    {b1:'1L', b2:'3rd-EHIJK', t1:'England', t2:'Congo DR',             mid:80, time:'9:00 AM',  venue:'Mercedes-Benz Stadium, GA'},
+    {b1:'1G', b2:'3rd-AEHIJ', t1:'Belgium', t2:'Senegal',              mid:82, time:'1:00 PM',  venue:'Lumen Field, WA'},
+    {b1:'1D', b2:'3rd-BEFIJ', t1:'USA',     t2:'Bosnia & Herzegovina', mid:81, time:'5:00 PM',  venue:"Levi's Stadium, CA"},
   ]},
   {date:'Thu · Jul 2', date_es:'Jue · Jul 2', ms:[
     {b1:'1H', b2:'2J',        t1:'Spain',       t2:'Austria',  mid:84, time:'12:00 PM', venue:'SoFi Stadium, CA'},
@@ -646,7 +666,7 @@ const STAGE_SHORT = {
 
 /* ══ i18n ═════════════════════════════════════════════ */
 let lang = 'en';
-let currentStage = 'Group Stage';
+let currentStage = 'Round of 32';
 let currentMD    = null;
 let lastUpdDate  = null;
 
@@ -819,6 +839,7 @@ let TRENDS     = {}; // teamName → 'win' | 'loss' | 'draw'
 let STATS      = {}; // teamName → {w, d, l, gf} from MD results
 let QUALIFIERS = {}; // qualifiers from data.json (winners, runnersup, third_qualified)
 let STANDINGS  = {}; // group standings from data.json
+QUALIFIERS    = STATIC_QUALIFIERS; // pre-fill bracket; overwritten by data.json if available
 
 /* ── LOAD DATA ──────────────────────────────────────── */
 async function loadData() {
@@ -829,6 +850,8 @@ async function loadData() {
     TD         = j.teams      || {};
     QUALIFIERS = j.qualifiers || {};
     STANDINGS  = j.standings  || {};
+    // Merge: keep any entries already set by static fallback below
+    if (!QUALIFIERS.winners || !QUALIFIERS.winners.length) QUALIFIERS = STATIC_QUALIFIERS;
 
     // Apply hardcoded ELIM_STATUS overrides so eliminated teams always show
     Object.entries(ELIM_STATUS).forEach(([name, round]) => {
@@ -837,16 +860,11 @@ async function loadData() {
         TD[name].roundReached = TD[name].roundReached || round;
       }
     });
-    const active = Object.values(TD).filter(tm=>tm.status==='active').length;
-    const elim   = Object.values(TD).filter(tm=>tm.status==='eliminated').length;
-    document.getElementById('s-active').textContent = active;
-    document.getElementById('s-elim').textContent   = elim;
-    document.getElementById('elim-ct').textContent  = `(${elim})`;
+    // stats panel updated via updateStatsPanel() in renderAll() — uses ti() not raw TD
 
     currentStage = j.meta?.stage || 'Group Stage';
     currentMD    = j.meta?.matchday;
-    document.getElementById('s-stage').textContent = STAGE_SHORT[currentStage] || currentStage;
-    updateBadge();
+    // stage badge updated by updateStatsPanel() in renderAll()
 
     if (j.meta?.lastUpdated) {
       lastUpdDate = new Date(j.meta.lastUpdated);
@@ -920,11 +938,55 @@ function ti(name) {
       result.roundReached = kr;
     }
   }
+  // Compute pts dynamically from roundReached (so R32 losers get 1 pt, etc.)
+  if (result.status === 'eliminated') {
+    result.pts = PTS_MAP[result.roundReached] !== undefined ? PTS_MAP[result.roundReached] : 0;
+  } else {
+    // Active team — guaranteed at least the current stage pts
+    // Also check if they've advanced further via matchWinner
+    const stagePts = PTS_MAP[currentStage] !== undefined ? PTS_MAP[currentStage] : (b.pts || 0);
+    let advancedPts = stagePts;
+    // Check if team already won an R32 match and is in R16
+    for (const p of R16_PAIRS) {
+      const w1 = matchWinner(p.t1a, p.t1b);
+      const w2 = matchWinner(p.t2a, p.t2b);
+      if (w1 === name || w2 === name) {
+        advancedPts = Math.max(advancedPts, PTS_MAP['Round of 16']);
+        // Check if in QF
+        if (w1 && w2) {
+          const r16w = matchWinner(w1, w2);
+          if (r16w === name) {
+            advancedPts = Math.max(advancedPts, PTS_MAP['Quarter-finals']);
+          }
+        }
+        break;
+      }
+    }
+    result.pts = advancedPts;
+  }
   return result;
+}
+
+/* ── STATS PANEL ─────────────────────────────────────── */
+// Recomputes header stats using ti() so ELIM_STATUS + knockoutStatus are included
+// even when data.json fails to load (e.g. file:// protocol).
+function updateStatsPanel() {
+  const allNations = new Set([...Object.keys(TD), ...Object.keys(FLAGS)]);
+  let activeCount = 0, elimCount = 0;
+  allNations.forEach(n => {
+    if (ti(n).status === 'eliminated') elimCount++;
+    else activeCount++;
+  });
+  document.getElementById('s-active').textContent = activeCount;
+  document.getElementById('s-elim').textContent   = elimCount;
+  document.getElementById('elim-ct').textContent  = `(${elimCount})`;
+  document.getElementById('s-stage').textContent  = STAGE_SHORT[currentStage] || currentStage;
+  updateBadge();
 }
 
 /* ── RENDER ALL ─────────────────────────────────────── */
 function renderAll() {
+  updateStatsPanel();
   renderPodium();
   renderPool();
   renderGroups();
@@ -990,7 +1052,9 @@ function renderPool() {
     const draws = s1.d  + s2.d;
     const gf    = s1.gf + s2.gf;
     const gd    = gf - (s1.ga + s2.ga);
-    return {...p,t1,t2,pts,wins,draws,gf,_sort:pts*100000+wins*1000+draws*100+gd*10+gf+(both?20:one?10:0),_i:i};
+    const t1ok_= t1.status!=='eliminated', t2ok_= t2.status!=='eliminated';
+    const statusScore = both ? 2 : (t1ok_||t2ok_) ? 1 : 0;
+    return {...p,t1,t2,pts,wins,draws,gf,_sort:statusScore*10000000+pts*10000+wins*100+draws*10+gf,_i:i};
   }).sort((a,b)=>b._sort-a._sort||a.name.localeCompare(b.name));
 
   const body  = document.getElementById('pool-body');
@@ -1116,11 +1180,26 @@ function bracketLabel(code) {
   return code;
 }
 
+
+// ── Static qualifiers fallback (bracket R32 column when data.json unavailable) ──
+const STATIC_QUALIFIERS = {
+  winners:        ['Mexico','Switzerland','Brazil','USA','Paraguay','Morocco',
+                   'Belgium','Egypt','France','Norway','Argentina','Colombia','Portugal','England'],
+  runnersup:      ['Canada','Bosnia & Herzegovina','Japan','Australia',"Côte d'Ivoire",'Netherlands',
+                   'Spain','Cabo Verde','Senegal','Algeria','Congo DR','Croatia','Sweden','Ghana'],
+  third_qualified:['South Africa','Morocco','Germany','Netherlands'],
+};
 // Build bracket code → real team name map from QUALIFIERS
+// Supports both string arrays (plain team name) and object arrays ({team, group, flag, pts})
 function buildR32Map() {
   const map = {};
-  (QUALIFIERS.winners   || []).forEach(q => { map[`1${q.group}`] = q.team; });
-  (QUALIFIERS.runnersup || []).forEach(q => { map[`2${q.group}`] = q.team; });
+  const resolve = (q, prefix) => {
+    const name = typeof q === 'string' ? q : q.team;
+    const grp  = typeof q === 'string' ? (GROUP_MAP[name] || (TD[name]||{}).group) : q.group;
+    if (name && grp) map[`${prefix}${grp}`] = name;
+  };
+  (QUALIFIERS.winners   || []).forEach(q => resolve(q, '1'));
+  (QUALIFIERS.runnersup || []).forEach(q => resolve(q, '2'));
   return map;
 }
 
@@ -1132,20 +1211,24 @@ function scoreEntry(t1, t2) {
 
 // Return winner of any completed match (R32, R16, QF …) or null if not yet decided.
 // Handles extra time / penalty shootouts via ESPN's winner flag for tied scores.
+// Falls back to STATIC_WINNERS when ESPN data unavailable.
 function matchWinner(t1, t2) {
   if (!t1 || !t2) return null;
   const lk = scoreEntry(t1, t2);
-  if (!lk || lk.state !== 'post') return null;
-  const isHome1 = lk.t1 === t1;
-  const s1 = Number(isHome1 ? lk.homeScore : lk.awayScore);
-  const s2 = Number(isHome1 ? lk.awayScore : lk.homeScore);
-  if (s1 !== s2) return s1 > s2 ? t1 : t2;
-  // Tied score (ET/PKs) — use winner flag stored from ESPN
-  const hw = isHome1 ? lk.homeWinner : lk.awayWinner;
-  const aw = isHome1 ? lk.awayWinner : lk.homeWinner;
-  if (hw) return t1;
-  if (aw) return t2;
-  return null; // truly unknown (e.g. still processing)
+  if (lk && lk.state === 'post') {
+    const isHome1 = lk.t1 === t1;
+    const s1 = Number(isHome1 ? lk.homeScore : lk.awayScore);
+    const s2 = Number(isHome1 ? lk.awayScore : lk.homeScore);
+    if (s1 !== s2) return s1 > s2 ? t1 : t2;
+    // Tied score (ET/PKs) — use winner flag stored from ESPN
+    const hw = isHome1 ? lk.homeWinner : lk.awayWinner;
+    const aw = isHome1 ? lk.awayWinner : lk.homeWinner;
+    if (hw) return t1;
+    if (aw) return t2;
+    // ESPN winner flags absent (bug) — fall through to static map
+  }
+  // Static fallback for known match outcomes (covers PKs and offline mode)
+  return STATIC_WINNERS[`${t1}|${t2}`] || null;
 }
 // Alias so existing call-sites keep working
 const r32Winner = matchWinner;
@@ -1257,12 +1340,15 @@ function renderSchedule() {
         if (lk.state==='in') {
           right = `<span class="mscore-live">${s1}–${s2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
         } else if (lk.state==='post') {
-          right = `<span class="mscore">${s1}–${s2} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+          const tied = Number(s1) === Number(s2);
+          const pkSuffix = tied ? ` <span style="font-size:.6rem;color:var(--gold)">(PKs)</span>` : '';
+          right = `<span class="mscore">${s1}–${s2}${pkSuffix} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
         } else {
           right = `<span class="mtime">${m.time} ${tr('pt')}</span>`;
         }
       } else if (m.score) {
-        right = `<span class="mscore">${m.score} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+        const pkSuffix = m.pk ? ` <span style="font-size:.6rem;color:var(--gold)">(PKs)</span>` : '';
+        right = `<span class="mscore">${m.score}${pkSuffix} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
       } else {
         right = `<span class="mtime">${m.time} ${tr('pt')}</span>`;
       }
@@ -1436,29 +1522,41 @@ function renderBracket() {
   const r32sub   = lang==='es' ? `${r32count} de 32 clasificados` : `${r32count} / 32 qualified`;
   let r32html = `<div class="brnd-ttl">${r32label}<span class="brnd-sub">${r32sub}</span></div>`;
 
+  // qChip: supports both plain string team names and {team, group, flag, pts} objects
   function qChip(q, label) {
-    const flag = q.flag || (TD[q.team] || {}).flag || '🏳';
+    const name = typeof q === 'string' ? q : q.team;
+    const flag = (typeof q === 'object' ? q.flag : null) || (TD[name]||{}).flag || FLAGS[name] || '🏳';
+    const elimInfo = ti(name);
+    const isOut = elimInfo.status === 'eliminated';
     const lbl  = `<span style="font-size:.55rem;opacity:.55;margin-left:.2rem">${label}</span>`;
-    return `<div class="bt" style="justify-content:flex-start;gap:.4rem;padding:.35rem .6rem">
+    return `<div class="bt" style="justify-content:flex-start;gap:.4rem;padding:.35rem .6rem;${isOut?'opacity:.45':''}">
       <span style="font-size:.95rem">${flag}</span>
-      <span style="font-size:.78rem;font-weight:700">${q.team}</span>${lbl}
+      <span style="font-size:.78rem;font-weight:700;${isOut?'text-decoration:line-through;':''}">
+        ${name}</span>${isOut?`<span style="font-size:.55rem;color:var(--red);margin-left:2px">${elimInfo.roundReached||'Out'}</span>`:''}${lbl}
     </div>`;
   }
+
+  const resolveQName = q => typeof q === 'string' ? q : q.team;
+  const resolveQGrp  = q => typeof q === 'string' ? (GROUP_MAP[q]||(TD[q]||{}).group||'?') : q.group;
 
   if (r32count === 0) {
     r32html += `<div style="color:var(--faint);font-size:.78rem;padding:.5rem;text-align:center">${lang==='es'?'Completo al terminar MD3 (~27 Jun)':'Fills after MD3 ends (~Jun 27)'}</div>`;
   } else {
     if (winners.length) {
       r32html += `<div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--green);padding:.4rem .6rem .15rem;opacity:.8">${lang==='es'?'▸ PRIMEROS DE GRUPO':'▸ GROUP WINNERS'} (${winners.length})</div>`;
-      winners.forEach(q => { r32html += qChip(q, `1${q.group}`); });
+      winners.forEach(q => { r32html += qChip(q, `1${resolveQGrp(q)}`); });
     }
     if (runnersup.length) {
       r32html += `<div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--blue-lt);padding:.4rem .6rem .15rem;opacity:.8">${lang==='es'?'▸ SEGUNDOS DE GRUPO':'▸ RUNNERS-UP'} (${runnersup.length})</div>`;
-      runnersup.forEach(q => { r32html += qChip(q, `2${q.group}`); });
+      runnersup.forEach(q => { r32html += qChip(q, `2${resolveQGrp(q)}`); });
     }
     if (thirds.length) {
       r32html += `<div style="font-size:.6rem;font-weight:800;letter-spacing:.08em;color:var(--yellow,#FBBF24);padding:.4rem .6rem .15rem;opacity:.8">${lang==='es'?'▸ MEJORES TERCEROS':'▸ BEST 3RD-PLACE'} (${thirds.length}/8)</div>`;
-      thirds.forEach(q => { r32html += qChip(q, `3${q.group} · ${q.pts}pts`); });
+      thirds.forEach(q => {
+        const grp  = resolveQGrp(q);
+        const pts  = typeof q === 'object' ? q.pts : '';
+        r32html += qChip(q, `3${grp}${pts ? ' · ' + pts + 'pts' : ''}`);
+      });
     }
     // Empty slots for remaining spots
     const remaining = 32 - r32count;
@@ -1476,37 +1574,82 @@ function renderBracket() {
   body.appendChild(r32col);
 
   // ── Knockout rounds (R16 → Final) ──────────────────
+  // Resolve R16 matchups dynamically from matchWinner results
+  const r16Matchups = R16_PAIRS.map(p => {
+    const w1 = matchWinner(p.t1a, p.t1b);
+    const w2 = matchWinner(p.t2a, p.t2b);
+    return { side1: w1 || null, side2: w2 || null, pair: p };
+  });
+
+  const resolveQFMatchup = (p) => {
+    const r16a = R16_PAIRS.find(x => x.mid === p.m1);
+    const r16b = R16_PAIRS.find(x => x.mid === p.m2);
+    if (!r16a || !r16b) return { side1: null, side2: null };
+    const a1 = matchWinner(r16a.t1a, r16a.t1b);
+    const a2 = matchWinner(r16a.t2a, r16a.t2b);
+    const b1 = matchWinner(r16b.t1a, r16b.t1b);
+    const b2 = matchWinner(r16b.t2a, r16b.t2b);
+    const side1 = (a1 && a2) ? matchWinner(a1, a2) : null;
+    const side2 = (b1 && b2) ? matchWinner(b1, b2) : null;
+    return { side1, side2 };
+  };
+
+  const teamSlot = (name, isWinner) => {
+    if (!name) return `<div class="bt" style="opacity:.35">⚽ <span style="font-size:.78rem">${tr('tbd')}</span></div>`;
+    const info = ti(name);
+    const style = isWinner ? 'font-weight:800;color:var(--green)' : '';
+    return `<div class="bt ${isWinner ? 'winner' : ''}">
+      <span style="font-size:.9rem">${info.flag||FLAGS[name]||'🏳'}</span>
+      <span style="font-size:.78rem;${style}">${name}</span>
+    </div>`;
+  };
+
   const RNDS = [
-    {nk:'r16', sk:'r16sub', n:3, date:'Jul 1–6'},
-    {nk:'qf',  sk:'qfsub',  n:2, date:'Jul 9–11'},
-    {nk:'sf',  sk:'sfsub',  n:1, date:'Jul 14–15'},
-    {nk:'fin', sk:null,     n:1, date:'Jul 19'},
+    {nk:'r16', sk:'r16sub', matchups: r16Matchups, n:8},
+    {nk:'qf',  sk:'qfsub',  matchups: QF_PAIRS.map(resolveQFMatchup), n:4},
+    {nk:'sf',  sk:'sfsub',  matchups: [], n:2},
+    {nk:'fin', sk:null,     matchups: [], n:1},
   ];
+
   RNDS.forEach((r, ri) => {
-    const sub = r.sk ? tr(r.sk) : r.date;
+    const sub = r.sk ? tr(r.sk) : (ri===3 ? 'Jul 19' : '');
     let html = `<div class="brnd-ttl">${tr(r.nk)}<span class="brnd-sub">${sub}</span></div>`;
 
-    // Check if any teams have reached this round in TD
+    // Try dynamic matchups first (R16/QF), fall back to data.json for SF/Final
     const roundKey = {r16:'Round of 16', qf:'Quarter-finals', sf:'Semi-finals', fin:'Final'}[r.nk];
-    const roundTeams = Object.entries(TD).filter(([,t]) =>
-      t.roundReached === roundKey || (r.nk==='fin' && (t.status==='champion'||t.roundReached==='Runner-up'))
-    );
+    const dynMatchups = r.matchups || [];
 
-    if (roundTeams.length >= 2) {
-      for (let i = 0; i < roundTeams.length - 1; i += 2) {
-        const [n1, t1] = roundTeams[i];
-        const [n2, t2] = roundTeams[i+1] || [null, null];
+    if (dynMatchups.length > 0 && (dynMatchups[0].side1 || dynMatchups[0].side2)) {
+      // Show dynamic bracket slots
+      dynMatchups.forEach(mu => {
+        const w = mu.side1 && mu.side2 ? matchWinner(mu.side1, mu.side2) : null;
         html += `<div class="bm">
-          <div class="bt"><span style="font-size:.9rem">${t1.flag||FLAGS[n1]||'🏳'}</span> <span style="font-size:.78rem;font-weight:700">${n1}</span></div>
-          ${n2 ? `<div class="bt"><span style="font-size:.9rem">${t2.flag||FLAGS[n2]||'🏳'}</span> <span style="font-size:.78rem;font-weight:700">${n2}</span></div>` : `<div class="bt" style="opacity:.35">⚽ <span>${tr('tbd')}</span></div>`}
+          ${teamSlot(mu.side1, w === mu.side1)}
+          ${teamSlot(mu.side2, w === mu.side2)}
         </div>`;
-      }
+      });
     } else {
-      for (let i = 0; i < r.n; i++) {
-        html += `<div class="bm">
-          <div class="bt" style="opacity:.35">⚽ <span style="font-size:.78rem">${tr('tbd')}</span></div>
-          <div class="bt" style="opacity:.35">⚽ <span style="font-size:.78rem">${tr('tbd')}</span></div>
-        </div>`;
+      // Fall back to data.json roundReached entries or empty slots
+      const roundTeams = Object.entries(TD).filter(([,t]) =>
+        t.roundReached === roundKey || (r.nk==='fin' && (t.status==='champion'||t.roundReached==='Runner-up'))
+      );
+      if (roundTeams.length >= 2) {
+        for (let i = 0; i < roundTeams.length - 1; i += 2) {
+          const [n1, td1] = roundTeams[i];
+          const [n2, td2] = roundTeams[i+1] || [null, null];
+          html += `<div class="bm">
+            <div class="bt winner"><span style="font-size:.9rem">${td1.flag||FLAGS[n1]||'🏳'}</span> <span style="font-size:.78rem;font-weight:700">${n1}</span></div>
+            ${td2 ? `<div class="bt"><span style="font-size:.9rem">${td2.flag||FLAGS[n2]||'🏳'}</span> <span style="font-size:.78rem;font-weight:700">${n2}</span></div>` : `<div class="bt" style="opacity:.35">⚽ <span>${tr('tbd')}</span></div>`}
+          </div>`;
+        }
+      } else {
+        const slots = r.nk === 'r16' ? 8 : r.nk === 'qf' ? 4 : r.nk === 'sf' ? 2 : 1;
+        for (let i = 0; i < slots; i += 2) {
+          html += `<div class="bm">
+            <div class="bt" style="opacity:.35">⚽ <span style="font-size:.78rem">${tr('tbd')}</span></div>
+            <div class="bt" style="opacity:.35">⚽ <span style="font-size:.78rem">${tr('tbd')}</span></div>
+          </div>`;
+        }
       }
     }
     if (ri === 3) html += `<div style="text-align:center;margin-top:.5rem;font-size:1.5rem">🏆</div>`;
@@ -1518,26 +1661,39 @@ function renderBracket() {
 
 /* ── ELIMINATED ─────────────────────────────────────── */
 function renderElim() {
+  // Gather all 48 pool nations (TD may not have all if data.json partial)
+  const allNations = new Set([...Object.keys(TD), ...Object.keys(FLAGS)]);
   // Use ti() so R32/R16/QF eliminations are included alongside group-stage ones
-  const out = Object.keys(TD)
+  const out = [...allNations]
     .map(n => [n, ti(n)])
     .filter(([, tm]) => tm.status === 'eliminated')
-    .sort(([a], [b]) => a.localeCompare(b));
+    .sort(([a, ia], [b, ib]) => {
+      // Sort by round (later rounds first), then alphabetical
+      const ra = PTS_MAP[ia.roundReached] || 0;
+      const rb = PTS_MAP[ib.roundReached] || 0;
+      return rb - ra || a.localeCompare(b);
+    });
   const body=document.getElementById('elim-body');
   const sub=document.getElementById('elim-sub');
-  document.getElementById('elim-ct').textContent=`(${out.length})`;
+  document.getElementById('elim-ct').textContent=`(${out.length})`; // tab badge
   if(!out.length){
     body.innerHTML=`<p style="color:var(--faint);font-size:.8rem;padding:.25rem">${tr('noElim')}</p>`;
     sub.textContent=tr('noneYet');
     return;
   }
   sub.textContent=tr('nations',out.length);
-  body.innerHTML=out.map(([n,info])=>`<div class="echip">
-    <span style="font-size:1rem">${info.flag||FLAGS[n]||'🏳'}</span>
-    <span class="echip-name">${n}</span>
-    <span class="b b-grp" style="font-size:.58rem">${tr('grp')} ${info.group||GROUP_MAP[n]||'?'}</span>
-    ${info.roundReached?`<span class="b b-out" style="font-size:.58rem;opacity:.75">${info.roundReached}</span>`:''}
-  </div>`).join('');
+  body.innerHTML=out.map(([n,info])=>{
+    const roundLabel = info.roundReached || '';
+    const roundBadgeColor = roundLabel === 'Round of 32'
+      ? 'background:rgba(251,191,36,.15);color:#FBBF24;border-color:rgba(251,191,36,.3)'
+      : 'background:var(--red-bg);color:var(--red);border-color:rgba(200,52,59,.25)';
+    return `<div class="echip">
+      <span style="font-size:1rem">${info.flag||FLAGS[n]||'🏳'}</span>
+      <span class="echip-name">${n}</span>
+      <span class="b b-grp" style="font-size:.58rem">${tr('grp')} ${info.group||GROUP_MAP[n]||'?'}</span>
+      ${roundLabel?`<span class="b" style="font-size:.58rem;${roundBadgeColor}">${roundLabel}</span>`:''}
+    </div>`;
+  }).join('');
 }
 
 /* ── TABS ───────────────────────────────────────────── */
@@ -1627,12 +1783,11 @@ async function fetchAllHistoricalScores() {
     } catch { /* skip unavailable date */ }
   }
 
-  if (allResults.length === 0) return; // ESPN unavailable — keep recentResults fallback
+  if (allResults.length === 0) return;
 
-  // Rebuild STATS and TRENDS completely from all completed games
   STATS = {}; TRENDS = {};
   const freshHist = {};
-  allResults.forEach(({ t1, t2, hs, as: as_ }) => {
+  allResults.forEach(({ t1, t2, hs, as: as_, hw, aw }) => {
     if (!STATS[t1]) STATS[t1] = {w:0,d:0,l:0,gf:0,ga:0};
     if (!STATS[t2]) STATS[t2] = {w:0,d:0,l:0,gf:0,ga:0};
     STATS[t1].gf += hs; STATS[t2].gf += as_;
@@ -1642,21 +1797,21 @@ async function fetchAllHistoricalScores() {
     else                { STATS[t1].d++; STATS[t2].d++; }
     TRENDS[t1] = hs > as_ ? 'win' : as_ > hs ? 'loss' : 'draw';
     TRENDS[t2] = as_ > hs ? 'win' : hs > as_ ? 'loss' : 'draw';
-    // Store for schedule score display
-    const entry = { t1, t2, homeScore: hs, awayScore: as_, state: 'post', homeWinner: r.hw, awayWinner: r.aw };
+    const entry = { t1, t2, homeScore: hs, awayScore: as_, state: 'post', homeWinner: hw, awayWinner: aw };
     freshHist[`${t1}|${t2}`] = entry;
     freshHist[`${t2}|${t1}`] = entry;
   });
   historicalScores = freshHist;
 
-  // Update the snapshot used by fetchLiveScores for today's enrichment
   BASE_STATS = JSON.parse(JSON.stringify(STATS));
   BASE_TRENDS = JSON.parse(JSON.stringify(TRENDS));
   BASE_RESULT_KEYS = new Set(seen);
 
   renderGroups();
   renderPool();
-  renderSchedule(); // refresh schedule with any newly-fetched scores
+  renderSchedule();
+  renderBracket();
+  renderElim();
 }
 
 async function fetchLiveScores() {
@@ -1671,7 +1826,7 @@ async function fetchLiveScores() {
     events.forEach(ev => {
       const comp = ev.competitions?.[0];
       if (!comp) return;
-      const state = ev.status?.type?.state;   // 'pre' | 'in' | 'post'
+      const state = ev.status?.type?.state;
       const clock = ev.status?.displayClock || '';
       const home  = comp.competitors?.find(c => c.homeAway === 'home');
       const away  = comp.competitors?.find(c => c.homeAway === 'away');
@@ -1687,9 +1842,7 @@ async function fetchLiveScores() {
     liveScores = fresh;
     renderSchedule();
 
-    // Enrich group standings with any ESPN post-game results not yet in data.json
     const seen = new Set(BASE_RESULT_KEYS);
-    // Reset to base snapshot first to avoid double-counting across repeated calls
     STATS  = JSON.parse(JSON.stringify(BASE_STATS));
     TRENDS = JSON.parse(JSON.stringify(BASE_TRENDS));
     let statsChanged = false;
@@ -1711,9 +1864,8 @@ async function fetchLiveScores() {
       TRENDS[entry.t2] = as > hs ? 'win' : hs > as ? 'loss' : 'draw';
       statsChanged = true;
     });
-    if (statsChanged) { renderGroups(); renderPool(); }
+    if (statsChanged) { renderGroups(); renderPool(); renderBracket(); renderElim(); }
 
-    // Pulse the Schedule tab when live
     const schedBtn = document.getElementById('tab-sched');
     if (schedBtn) {
       const already = schedBtn.querySelector('.live-dot');
@@ -1724,7 +1876,6 @@ async function fetchLiveScores() {
       }
     }
 
-    // Poll every 60 s while live, stop when no live games
     if (hasLive && !liveInterval) {
       liveInterval = setInterval(fetchLiveScores, 60000);
     } else if (!hasLive && liveInterval) {
@@ -1733,13 +1884,13 @@ async function fetchLiveScores() {
   } catch { /* ESPN unavailable — silent fail */ }
 }
 
-/* ── INIT ───────────────────────────────────────────────────── */
+/* ── INIT ────────────────────────────────────────────── */
 loadData();
-setInterval(loadData, 600000); // refresh team metadata every 10 min
-fetchAllHistoricalScores();     // build full standings from all past days immediately
-setInterval(fetchAllHistoricalScores, 600000); // refresh historical every 10 min
-fetchLiveScores();              // check for in-progress/today's games immediately
-setInterval(fetchLiveScores, 60000); // live poll every 60 s
+setInterval(loadData, 600000);
+fetchAllHistoricalScores();
+setInterval(fetchAllHistoricalScores, 600000);
+fetchLiveScores();
+setInterval(fetchLiveScores, 60000);
 </script>
 </body>
 </html>
