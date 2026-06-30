@@ -1851,4 +1851,47 @@ async function fetchLiveScores() {
     Object.values(fresh).forEach(entry => {
       if (entry.state !== 'post') return;
       const key = `${entry.t1}|${entry.t2}`;
-      if (seen.has(key) || processed.has(
+      if (seen.has(key) || processed.has(key)) return;
+      processed.add(key); processed.add(`${entry.t2}|${entry.t1}`);
+      const hs = Number(entry.homeScore), as = Number(entry.awayScore);
+      if (!STATS[entry.t1]) STATS[entry.t1] = {w:0,d:0,l:0,gf:0,ga:0};
+      if (!STATS[entry.t2]) STATS[entry.t2] = {w:0,d:0,l:0,gf:0,ga:0};
+      STATS[entry.t1].gf += hs; STATS[entry.t2].gf += as;
+      STATS[entry.t1].ga += as; STATS[entry.t2].ga += hs;
+      if (hs > as)      { STATS[entry.t1].w++; STATS[entry.t2].l++; }
+      else if (as > hs) { STATS[entry.t2].w++; STATS[entry.t1].l++; }
+      else              { STATS[entry.t1].d++;  STATS[entry.t2].d++; }
+      TRENDS[entry.t1] = hs > as ? 'win' : as > hs ? 'loss' : 'draw';
+      TRENDS[entry.t2] = as > hs ? 'win' : hs > as ? 'loss' : 'draw';
+      statsChanged = true;
+    });
+    if (statsChanged) { renderGroups(); renderPool(); renderBracket(); renderElim(); }
+
+    const schedBtn = document.getElementById('tab-sched');
+    if (schedBtn) {
+      const already = schedBtn.querySelector('.live-dot');
+      if (hasLive && !already) {
+        schedBtn.innerHTML = `${tr('schedule')} <span class="live-dot"></span>`;
+      } else if (!hasLive && already) {
+        schedBtn.textContent = tr('schedule');
+      }
+    }
+
+    if (hasLive && !liveInterval) {
+      liveInterval = setInterval(fetchLiveScores, 60000);
+    } else if (!hasLive && liveInterval) {
+      clearInterval(liveInterval); liveInterval = null;
+    }
+  } catch { /* ESPN unavailable — silent fail */ }
+}
+
+/* ── INIT ────────────────────────────────────────────── */
+loadData();
+setInterval(loadData, 600000);
+fetchAllHistoricalScores();
+setInterval(fetchAllHistoricalScores, 600000);
+fetchLiveScores();
+setInterval(fetchLiveScores, 60000);
+</script>
+</body>
+</html>
