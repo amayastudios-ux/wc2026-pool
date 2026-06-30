@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-29T09:26:50Z",
+    "lastUpdated": "2026-06-30T08:30:53Z",
     "stage": "Round of 32",
     "matchday": 3,
-    "eliminatedCount": 17,
+    "eliminatedCount": 18,
     "recentResults": [
       {
         "home": "Mexico",
@@ -585,6 +585,30 @@
         "home": "South Africa",
         "away": "Canada",
         "homeScore": 0,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Brazil",
+        "away": "Japan",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Germany",
+        "away": "Paraguay",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Netherlands",
+        "away": "Morocco",
+        "homeScore": 1,
         "awayScore": 1,
         "round": "Round of 32",
         "slug": "round-of-32"
@@ -1608,9 +1632,9 @@
     "Japan": {
       "group": "F",
       "flag": "🇯🇵",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Sweden": {
       "group": "F",
