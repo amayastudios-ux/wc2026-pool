@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-30T08:30:53Z",
+    "lastUpdated": "2026-07-01T08:50:23Z",
     "stage": "Round of 32",
     "matchday": 3,
-    "eliminatedCount": 18,
+    "eliminatedCount": 21,
     "recentResults": [
       {
         "home": "Mexico",
@@ -610,6 +610,30 @@
         "away": "Morocco",
         "homeScore": 1,
         "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Côte d'Ivoire",
+        "away": "Norway",
+        "homeScore": 1,
+        "awayScore": 2,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "France",
+        "away": "Sweden",
+        "homeScore": 3,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Mexico",
+        "away": "Ecuador",
+        "homeScore": 2,
+        "awayScore": 0,
         "round": "Round of 32",
         "slug": "round-of-32"
       }
@@ -1611,16 +1635,16 @@
     "Côte d'Ivoire": {
       "group": "E",
       "flag": "🇨🇮",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Ecuador": {
       "group": "E",
       "flag": "🇪🇨",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Netherlands": {
       "group": "F",
@@ -1639,9 +1663,9 @@
     "Sweden": {
       "group": "F",
       "flag": "🇸🇪",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Tunisia": {
       "group": "F",
