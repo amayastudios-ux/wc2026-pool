@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-01T08:50:23Z",
+    "lastUpdated": "2026-07-02T08:12:17Z",
     "stage": "Round of 32",
     "matchday": 3,
-    "eliminatedCount": 21,
+    "eliminatedCount": 24,
     "recentResults": [
       {
         "home": "Mexico",
@@ -632,6 +632,30 @@
       {
         "home": "Mexico",
         "away": "Ecuador",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "England",
+        "away": "Congo DR",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Belgium",
+        "away": "Senegal",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "USA",
+        "away": "Bosnia & Herzegovina",
         "homeScore": 2,
         "awayScore": 0,
         "round": "Round of 32",
@@ -1544,9 +1568,9 @@
     "Bosnia & Herzegovina": {
       "group": "B",
       "flag": "🇧🇦",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Qatar": {
       "group": "B",
@@ -1740,9 +1764,9 @@
     "Senegal": {
       "group": "I",
       "flag": "🇸🇳",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Iraq": {
       "group": "I",
@@ -1796,9 +1820,9 @@
     "Congo DR": {
       "group": "K",
       "flag": "🇨🇩",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Uzbekistan": {
       "group": "K",
