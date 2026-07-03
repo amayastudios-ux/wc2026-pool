@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-02T08:12:17Z",
+    "lastUpdated": "2026-07-03T08:10:11Z",
     "stage": "Round of 32",
     "matchday": 3,
-    "eliminatedCount": 24,
+    "eliminatedCount": 27,
     "recentResults": [
       {
         "home": "Mexico",
@@ -656,6 +656,30 @@
       {
         "home": "USA",
         "away": "Bosnia & Herzegovina",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Spain",
+        "away": "Austria",
+        "homeScore": 3,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Portugal",
+        "away": "Croatia",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Switzerland",
+        "away": "Algeria",
         "homeScore": 2,
         "awayScore": 0,
         "round": "Round of 32",
@@ -1792,16 +1816,16 @@
     "Algeria": {
       "group": "J",
       "flag": "🇩🇿",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Austria": {
       "group": "J",
       "flag": "🇦🇹",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Jordan": {
       "group": "J",
@@ -1848,9 +1872,9 @@
     "Croatia": {
       "group": "L",
       "flag": "🇭🇷",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Ghana": {
       "group": "L",
