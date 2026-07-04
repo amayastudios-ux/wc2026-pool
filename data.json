@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-03T08:10:11Z",
+    "lastUpdated": "2026-07-04T07:47:22Z",
     "stage": "Round of 32",
     "matchday": 3,
-    "eliminatedCount": 27,
+    "eliminatedCount": 29,
     "recentResults": [
       {
         "home": "Mexico",
@@ -681,6 +681,30 @@
         "home": "Switzerland",
         "away": "Algeria",
         "homeScore": 2,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Australia",
+        "away": "Egypt",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Argentina",
+        "away": "Cabo Verde",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Colombia",
+        "away": "Ghana",
+        "homeScore": 1,
         "awayScore": 0,
         "round": "Round of 32",
         "slug": "round-of-32"
@@ -1760,9 +1784,9 @@
     "Cabo Verde": {
       "group": "H",
       "flag": "🇨🇻",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Saudi Arabia": {
       "group": "H",
@@ -1879,9 +1903,9 @@
     "Ghana": {
       "group": "L",
       "flag": "🇬🇭",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Panama": {
       "group": "L",
