@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-04T07:47:22Z",
-    "stage": "Round of 32",
+    "lastUpdated": "2026-07-05T07:57:26Z",
+    "stage": "Round of 16",
     "matchday": 3,
-    "eliminatedCount": 29,
+    "eliminatedCount": 31,
     "recentResults": [
       {
         "home": "Mexico",
@@ -708,6 +708,22 @@
         "awayScore": 0,
         "round": "Round of 32",
         "slug": "round-of-32"
+      },
+      {
+        "home": "Canada",
+        "away": "Morocco",
+        "homeScore": 0,
+        "awayScore": 3,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Paraguay",
+        "away": "France",
+        "homeScore": 0,
+        "awayScore": 1,
+        "round": "Round of 16",
+        "slug": "round-of-16"
       }
     ]
   },
@@ -1609,9 +1625,9 @@
     "Canada": {
       "group": "B",
       "flag": "🇨🇦",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Round of 16"
     },
     "Bosnia & Herzegovina": {
       "group": "B",
@@ -1672,9 +1688,9 @@
     "Paraguay": {
       "group": "D",
       "flag": "🇵🇾",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Round of 16"
     },
     "Australia": {
       "group": "D",
