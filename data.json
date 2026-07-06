@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-05T07:57:26Z",
+    "lastUpdated": "2026-07-06T09:00:27Z",
     "stage": "Round of 16",
     "matchday": 3,
-    "eliminatedCount": 31,
+    "eliminatedCount": 33,
     "recentResults": [
       {
         "home": "Mexico",
@@ -722,6 +722,22 @@
         "away": "France",
         "homeScore": 0,
         "awayScore": 1,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Brazil",
+        "away": "Norway",
+        "homeScore": 1,
+        "awayScore": 2,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Mexico",
+        "away": "England",
+        "homeScore": 2,
+        "awayScore": 3,
         "round": "Round of 16",
         "slug": "round-of-16"
       }
@@ -1597,9 +1613,9 @@
     "Mexico": {
       "group": "A",
       "flag": "🇲🇽",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Round of 16"
     },
     "South Africa": {
       "group": "A",
@@ -1653,9 +1669,9 @@
     "Brazil": {
       "group": "C",
       "flag": "🇧🇷",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Round of 16"
     },
     "Morocco": {
       "group": "C",
