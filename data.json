@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-06T09:00:27Z",
+    "lastUpdated": "2026-07-07T08:23:55Z",
     "stage": "Round of 16",
     "matchday": 3,
-    "eliminatedCount": 33,
+    "eliminatedCount": 35,
     "recentResults": [
       {
         "home": "Mexico",
@@ -738,6 +738,22 @@
         "away": "England",
         "homeScore": 2,
         "awayScore": 3,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Portugal",
+        "away": "Spain",
+        "homeScore": 0,
+        "awayScore": 1,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "USA",
+        "away": "Belgium",
+        "homeScore": 1,
+        "awayScore": 4,
         "round": "Round of 16",
         "slug": "round-of-16"
       }
@@ -1697,9 +1713,9 @@
     "USA": {
       "group": "D",
       "flag": "🇺🇸",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Round of 16"
     },
     "Paraguay": {
       "group": "D",
@@ -1893,9 +1909,9 @@
     "Portugal": {
       "group": "K",
       "flag": "🇵🇹",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Round of 16"
     },
     "Congo DR": {
       "group": "K",
