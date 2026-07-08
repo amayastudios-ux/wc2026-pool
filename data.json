@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-07T08:23:55Z",
+    "lastUpdated": "2026-07-08T07:29:28Z",
     "stage": "Round of 16",
     "matchday": 3,
-    "eliminatedCount": 35,
+    "eliminatedCount": 36,
     "recentResults": [
       {
         "home": "Mexico",
@@ -754,6 +754,22 @@
         "away": "Belgium",
         "homeScore": 1,
         "awayScore": 4,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Argentina",
+        "away": "Egypt",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Switzerland",
+        "away": "Colombia",
+        "homeScore": 0,
+        "awayScore": 0,
         "round": "Round of 16",
         "slug": "round-of-16"
       }
@@ -1804,9 +1820,9 @@
     "Egypt": {
       "group": "G",
       "flag": "🇪🇬",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Round of 16"
     },
     "Iran": {
       "group": "G",
