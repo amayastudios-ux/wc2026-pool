@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-09T08:28:55Z",
-    "stage": "Round of 16",
+    "lastUpdated": "2026-07-10T08:23:16Z",
+    "stage": "Quarter-finals",
     "matchday": 3,
-    "eliminatedCount": 36,
+    "eliminatedCount": 37,
     "recentResults": [
       {
         "home": "Mexico",
@@ -772,6 +772,14 @@
         "awayScore": 0,
         "round": "Round of 16",
         "slug": "round-of-16"
+      },
+      {
+        "home": "France",
+        "away": "Morocco",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Quarter-finals",
+        "slug": "quarterfinals"
       }
     ]
   },
@@ -1708,9 +1716,9 @@
     "Morocco": {
       "group": "C",
       "flag": "🇲🇦",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 5,
+      "roundReached": "Runner-up"
     },
     "Haiti": {
       "group": "C",
@@ -1869,9 +1877,9 @@
     "France": {
       "group": "I",
       "flag": "🇫🇷",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "champion",
+      "pts": 6,
+      "roundReached": "Champion"
     },
     "Senegal": {
       "group": "I",
