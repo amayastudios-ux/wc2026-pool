@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-10T08:23:16Z",
+    "lastUpdated": "2026-07-11T07:11:40Z",
     "stage": "Quarter-finals",
     "matchday": 3,
-    "eliminatedCount": 37,
+    "eliminatedCount": 38,
     "recentResults": [
       {
         "home": "Mexico",
@@ -778,6 +778,14 @@
         "away": "Morocco",
         "homeScore": 2,
         "awayScore": 0,
+        "round": "Quarter-finals",
+        "slug": "quarterfinals"
+      },
+      {
+        "home": "Spain",
+        "away": "Belgium",
+        "homeScore": 2,
+        "awayScore": 1,
         "round": "Quarter-finals",
         "slug": "quarterfinals"
       }
@@ -1821,9 +1829,9 @@
     "Belgium": {
       "group": "G",
       "flag": "🇧🇪",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 5,
+      "roundReached": "Runner-up"
     },
     "Egypt": {
       "group": "G",
@@ -1849,9 +1857,9 @@
     "Spain": {
       "group": "H",
       "flag": "🇪🇸",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "champion",
+      "pts": 6,
+      "roundReached": "Champion"
     },
     "Cabo Verde": {
       "group": "H",
