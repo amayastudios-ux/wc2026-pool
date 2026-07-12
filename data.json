@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-11T07:11:40Z",
+    "lastUpdated": "2026-07-12T07:29:13Z",
     "stage": "Quarter-finals",
     "matchday": 3,
-    "eliminatedCount": 38,
+    "eliminatedCount": 40,
     "recentResults": [
       {
         "home": "Mexico",
@@ -785,6 +785,22 @@
         "home": "Spain",
         "away": "Belgium",
         "homeScore": 2,
+        "awayScore": 1,
+        "round": "Quarter-finals",
+        "slug": "quarterfinals"
+      },
+      {
+        "home": "Norway",
+        "away": "England",
+        "homeScore": 1,
+        "awayScore": 2,
+        "round": "Quarter-finals",
+        "slug": "quarterfinals"
+      },
+      {
+        "home": "Argentina",
+        "away": "Switzerland",
+        "homeScore": 3,
         "awayScore": 1,
         "round": "Quarter-finals",
         "slug": "quarterfinals"
@@ -1710,9 +1726,9 @@
     "Switzerland": {
       "group": "B",
       "flag": "🇨🇭",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 5,
+      "roundReached": "Runner-up"
     },
     "Brazil": {
       "group": "C",
@@ -1906,16 +1922,16 @@
     "Norway": {
       "group": "I",
       "flag": "🇳🇴",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 5,
+      "roundReached": "Runner-up"
     },
     "Argentina": {
       "group": "J",
       "flag": "🇦🇷",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "champion",
+      "pts": 6,
+      "roundReached": "Champion"
     },
     "Algeria": {
       "group": "J",
@@ -1969,9 +1985,9 @@
     "England": {
       "group": "L",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "champion",
+      "pts": 6,
+      "roundReached": "Champion"
     },
     "Croatia": {
       "group": "L",
