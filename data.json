@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-06-30T08:30:53Z",
-    "stage": "Round of 32",
-    "matchday": 3,
-    "eliminatedCount": 18,
+    "lastUpdated": "2026-07-12T12:00:00Z",
+    "stage": "Semi-finals",
+    "matchday": 7,
+    "eliminatedCount": 44,
     "recentResults": [
       {
         "home": "Mexico",
@@ -582,6 +582,30 @@
         "slug": "group-stage"
       },
       {
+        "home": "Spain",
+        "away": "Austria",
+        "homeScore": 3,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Portugal",
+        "away": "Croatia",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Switzerland",
+        "away": "Algeria",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
         "home": "South Africa",
         "away": "Canada",
         "homeScore": 0,
@@ -612,6 +636,174 @@
         "awayScore": 1,
         "round": "Round of 32",
         "slug": "round-of-32"
+      },
+      {
+        "home": "Côte d'Ivoire",
+        "away": "Norway",
+        "homeScore": 1,
+        "awayScore": 2,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "France",
+        "away": "Sweden",
+        "homeScore": 3,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Mexico",
+        "away": "Ecuador",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "England",
+        "away": "Congo DR",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Belgium",
+        "away": "Senegal",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "USA",
+        "away": "Bosnia & Herzegovina",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Australia",
+        "away": "Egypt",
+        "homeScore": 1,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Argentina",
+        "away": "Cabo Verde",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Colombia",
+        "away": "Ghana",
+        "homeScore": 1,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Spain",
+        "away": "Portugal",
+        "homeScore": 1,
+        "awayScore": 0,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Belgium",
+        "away": "USA",
+        "homeScore": 4,
+        "awayScore": 1,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "England",
+        "away": "Mexico",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Norway",
+        "away": "Brazil",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Morocco",
+        "away": "Canada",
+        "homeScore": 3,
+        "awayScore": 0,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "France",
+        "away": "Paraguay",
+        "homeScore": 1,
+        "awayScore": 0,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Argentina",
+        "away": "Egypt",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Switzerland",
+        "away": "Colombia",
+        "homeScore": 0,
+        "awayScore": 0,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "France",
+        "away": "Morocco",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Quarter-finals",
+        "slug": "quarter-final"
+      },
+      {
+        "home": "Spain",
+        "away": "Belgium",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Quarter-finals",
+        "slug": "quarter-final"
+      },
+      {
+        "home": "England",
+        "away": "Norway",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Quarter-finals",
+        "slug": "quarter-final"
+      },
+      {
+        "home": "Argentina",
+        "away": "Switzerland",
+        "homeScore": 3,
+        "awayScore": 1,
+        "round": "Quarter-finals",
+        "slug": "quarter-final"
       }
     ]
   },
@@ -1485,9 +1677,9 @@
     "Mexico": {
       "group": "A",
       "flag": "🇲🇽",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 16"
     },
     "South Africa": {
       "group": "A",
@@ -1513,16 +1705,16 @@
     "Canada": {
       "group": "B",
       "flag": "🇨🇦",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 16"
     },
     "Bosnia & Herzegovina": {
       "group": "B",
       "flag": "🇧🇦",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Qatar": {
       "group": "B",
@@ -1534,23 +1726,23 @@
     "Switzerland": {
       "group": "B",
       "flag": "🇨🇭",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Quarter-finals"
     },
     "Brazil": {
       "group": "C",
       "flag": "🇧🇷",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 16"
     },
     "Morocco": {
       "group": "C",
       "flag": "🇲🇦",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Quarter-finals"
     },
     "Haiti": {
       "group": "C",
@@ -1569,23 +1761,23 @@
     "USA": {
       "group": "D",
       "flag": "🇺🇸",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 16"
     },
     "Paraguay": {
       "group": "D",
       "flag": "🇵🇾",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 16"
     },
     "Australia": {
       "group": "D",
       "flag": "🇦🇺",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Türkiye": {
       "group": "D",
@@ -1597,9 +1789,9 @@
     "Germany": {
       "group": "E",
       "flag": "🇩🇪",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Curaçao": {
       "group": "E",
@@ -1611,23 +1803,23 @@
     "Côte d'Ivoire": {
       "group": "E",
       "flag": "🇨🇮",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Ecuador": {
       "group": "E",
       "flag": "🇪🇨",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Netherlands": {
       "group": "F",
       "flag": "🇳🇱",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Japan": {
       "group": "F",
@@ -1639,9 +1831,9 @@
     "Sweden": {
       "group": "F",
       "flag": "🇸🇪",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Tunisia": {
       "group": "F",
@@ -1653,16 +1845,16 @@
     "Belgium": {
       "group": "G",
       "flag": "🇧🇪",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Quarter-finals"
     },
     "Egypt": {
       "group": "G",
       "flag": "🇪🇬",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 16"
     },
     "Iran": {
       "group": "G",
@@ -1682,15 +1874,15 @@
       "group": "H",
       "flag": "🇪🇸",
       "status": "active",
-      "pts": 0,
+      "pts": 3,
       "roundReached": null
     },
     "Cabo Verde": {
       "group": "H",
       "flag": "🇨🇻",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Saudi Arabia": {
       "group": "H",
@@ -1710,15 +1902,15 @@
       "group": "I",
       "flag": "🇫🇷",
       "status": "active",
-      "pts": 0,
+      "pts": 3,
       "roundReached": null
     },
     "Senegal": {
       "group": "I",
       "flag": "🇸🇳",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Iraq": {
       "group": "I",
@@ -1730,30 +1922,30 @@
     "Norway": {
       "group": "I",
       "flag": "🇳🇴",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 2,
+      "roundReached": "Quarter-finals"
     },
     "Argentina": {
       "group": "J",
       "flag": "🇦🇷",
       "status": "active",
-      "pts": 0,
+      "pts": 3,
       "roundReached": null
     },
     "Algeria": {
       "group": "J",
       "flag": "🇩🇿",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Austria": {
       "group": "J",
       "flag": "🇦🇹",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Jordan": {
       "group": "J",
@@ -1765,16 +1957,16 @@
     "Portugal": {
       "group": "K",
       "flag": "🇵🇹",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 16"
     },
     "Congo DR": {
       "group": "K",
       "flag": "🇨🇩",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Uzbekistan": {
       "group": "K",
@@ -1786,30 +1978,30 @@
     "Colombia": {
       "group": "K",
       "flag": "🇨🇴",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 16"
     },
     "England": {
       "group": "L",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
       "status": "active",
-      "pts": 0,
+      "pts": 3,
       "roundReached": null
     },
     "Croatia": {
       "group": "L",
       "flag": "🇭🇷",
-      "status": "active",
+      "status": "eliminated",
       "pts": 0,
-      "roundReached": null
+      "roundReached": "Round of 32"
     },
     "Ghana": {
       "group": "L",
       "flag": "🇬🇭",
-      "status": "active",
-      "pts": 0,
-      "roundReached": null
+      "status": "eliminated",
+      "pts": 1,
+      "roundReached": "Round of 32"
     },
     "Panama": {
       "group": "L",

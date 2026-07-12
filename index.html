@@ -285,7 +285,7 @@
       <p id="hdr-sub">Pool tracker &nbsp;·&nbsp; 24 participants &nbsp;·&nbsp; Jun 11 – Jul 19, 2026</p>
     </div>
     <div style="margin-left:auto;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-      <div class="hdr-badge" id="stage-badge">Round of 32</div>
+      <div class="hdr-badge" id="stage-badge">Semi-finals</div>
       <div class="lang-tog">
         <button class="ltbtn on" id="btn-en" onclick="setLang('en')">EN</button>
         <button class="ltbtn" id="btn-es" onclick="setLang('es')">ES</button>
@@ -296,9 +296,9 @@
   <!-- ── Stats ── -->
   <div class="stats">
     <div class="stat"><div class="stat-val">24</div><div class="stat-lbl" id="sl-part">Participants</div></div>
-    <div class="stat"><div class="stat-val" id="s-active" style="color:var(--green)">48</div><div class="stat-lbl" id="sl-active">Active Nations</div></div>
-    <div class="stat"><div class="stat-val" id="s-elim"   style="color:var(--red)">0</div><div class="stat-lbl" id="sl-elim">Eliminated</div></div>
-    <div class="stat"><div class="stat-val" id="s-stage">GS</div><div class="stat-lbl" id="sl-round">Current Round</div></div>
+    <div class="stat"><div class="stat-val" id="s-active" style="color:var(--green)">4</div><div class="stat-lbl" id="sl-active">Active Nations</div></div>
+    <div class="stat"><div class="stat-val" id="s-elim"   style="color:var(--red)">44</div><div class="stat-lbl" id="sl-elim">Eliminated</div></div>
+    <div class="stat"><div class="stat-val" id="s-stage">SF</div><div class="stat-lbl" id="sl-round">Current Round</div></div>
   </div>
 
   <!-- ── Tabs ── -->
@@ -346,22 +346,22 @@
   <!-- ══ SCHEDULE ══ -->
   <div id="t-sched" style="display:none">
     <div class="card">
-      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Round of 32 — Jun 28–Jul 3 · Group Stage Complete</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
+      <div class="card-hdr"><span class="card-ttl" id="sched-ttl">Semi-finals — Jul 14–15 · Quarterfinals Complete</span><span class="card-sub" id="sched-tz">All times Pacific</span></div>
       <div id="sched-body"></div>
     </div>
     <div class="infobox">
       <i class="ti ti-refresh"></i>
-      <p id="sched-info">Matchday 3 runs Jun 24–27. Scores update automatically each morning once results are in.</p>
+      <p id="sched-info">Semifinals: France vs Spain (Tue Jul 14) and England vs Argentina (Wed Jul 15). Winners meet in the Final on Jul 19.</p>
     </div>
   </div>
 
   <!-- ══ BRACKET ══ -->
   <div id="t-bracket" style="display:none">
     <div class="card">
-      <div class="card-hdr"><span class="card-ttl" id="bracket-ttl">Tournament Bracket</span><span class="card-sub" id="bracket-sub">32 teams advance from 12 groups</span></div>
+      <div class="card-hdr"><span class="card-ttl" id="bracket-ttl">Tournament Bracket</span><span class="card-sub" id="bracket-sub">Final Four — France, Spain, England, Argentina</span></div>
       <div style="padding:1rem">
         <div class="bwrap"><div class="bracket" id="bracket-body"></div></div>
-        <p class="legend" id="bracket-leg" style="margin-top:.75rem">Bracket fills after group stage ends (~Jun 27) &nbsp;·&nbsp; Bronze Final: Jul 18 &nbsp;·&nbsp; Final: Jul 19, MetLife Stadium NJ</p>
+        <p class="legend" id="bracket-leg" style="margin-top:.75rem">Semifinals: Jul 14–15 &nbsp;·&nbsp; Bronze Final: Jul 18 &nbsp;·&nbsp; Final: Jul 19, MetLife Stadium NJ</p>
       </div>
     </div>
   </div>
@@ -463,6 +463,13 @@ const ELIM_STATUS = {
   'South Africa':'Round of 32','Japan':'Round of 32',
   'Germany':'Round of 32','Netherlands':'Round of 32',
   "Côte d'Ivoire":'Round of 32',
+  // Round of 16 eliminations
+  'Canada':'Round of 16','Paraguay':'Round of 16','Brazil':'Round of 16',
+  'Mexico':'Round of 16','USA':'Round of 16','Colombia':'Round of 16',
+  'Egypt':'Round of 16','Portugal':'Round of 16',
+  // Quarter-final eliminations
+  'Switzerland':'Quarter-finals','Morocco':'Quarter-finals',
+  'Belgium':'Quarter-finals','Norway':'Quarter-finals',
 };
 
 // ── Static R32 match winners (fallback when ESPN unavailable) ──
@@ -608,6 +615,17 @@ const QF_PAIRS = [
   {mid:100, m1:95, m2:96, date:'Fri · Jul 10', date_es:'Vie · Jul 10'},
 ];
 
+// Semifinals bracket — Jul 14–15, 2026
+// m1/m2 = source QF match IDs
+const SF_PAIRS = [
+  {mid:101, m1:97, m2:98,  t1:'France',  t2:'Spain',     date:'Tue · Jul 14', date_es:'Mar · Jul 14', venue:'MetLife Stadium, NJ'},
+  {mid:102, m1:99, m2:100, t1:'England', t2:'Argentina', date:'Wed · Jul 15', date_es:'Mié · Jul 15', venue:'AT&T Stadium, TX'},
+];
+
+// Final — Jul 19, 2026
+// m1/m2 = source SF match IDs
+const FINAL_PAIR = {mid:103, m1:101, m2:102, date:'Sun · Jul 19', date_es:'Dom · Jul 19', venue:'MetLife Stadium, NJ'};
+
 const SCHEDULE_MD2 = [
   {date:'Thu · Jun 18', date_es:'Jue · Jun 18', ms:[
     {t1:'South Africa',           t2:'Czechia',              g:'A', time:'9:00 AM',  score:'1–1'},
@@ -701,12 +719,12 @@ const T = {
     ft:              'FT',
     tbd:             'TBD',
     more12:          '+12 more',
-    md1:             'Round of 32 — Jun 28–Jul 3 · Group Stage Complete',
+    md1:             'Semi-finals — Jul 14–15 · Quarterfinals Complete',
     allTimes:        'All times Pacific',
-    infoMsg:         'Round of 32 runs Jun 28–Jul 3. Team matchups resolve once qualifiers are final. Scores update live.',
+    infoMsg:         'Semifinals: France vs Spain (Tue Jul 14) and England vs Argentina (Wed Jul 15). Winners meet in the Final on Jul 19.',
     tournamentBracket:'Tournament Bracket',
-    bracketSub:      '32 teams advance from 12 groups',
-    bracketLegend:   'Bracket fills after group stage ends (~Jun 27) · Bronze Final: Jul 18 · Final: Jul 19, MetLife Stadium NJ',
+    bracketSub:      'Final Four — France, Spain, England, Argentina',
+    bracketLegend:   'Semifinals: Jul 14–15 · Bronze Final: Jul 18 · Final: Jul 19, MetLife Stadium NJ',
     eliminatedNations:'Eliminated Nations',
     noneYet:         'None yet — tournament in progress',
     noElim:          'No teams eliminated yet. Check back after Matchday 3 (Jun 27).',
@@ -749,12 +767,12 @@ const T = {
     ft:              'FIN',
     tbd:             'PD',
     more12:          '+12 más',
-    md1:             'Ronda de 32 — 28 Jun–3 Jul · Fase de Grupos Completa',
+    md1:             'Semifinales — 14–15 Jul · Cuartos de Final Completos',
     allTimes:        'Hora del Pacífico',
-    infoMsg:         'La Ronda de 32 se juega del 28 Jun al 3 Jul. Los equipos se muestran cuando los clasificados son definitivos. Marcadores en directo.',
+    infoMsg:         'Semifinales: Francia vs España (Mar 14 Jul) e Inglaterra vs Argentina (Mié 15 Jul). Los ganadores se enfrentan en la Final el 19 Jul.',
     tournamentBracket:'Cuadro del Torneo',
-    bracketSub:      '32 equipos avanzan desde 12 grupos',
-    bracketLegend:   'El cuadro se completa al terminar la fase de grupos (~27 Jun) · Tercer lugar: 18 Jul · Final: 19 Jul, MetLife Stadium NJ',
+    bracketSub:      'Semifinalistas — Francia, España, Inglaterra, Argentina',
+    bracketLegend:   'Semifinales: 14–15 Jul · Tercer lugar: 18 Jul · Final: 19 Jul, MetLife Stadium NJ',
     eliminatedNations:'Naciones Eliminadas',
     noneYet:         'Ninguno aún — torneo en curso',
     noElim:          'Ningún equipo eliminado aún. Vuelve después de la Jornada 3 (~27 Jun).',
@@ -1481,16 +1499,133 @@ function renderSchedule() {
     });
   };
 
-  // ── ORDER: R32 → R16 → QF → Group Stage (MD3→MD1) ──
+  // SF preview — resolves through R32 → R16 → QF → SF chain (uses known t1/t2 when set)
+  const resolveSFTeam = (qfMid) => {
+    const pair = QF_PAIRS.find(p => p.mid === qfMid);
+    if (!pair) return { name: '?', flag: '⚽', known: false };
+    const s1 = resolveQFTeam(pair.m1);
+    const s2 = resolveQFTeam(pair.m2);
+    if (s1.known && s2.known) {
+      const w = matchWinner(s1.name, s2.name);
+      if (w) return { name: w, flag: ti(w).flag, known: true };
+      return { name: `${s1.name} or ${s2.name}`, flag: '⚽', known: false };
+    }
+    return { name: `${s1.name} or ${s2.name}`, flag: '⚽', known: false };
+  };
 
-  body.innerHTML += mdBanner(lang==='es' ? '▸ RONDA DE 32 — Jun 28–Jul 3 · En Curso' : '▸ ROUND OF 32 — Jun 28–Jul 3 · In Progress', 'gold');
+  const renderSFPreview = () => {
+    const dateOrder = [], byDate = {};
+    SF_PAIRS.forEach(p => {
+      const dk = lang==='es' ? p.date_es : p.date;
+      if (!byDate[dk]) { byDate[dk] = []; dateOrder.push(dk); }
+      byDate[dk].push(p);
+    });
+    dateOrder.forEach(dk => {
+      body.innerHTML += `<div class="dhdr">${dk}</div>`;
+      byDate[dk].forEach(p => {
+        const s1 = p.t1 ? { name: p.t1, flag: ti(p.t1).flag, known: true } : resolveSFTeam(p.m1);
+        const s2 = p.t2 ? { name: p.t2, flag: ti(p.t2).flag, known: true } : resolveSFTeam(p.m2);
+        const lk = s1.known && s2.known ? scoreEntry(s1.name, s2.name) : null;
+        let right;
+        if (lk) {
+          const sc1 = lk.t1===s1.name ? lk.homeScore : lk.awayScore;
+          const sc2 = lk.t1===s1.name ? lk.awayScore : lk.homeScore;
+          if (lk.state==='in') {
+            right = `<span class="mscore-live">${sc1}–${sc2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
+          } else if (lk.state==='post') {
+            right = `<span class="mscore">${sc1}–${sc2} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+          } else {
+            right = `<span class="mtime" style="opacity:.5">${tr('tbd')}</span>`;
+          }
+        } else {
+          right = `<span class="mtime" style="opacity:.5">${tr('tbd')}</span>`;
+        }
+        const venueHtml = p.venue
+          ? `<span style="font-size:.6rem;color:var(--faint);white-space:nowrap;flex-shrink:0">📍 ${p.venue}</span>`
+          : '';
+        body.innerHTML += `<div class="mrow" style="flex-wrap:wrap;row-gap:.2rem">
+          <span class="b b-grp" style="flex-shrink:0;background:rgba(251,191,36,.15);color:#FBBF24;border-color:rgba(251,191,36,.3)">SF</span>
+          <div class="mteams">
+            <span class="flag" style="font-size:1rem">${s1.flag}</span>
+            <span style="font-size:.8125rem;font-weight:600;${!s1.known?'opacity:.5':''}">${s1.name}</span>
+            <span class="mvs">${tr('vs')}</span>
+            <span style="font-size:.8125rem;font-weight:600;${!s2.known?'opacity:.5':''}">${s2.name}</span>
+            <span class="flag" style="font-size:1rem">${s2.flag}</span>
+          </div>
+          ${right}
+          ${venueHtml}
+        </div>`;
+      });
+    });
+  };
+
+  // Final preview — resolves through the SF chain
+  const resolveFinalTeam = (sfMid) => {
+    const pair = SF_PAIRS.find(p => p.mid === sfMid);
+    if (!pair) return { name: '?', flag: '⚽', known: false };
+    const s1 = pair.t1 ? { name: pair.t1, flag: ti(pair.t1).flag, known: true } : resolveSFTeam(pair.m1);
+    const s2 = pair.t2 ? { name: pair.t2, flag: ti(pair.t2).flag, known: true } : resolveSFTeam(pair.m2);
+    if (s1.known && s2.known) {
+      const w = matchWinner(s1.name, s2.name);
+      if (w) return { name: w, flag: ti(w).flag, known: true };
+      return { name: `${s1.name} or ${s2.name}`, flag: '⚽', known: false };
+    }
+    return { name: `${s1.name} or ${s2.name}`, flag: '⚽', known: false };
+  };
+
+  const renderFinalPreview = () => {
+    const p = FINAL_PAIR;
+    body.innerHTML += `<div class="dhdr">${lang==='es' ? p.date_es : p.date}</div>`;
+    const s1 = resolveFinalTeam(p.m1);
+    const s2 = resolveFinalTeam(p.m2);
+    const lk = s1.known && s2.known ? scoreEntry(s1.name, s2.name) : null;
+    let right;
+    if (lk) {
+      const sc1 = lk.t1===s1.name ? lk.homeScore : lk.awayScore;
+      const sc2 = lk.t1===s1.name ? lk.awayScore : lk.homeScore;
+      if (lk.state==='in') {
+        right = `<span class="mscore-live">${sc1}–${sc2}</span> <span class="mlive">🔴 ${lk.clock}'</span>`;
+      } else if (lk.state==='post') {
+        right = `<span class="mscore">${sc1}–${sc2} <span style="font-size:.62rem;opacity:.6">${tr('ft')}</span></span>`;
+      } else {
+        right = `<span class="mtime" style="opacity:.5">${tr('tbd')}</span>`;
+      }
+    } else {
+      right = `<span class="mtime" style="opacity:.5">${tr('tbd')}</span>`;
+    }
+    const venueHtml = p.venue
+      ? `<span style="font-size:.6rem;color:var(--faint);white-space:nowrap;flex-shrink:0">📍 ${p.venue}</span>`
+      : '';
+    body.innerHTML += `<div class="mrow" style="flex-wrap:wrap;row-gap:.2rem">
+      <span class="b b-grp" style="flex-shrink:0;background:var(--gold-bg);color:var(--gold);border-color:rgba(200,168,75,.25)">🏆</span>
+      <div class="mteams">
+        <span class="flag" style="font-size:1rem">${s1.flag}</span>
+        <span style="font-size:.8125rem;font-weight:600;${!s1.known?'opacity:.5':''}">${s1.name}</span>
+        <span class="mvs">${tr('vs')}</span>
+        <span style="font-size:.8125rem;font-weight:600;${!s2.known?'opacity:.5':''}">${s2.name}</span>
+        <span class="flag" style="font-size:1rem">${s2.flag}</span>
+      </div>
+      ${right}
+      ${venueHtml}
+    </div>`;
+  };
+
+  // ── ORDER: R32 → R16 → QF → SF → Final → Group Stage (MD3→MD1) ──
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ RONDA DE 32 — Jun 28–Jul 3 · Completada' : '▸ ROUND OF 32 — Jun 28–Jul 3 · Complete', 'gold');
   SCHEDULE_R32.forEach(renderR32Day);
 
-  body.innerHTML += mdBanner(lang==='es' ? '▸ RONDA DE 16 — Jul 4–7 · Próximamente' : '▸ ROUND OF 16 — Jul 4–7 · Upcoming', 'blue');
+  body.innerHTML += mdBanner(lang==='es' ? '▸ RONDA DE 16 — Jul 4–7 · Completada' : '▸ ROUND OF 16 — Jul 4–7 · Complete', 'blue');
   renderR16Preview();
 
-  body.innerHTML += mdBanner(lang==='es' ? '▸ CUARTOS DE FINAL — Jul 9–10 · Próximamente' : '▸ QUARTERFINALS — Jul 9–10 · Upcoming', 'purple');
+  body.innerHTML += mdBanner(lang==='es' ? '▸ CUARTOS DE FINAL — Jul 9–10 · Completada' : '▸ QUARTERFINALS — Jul 9–10 · Complete', 'purple');
   renderQFPreview();
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ SEMIFINALES — Jul 14–15 · Próximamente' : '▸ SEMIFINALS — Jul 14–15 · Upcoming', 'gold');
+  renderSFPreview();
+
+  body.innerHTML += mdBanner(lang==='es' ? '▸ FINAL — Jul 19 · Próximamente' : '▸ FINAL — Jul 19 · Upcoming');
+  renderFinalPreview();
 
   // Group Stage divider
   body.innerHTML += `<div class="dhdr" style="font-size:.68rem;font-weight:800;letter-spacing:.08em;opacity:.5;margin-top:.25rem;padding:.55rem 1rem">── ${lang==='es'?'FASE DE GRUPOS — RESULTADOS':'GROUP STAGE — RESULTS'} ──</div>`;
@@ -1595,6 +1730,31 @@ function renderBracket() {
     return { side1, side2 };
   };
 
+  // Semifinal matchup — use known t1/t2 directly if set, else chain through QF winners
+  const resolveSFMatchup = (p) => {
+    if (p.t1 && p.t2) return { side1: p.t1, side2: p.t2 };
+    const qfa = QF_PAIRS.find(x => x.mid === p.m1);
+    const qfb = QF_PAIRS.find(x => x.mid === p.m2);
+    if (!qfa || !qfb) return { side1: null, side2: null };
+    const a = resolveQFMatchup(qfa);
+    const b = resolveQFMatchup(qfb);
+    const side1 = (a.side1 && a.side2) ? matchWinner(a.side1, a.side2) : null;
+    const side2 = (b.side1 && b.side2) ? matchWinner(b.side1, b.side2) : null;
+    return { side1, side2 };
+  };
+
+  // Final matchup — chain through SF winners
+  const resolveFinalMatchup = (p) => {
+    const sfa = SF_PAIRS.find(x => x.mid === p.m1);
+    const sfb = SF_PAIRS.find(x => x.mid === p.m2);
+    if (!sfa || !sfb) return { side1: null, side2: null };
+    const a = resolveSFMatchup(sfa);
+    const b = resolveSFMatchup(sfb);
+    const side1 = (a.side1 && a.side2) ? matchWinner(a.side1, a.side2) : null;
+    const side2 = (b.side1 && b.side2) ? matchWinner(b.side1, b.side2) : null;
+    return { side1, side2 };
+  };
+
   const teamSlot = (name, isWinner) => {
     if (!name) return `<div class="bt" style="opacity:.35">⚽ <span style="font-size:.78rem">${tr('tbd')}</span></div>`;
     const info = ti(name);
@@ -1608,8 +1768,8 @@ function renderBracket() {
   const RNDS = [
     {nk:'r16', sk:'r16sub', matchups: r16Matchups, n:8},
     {nk:'qf',  sk:'qfsub',  matchups: QF_PAIRS.map(resolveQFMatchup), n:4},
-    {nk:'sf',  sk:'sfsub',  matchups: [], n:2},
-    {nk:'fin', sk:null,     matchups: [], n:1},
+    {nk:'sf',  sk:'sfsub',  matchups: SF_PAIRS.map(resolveSFMatchup), n:2},
+    {nk:'fin', sk:null,     matchups: [FINAL_PAIR].map(resolveFinalMatchup), n:1},
   ];
 
   RNDS.forEach((r, ri) => {
