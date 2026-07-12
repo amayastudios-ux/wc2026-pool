@@ -304,7 +304,7 @@
   <!-- ── Prize Pool ── -->
   <div class="infobox" style="margin-bottom:1.25rem">
     <i class="ti ti-trophy" style="color:var(--gold)"></i>
-    <p><strong style="color:var(--text)">WC Pool: $720.00</strong> &nbsp;·&nbsp; 🥇 First Place: <strong style="color:var(--text)">$480.00</strong> &nbsp;·&nbsp; 🥈 Second Place: <strong style="color:var(--text)">$240.00</strong></p>
+    <p id="prize-info"><strong style="color:var(--text)">WC Pool: $720.00</strong> &nbsp;·&nbsp; 🥇 First Place: <strong style="color:var(--text)">$480.00</strong> &nbsp;·&nbsp; 🥈 Second Place: <strong style="color:var(--text)">$240.00</strong></p>
   </div>
 
   <!-- ── Tabs ── -->
@@ -963,17 +963,22 @@ function ti(name) {
     result.status = 'eliminated';
     result.roundReached = result.roundReached || ELIM_STATUS[name];
   }
-  // Knockout round elimination — detected live from score data (R32, R16, QF…)
+  // Knockout round elimination — detected live from score data (R32, R16, QF, SF, Final…)
   if (result.status !== 'eliminated') {
     const kr = knockoutStatus(name);
     if (kr) {
       result.status = 'eliminated';
       result.roundReached = kr;
+    } else if (isChampion(name)) {
+      result.status = 'champion';
+      result.roundReached = 'Champion';
     }
   }
   // Compute pts dynamically from roundReached (so R32 losers get 1 pt, etc.)
   if (result.status === 'eliminated') {
     result.pts = PTS_MAP[result.roundReached] !== undefined ? PTS_MAP[result.roundReached] : 0;
+  } else if (result.status === 'champion') {
+    result.pts = PTS_MAP['Champion'];
   } else {
     // Active team — guaranteed at least the current stage pts
     // Also check if they've advanced further via matchWinner
@@ -991,6 +996,16 @@ function ti(name) {
           if (r16w === name) {
             advancedPts = Math.max(advancedPts, PTS_MAP['Quarter-finals']);
           }
+        }
+        break;
+      }
+    }
+    // Check if team has won its semifinal (guaranteed at least Runner-up)
+    for (const p of SF_PAIRS) {
+      if ((p.t1 === name || p.t2 === name) && p.t1 && p.t2) {
+        const w = matchWinner(p.t1, p.t2);
+        if (w === name) {
+          advancedPts = Math.max(advancedPts, PTS_MAP['Runner-up']);
         }
         break;
       }
@@ -1026,6 +1041,28 @@ function renderAll() {
   renderSchedule();
   renderBracket();
   renderElim();
+  updatePrizeBanner();
+}
+
+/* ── PRIZE BANNER ───────────────────────────────────── */
+// Once the Final is decided, name the winning and runner-up pool participants
+// next to the prize amounts. Before that, just show the flat dollar amounts.
+function updatePrizeBanner() {
+  const el = document.getElementById('prize-info');
+  if (!el) return;
+  const defaultHtml = `<strong style="color:var(--text)">WC Pool: $720.00</strong> &nbsp;·&nbsp; 🥇 First Place: <strong style="color:var(--text)">$480.00</strong> &nbsp;·&nbsp; 🥈 Second Place: <strong style="color:var(--text)">$240.00</strong>`;
+  const allNations = new Set([...Object.keys(TD), ...Object.keys(FLAGS)]);
+  const champTeam = [...allNations].find(n => ti(n).status === 'champion');
+  if (!champTeam) { el.innerHTML = defaultHtml; return; }
+
+  // Tournament is fully decided — rank participants the same way renderPool() does
+  const rows = PARTICIPANTS.map(p => {
+    const t1 = ti(p.c1), t2 = ti(p.c2);
+    return { name: p.name, pts: (t1.pts||0) + (t2.pts||0) };
+  }).sort((a,b) => b.pts - a.pts || a.name.localeCompare(b.name));
+
+  const first = rows[0], second = rows[1];
+  el.innerHTML = `<strong style="color:var(--text)">WC Pool: $720.00</strong> &nbsp;·&nbsp; 🥇 First Place: <strong style="color:var(--text)">${first ? first.name : '—'}</strong> — $480.00 &nbsp;·&nbsp; 🥈 Second Place: <strong style="color:var(--text)">${second ? second.name : '—'}</strong> — $240.00`;
 }
 
 /* ── PODIUM ─────────────────────────────────────────── */
@@ -1292,7 +1329,38 @@ function knockoutStatus(name) {
       if (qw && qw !== name) return 'Quarter-finals';
     }
   }
+  // SF — team must be one of the two known semifinalists
+  for (const p of SF_PAIRS) {
+    if ((p.t1 === name || p.t2 === name) && p.t1 && p.t2) {
+      const w = matchWinner(p.t1, p.t2);
+      if (w && w !== name) return 'Semi-finals';
+    }
+  }
+  // Final — the losing finalist becomes Runner-up
+  {
+    const sfa = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m1);
+    const sfb = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m2);
+    if (sfa && sfb) {
+      const finA = sfa.t1 && sfa.t2 ? matchWinner(sfa.t1, sfa.t2) : null;
+      const finB = sfb.t1 && sfb.t2 ? matchWinner(sfb.t1, sfb.t2) : null;
+      if ((finA === name || finB === name) && finA && finB) {
+        const champ = matchWinner(finA, finB);
+        if (champ && champ !== name) return 'Runner-up';
+      }
+    }
+  }
   return null;
+}
+
+// Determine if a team has won the Final (the tournament champion).
+function isChampion(name) {
+  const sfa = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m1);
+  const sfb = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m2);
+  if (!sfa || !sfb) return false;
+  const finA = sfa.t1 && sfa.t2 ? matchWinner(sfa.t1, sfa.t2) : null;
+  const finB = sfb.t1 && sfb.t2 ? matchWinner(sfb.t1, sfb.t2) : null;
+  if (!finA || !finB) return false;
+  return matchWinner(finA, finB) === name;
 }
 
 function renderSchedule() {
