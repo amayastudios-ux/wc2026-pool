@@ -1,9 +1,9 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-12T12:00:00Z",
-    "stage": "Semi-finals",
-    "matchday": 7,
-    "eliminatedCount": 44,
+    "lastUpdated": "2026-07-13T08:17:53Z",
+    "stage": "Quarter-finals",
+    "matchday": 3,
+    "eliminatedCount": 42,
     "recentResults": [
       {
         "home": "Mexico",
@@ -582,30 +582,6 @@
         "slug": "group-stage"
       },
       {
-        "home": "Spain",
-        "away": "Austria",
-        "homeScore": 3,
-        "awayScore": 0,
-        "round": "Round of 32",
-        "slug": "round-of-32"
-      },
-      {
-        "home": "Portugal",
-        "away": "Croatia",
-        "homeScore": 2,
-        "awayScore": 1,
-        "round": "Round of 32",
-        "slug": "round-of-32"
-      },
-      {
-        "home": "Switzerland",
-        "away": "Algeria",
-        "homeScore": 2,
-        "awayScore": 0,
-        "round": "Round of 32",
-        "slug": "round-of-32"
-      },
-      {
         "home": "South Africa",
         "away": "Canada",
         "homeScore": 0,
@@ -686,6 +662,30 @@
         "slug": "round-of-32"
       },
       {
+        "home": "Spain",
+        "away": "Austria",
+        "homeScore": 3,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Portugal",
+        "away": "Croatia",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Switzerland",
+        "away": "Algeria",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
         "home": "Australia",
         "away": "Egypt",
         "homeScore": 1,
@@ -710,50 +710,50 @@
         "slug": "round-of-32"
       },
       {
-        "home": "Spain",
-        "away": "Portugal",
-        "homeScore": 1,
-        "awayScore": 0,
+        "home": "Canada",
+        "away": "Morocco",
+        "homeScore": 0,
+        "awayScore": 3,
         "round": "Round of 16",
         "slug": "round-of-16"
       },
       {
-        "home": "Belgium",
-        "away": "USA",
-        "homeScore": 4,
+        "home": "Paraguay",
+        "away": "France",
+        "homeScore": 0,
         "awayScore": 1,
         "round": "Round of 16",
         "slug": "round-of-16"
       },
       {
-        "home": "England",
-        "away": "Mexico",
-        "homeScore": 3,
+        "home": "Brazil",
+        "away": "Norway",
+        "homeScore": 1,
         "awayScore": 2,
         "round": "Round of 16",
         "slug": "round-of-16"
       },
       {
-        "home": "Norway",
-        "away": "Brazil",
+        "home": "Mexico",
+        "away": "England",
         "homeScore": 2,
+        "awayScore": 3,
+        "round": "Round of 16",
+        "slug": "round-of-16"
+      },
+      {
+        "home": "Portugal",
+        "away": "Spain",
+        "homeScore": 0,
         "awayScore": 1,
         "round": "Round of 16",
         "slug": "round-of-16"
       },
       {
-        "home": "Morocco",
-        "away": "Canada",
-        "homeScore": 3,
-        "awayScore": 0,
-        "round": "Round of 16",
-        "slug": "round-of-16"
-      },
-      {
-        "home": "France",
-        "away": "Paraguay",
+        "home": "USA",
+        "away": "Belgium",
         "homeScore": 1,
-        "awayScore": 0,
+        "awayScore": 4,
         "round": "Round of 16",
         "slug": "round-of-16"
       },
@@ -779,7 +779,7 @@
         "homeScore": 2,
         "awayScore": 0,
         "round": "Quarter-finals",
-        "slug": "quarter-final"
+        "slug": "quarterfinals"
       },
       {
         "home": "Spain",
@@ -787,15 +787,15 @@
         "homeScore": 2,
         "awayScore": 1,
         "round": "Quarter-finals",
-        "slug": "quarter-final"
+        "slug": "quarterfinals"
       },
       {
-        "home": "England",
-        "away": "Norway",
-        "homeScore": 2,
-        "awayScore": 1,
+        "home": "Norway",
+        "away": "England",
+        "homeScore": 1,
+        "awayScore": 2,
         "round": "Quarter-finals",
-        "slug": "quarter-final"
+        "slug": "quarterfinals"
       },
       {
         "home": "Argentina",
@@ -803,7 +803,7 @@
         "homeScore": 3,
         "awayScore": 1,
         "round": "Quarter-finals",
-        "slug": "quarter-final"
+        "slug": "quarterfinals"
       }
     ]
   },
@@ -1678,7 +1678,7 @@
       "group": "A",
       "flag": "🇲🇽",
       "status": "eliminated",
-      "pts": 1,
+      "pts": 2,
       "roundReached": "Round of 16"
     },
     "South Africa": {
@@ -1706,14 +1706,14 @@
       "group": "B",
       "flag": "🇨🇦",
       "status": "eliminated",
-      "pts": 1,
+      "pts": 2,
       "roundReached": "Round of 16"
     },
     "Bosnia & Herzegovina": {
       "group": "B",
       "flag": "🇧🇦",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Qatar": {
@@ -1727,22 +1727,22 @@
       "group": "B",
       "flag": "🇨🇭",
       "status": "eliminated",
-      "pts": 2,
-      "roundReached": "Quarter-finals"
+      "pts": 5,
+      "roundReached": "Runner-up"
     },
     "Brazil": {
       "group": "C",
       "flag": "🇧🇷",
       "status": "eliminated",
-      "pts": 1,
+      "pts": 2,
       "roundReached": "Round of 16"
     },
     "Morocco": {
       "group": "C",
       "flag": "🇲🇦",
       "status": "eliminated",
-      "pts": 2,
-      "roundReached": "Quarter-finals"
+      "pts": 5,
+      "roundReached": "Runner-up"
     },
     "Haiti": {
       "group": "C",
@@ -1762,14 +1762,14 @@
       "group": "D",
       "flag": "🇺🇸",
       "status": "eliminated",
-      "pts": 1,
+      "pts": 2,
       "roundReached": "Round of 16"
     },
     "Paraguay": {
       "group": "D",
       "flag": "🇵🇾",
       "status": "eliminated",
-      "pts": 1,
+      "pts": 2,
       "roundReached": "Round of 16"
     },
     "Australia": {
@@ -1789,9 +1789,9 @@
     "Germany": {
       "group": "E",
       "flag": "🇩🇪",
-      "status": "eliminated",
+      "status": "active",
       "pts": 0,
-      "roundReached": "Round of 32"
+      "roundReached": null
     },
     "Curaçao": {
       "group": "E",
@@ -1804,22 +1804,22 @@
       "group": "E",
       "flag": "🇨🇮",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Ecuador": {
       "group": "E",
       "flag": "🇪🇨",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Netherlands": {
       "group": "F",
       "flag": "🇳🇱",
-      "status": "eliminated",
+      "status": "active",
       "pts": 0,
-      "roundReached": "Round of 32"
+      "roundReached": null
     },
     "Japan": {
       "group": "F",
@@ -1832,7 +1832,7 @@
       "group": "F",
       "flag": "🇸🇪",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Tunisia": {
@@ -1846,14 +1846,14 @@
       "group": "G",
       "flag": "🇧🇪",
       "status": "eliminated",
-      "pts": 2,
-      "roundReached": "Quarter-finals"
+      "pts": 5,
+      "roundReached": "Runner-up"
     },
     "Egypt": {
       "group": "G",
       "flag": "🇪🇬",
       "status": "eliminated",
-      "pts": 1,
+      "pts": 2,
       "roundReached": "Round of 16"
     },
     "Iran": {
@@ -1873,9 +1873,9 @@
     "Spain": {
       "group": "H",
       "flag": "🇪🇸",
-      "status": "active",
-      "pts": 3,
-      "roundReached": null
+      "status": "champion",
+      "pts": 6,
+      "roundReached": "Champion"
     },
     "Cabo Verde": {
       "group": "H",
@@ -1901,15 +1901,15 @@
     "France": {
       "group": "I",
       "flag": "🇫🇷",
-      "status": "active",
-      "pts": 3,
-      "roundReached": null
+      "status": "champion",
+      "pts": 6,
+      "roundReached": "Champion"
     },
     "Senegal": {
       "group": "I",
       "flag": "🇸🇳",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Iraq": {
@@ -1923,28 +1923,28 @@
       "group": "I",
       "flag": "🇳🇴",
       "status": "eliminated",
-      "pts": 2,
-      "roundReached": "Quarter-finals"
+      "pts": 5,
+      "roundReached": "Runner-up"
     },
     "Argentina": {
       "group": "J",
       "flag": "🇦🇷",
-      "status": "active",
-      "pts": 3,
-      "roundReached": null
+      "status": "champion",
+      "pts": 6,
+      "roundReached": "Champion"
     },
     "Algeria": {
       "group": "J",
       "flag": "🇩🇿",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Austria": {
       "group": "J",
       "flag": "🇦🇹",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Jordan": {
@@ -1958,14 +1958,14 @@
       "group": "K",
       "flag": "🇵🇹",
       "status": "eliminated",
-      "pts": 1,
+      "pts": 2,
       "roundReached": "Round of 16"
     },
     "Congo DR": {
       "group": "K",
       "flag": "🇨🇩",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Uzbekistan": {
@@ -1985,15 +1985,15 @@
     "England": {
       "group": "L",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "status": "active",
-      "pts": 3,
-      "roundReached": null
+      "status": "champion",
+      "pts": 6,
+      "roundReached": "Champion"
     },
     "Croatia": {
       "group": "L",
       "flag": "🇭🇷",
       "status": "eliminated",
-      "pts": 0,
+      "pts": 1,
       "roundReached": "Round of 32"
     },
     "Ghana": {
