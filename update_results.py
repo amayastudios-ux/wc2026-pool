@@ -58,6 +58,25 @@ ROUND_POINTS = {
     "quarter-finals": 3, "semi-finals": 4, "runner-up": 5, "champion": 6,
 }
 
+# Ordering used to make "stage" monotonic -- ESPN only reports a round once a
+# match in it has actually kicked off, but the pool considers itself to have
+# *entered* a round as soon as the previous one finishes (e.g. the day the
+# semifinal matchups are known, before kickoff). Without this guard, every
+# scheduled run between "QFs just finished" and "first SF match completes"
+# would silently revert an already-correct "Semi-finals" stage (and the
+# eliminated-team count that goes with it) back down to "Quarter-finals".
+STAGE_ORDER = [
+    "Group Stage", "Round of 32", "Round of 16",
+    "Quarter-finals", "Semi-finals", "Final",
+]
+
+
+def stage_rank(stage_name):
+    try:
+        return STAGE_ORDER.index(stage_name)
+    except ValueError:
+        return -1
+
 # Groups lookup (ASCII keys only, no special chars)
 TEAM_GROUP = {
     "Mexico": "A", "South Africa": "A", "Korea Republic": "A", "Czechia": "A",
@@ -508,11 +527,21 @@ def main():
     # Build base team dict (knockout results update status)
     teams = build_teams(espn_results or [])
 
-    # Preserve existing knockout-round progress
+    # Preserve existing knockout-round progress. Team progress is monotonic --
+    # a team can only advance further, never un-eliminate or drop a round -- so
+    # keep whichever side (freshly-detected vs. already-committed) has the
+    # higher points value, not just the case where ESPN detection found
+    # nothing at all. This is what actually fixes the regression: ESPN
+    # detection can find *some* result for a team (pts > 0) that's still
+    # lower than a manually-recorded further-round result, and the old
+    # `teams[name]["pts"] == 0` check let that silently overwrite it.
     if existing:
         for name, ex_t in existing.get("teams", {}).items():
-            if name in teams and ex_t.get("pts", 0) > 0 and teams[name]["pts"] == 0:
-                teams[name]["pts"]          = ex_t["pts"]
+            if name not in teams:
+                continue
+            ex_pts = ex_t.get("pts", 0) or 0
+            if ex_pts > teams[name]["pts"]:
+                teams[name]["pts"]          = ex_pts
                 teams[name]["status"]       = ex_t["status"]
                 teams[name]["roundReached"] = ex_t.get("roundReached")
 
@@ -536,7 +565,30 @@ def main():
                                  for t in ranked]
 
     stage, matchday = determine_stage_matchday(espn_results or [], standings)
+
+    # Stage is monotonic too, for the same reason team progress is: ESPN only
+    # reports a knockout round once a match in it has kicked off, so a run
+    # between "previous round just finished" and "first match of the next
+    # round completes" would otherwise revert an already-correct later stage
+    # back to the earlier one.
+    if existing:
+        existing_stage = existing.get("meta", {}).get("stage", "")
+        if stage_rank(existing_stage) > stage_rank(stage):
+            print(f"  Stage guard: ESPN detection says '{stage}' but existing "
+                  f"data.json is already at '{existing_stage}' -- keeping the "
+                  f"later stage.")
+            stage = existing_stage
+            matchday = max(matchday, existing.get("meta", {}).get("matchday", matchday))
+
     elim_count   = sum(1 for t in teams.values() if t["status"] == "eliminated")
+    # Same monotonic guard applied to the summary count, as a final safety net
+    # in case any single team's status didn't round-trip through the merge above.
+    if existing:
+        existing_elim = existing.get("meta", {}).get("eliminatedCount", 0)
+        if existing_elim > elim_count:
+            print(f"  Elim-count guard: computed {elim_count} but existing "
+                  f"data.json already has {existing_elim} -- keeping the higher count.")
+            elim_count = existing_elim
     recent_clean = [{k: v for k, v in r.items() if not k.startswith("_")}
                     for r in (espn_results or [])]
 
