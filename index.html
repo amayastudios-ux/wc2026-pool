@@ -631,6 +631,12 @@ const SF_PAIRS = [
 // Final — Jul 19, 2026
 // m1/m2 = source SF match IDs
 const FINAL_PAIR = {mid:103, m1:101, m2:102, date:'Sun · Jul 19', date_es:'Dom · Jul 19', venue:'MetLife Stadium, NJ'};
+// Earliest real-world date a result can count as THIS semifinal/final.
+// Without this, a team that already met its SF/Final opponent earlier in the
+// tournament (e.g. group stage) would have that stale result mistaken for
+// today's match, since scores are looked up by team name only.
+const SF_MIN_DATE = '2026-07-14';
+const FINAL_MIN_DATE = '2026-07-19';
 
 const SCHEDULE_MD2 = [
   {date:'Thu · Jun 18', date_es:'Jue · Jun 18', ms:[
@@ -1003,7 +1009,7 @@ function ti(name) {
     // Check if team has won its semifinal (guaranteed at least Runner-up)
     for (const p of SF_PAIRS) {
       if ((p.t1 === name || p.t2 === name) && p.t1 && p.t2) {
-        const w = matchWinner(p.t1, p.t2);
+        const w = matchWinner(p.t1, p.t2, SF_MIN_DATE);
         if (w === name) {
           advancedPts = Math.max(advancedPts, PTS_MAP['Runner-up']);
         }
@@ -1051,18 +1057,29 @@ function updatePrizeBanner() {
   const el = document.getElementById('prize-info');
   if (!el) return;
   const defaultHtml = `<strong style="color:var(--text)">WC Pool: $720.00</strong> &nbsp;·&nbsp; 🥇 First Place: <strong style="color:var(--text)">$480.00</strong> &nbsp;·&nbsp; 🥈 Second Place: <strong style="color:var(--text)">$240.00</strong>`;
-  const allNations = new Set([...Object.keys(TD), ...Object.keys(FLAGS)]);
-  const champTeam = [...allNations].find(n => ti(n).status === 'champion');
-  if (!champTeam) { el.innerHTML = defaultHtml; return; }
 
-  // Tournament is fully decided — rank participants the same way renderPool() does
-  const rows = PARTICIPANTS.map(p => {
-    const t1 = ti(p.c1), t2 = ti(p.c2);
-    return { name: p.name, pts: (t1.pts||0) + (t2.pts||0) };
-  }).sort((a,b) => b.pts - a.pts || a.name.localeCompare(b.name));
+  // The Final itself is the source of truth: winner of the final = first place,
+  // loser of the final = second place. Both semifinals must be decided (on/after
+  // SF_MIN_DATE) before either finalist is known, and the Final itself must be
+  // decided (on/after FINAL_MIN_DATE) before a champion is known — this keeps
+  // names from appearing until the actual Jul 19 Final has been played.
+  const sfa = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m1);
+  const sfb = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m2);
+  if (!sfa || !sfb) { el.innerHTML = defaultHtml; return; }
+  const finA = sfa.t1 && sfa.t2 ? matchWinner(sfa.t1, sfa.t2, SF_MIN_DATE) : null;
+  const finB = sfb.t1 && sfb.t2 ? matchWinner(sfb.t1, sfb.t2, SF_MIN_DATE) : null;
+  if (!finA || !finB) { el.innerHTML = defaultHtml; return; }
+  const champ = matchWinner(finA, finB, FINAL_MIN_DATE);
+  if (!champ) { el.innerHTML = defaultHtml; return; }
+  const runnerUp = champ === finA ? finB : finA;
 
-  const first = rows[0], second = rows[1];
-  el.innerHTML = `<strong style="color:var(--text)">WC Pool: $720.00</strong> &nbsp;·&nbsp; 🥇 First Place: <strong style="color:var(--text)">${first ? first.name : '—'}</strong> — $480.00 &nbsp;·&nbsp; 🥈 Second Place: <strong style="color:var(--text)">${second ? second.name : '—'}</strong> — $240.00`;
+  const ownerOf = team => {
+    const p = PARTICIPANTS.find(pp => pp.c1 === team || pp.c2 === team);
+    return p ? p.name : null;
+  };
+  const first = ownerOf(champ), second = ownerOf(runnerUp);
+
+  el.innerHTML = `<strong style="color:var(--text)">WC Pool: $720.00</strong> &nbsp;·&nbsp; 🥇 First Place: <strong style="color:var(--text)">${first || '—'}</strong> — $480.00 &nbsp;·&nbsp; 🥈 Second Place: <strong style="color:var(--text)">${second || '—'}</strong> — $240.00`;
 }
 
 /* ── PODIUM ─────────────────────────────────────────── */
@@ -1265,18 +1282,25 @@ function buildR32Map() {
   return map;
 }
 
-// Score lookup checking live feed first, then historical results
-function scoreEntry(t1, t2) {
-  return liveScores[`${t1}|${t2}`] || liveScores[`${t2}|${t1}`] ||
-         historicalScores[`${t1}|${t2}`] || historicalScores[`${t2}|${t1}`] || null;
+// Score lookup checking live feed first, then historical results.
+// minDate (optional, 'YYYY-MM-DD') rejects any match that happened before that
+// date — needed because the same two teams can meet more than once across a
+// tournament (e.g. group stage, then again later), and a plain team-name
+// lookup can't otherwise tell today's match apart from an earlier one.
+function scoreEntry(t1, t2, minDate) {
+  const e = liveScores[`${t1}|${t2}`] || liveScores[`${t2}|${t1}`] ||
+            historicalScores[`${t1}|${t2}`] || historicalScores[`${t2}|${t1}`] || null;
+  if (!e) return null;
+  if (minDate && e.date && e.date < minDate) return null;
+  return e;
 }
 
 // Return winner of any completed match (R32, R16, QF …) or null if not yet decided.
 // Handles extra time / penalty shootouts via ESPN's winner flag for tied scores.
 // Falls back to STATIC_WINNERS when ESPN data unavailable.
-function matchWinner(t1, t2) {
+function matchWinner(t1, t2, minDate) {
   if (!t1 || !t2) return null;
-  const lk = scoreEntry(t1, t2);
+  const lk = scoreEntry(t1, t2, minDate);
   if (lk && lk.state === 'post') {
     const isHome1 = lk.t1 === t1;
     const s1 = Number(isHome1 ? lk.homeScore : lk.awayScore);
@@ -1329,10 +1353,12 @@ function knockoutStatus(name) {
       if (qw && qw !== name) return 'Quarter-finals';
     }
   }
-  // SF — team must be one of the two known semifinalists
+  // SF — team must be one of the two known semifinalists.
+  // minDate=SF_MIN_DATE guards against a stale earlier meeting between the
+  // same two teams (e.g. group stage) being mistaken for today's semifinal.
   for (const p of SF_PAIRS) {
     if ((p.t1 === name || p.t2 === name) && p.t1 && p.t2) {
-      const w = matchWinner(p.t1, p.t2);
+      const w = matchWinner(p.t1, p.t2, SF_MIN_DATE);
       if (w && w !== name) return 'Semi-finals';
     }
   }
@@ -1341,10 +1367,10 @@ function knockoutStatus(name) {
     const sfa = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m1);
     const sfb = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m2);
     if (sfa && sfb) {
-      const finA = sfa.t1 && sfa.t2 ? matchWinner(sfa.t1, sfa.t2) : null;
-      const finB = sfb.t1 && sfb.t2 ? matchWinner(sfb.t1, sfb.t2) : null;
+      const finA = sfa.t1 && sfa.t2 ? matchWinner(sfa.t1, sfa.t2, SF_MIN_DATE) : null;
+      const finB = sfb.t1 && sfb.t2 ? matchWinner(sfb.t1, sfb.t2, SF_MIN_DATE) : null;
       if ((finA === name || finB === name) && finA && finB) {
-        const champ = matchWinner(finA, finB);
+        const champ = matchWinner(finA, finB, FINAL_MIN_DATE);
         if (champ && champ !== name) return 'Runner-up';
       }
     }
@@ -1357,10 +1383,10 @@ function isChampion(name) {
   const sfa = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m1);
   const sfb = SF_PAIRS.find(x => x.mid === FINAL_PAIR.m2);
   if (!sfa || !sfb) return false;
-  const finA = sfa.t1 && sfa.t2 ? matchWinner(sfa.t1, sfa.t2) : null;
-  const finB = sfb.t1 && sfb.t2 ? matchWinner(sfb.t1, sfb.t2) : null;
+  const finA = sfa.t1 && sfa.t2 ? matchWinner(sfa.t1, sfa.t2, SF_MIN_DATE) : null;
+  const finB = sfb.t1 && sfb.t2 ? matchWinner(sfb.t1, sfb.t2, SF_MIN_DATE) : null;
   if (!finA || !finB) return false;
-  return matchWinner(finA, finB) === name;
+  return matchWinner(finA, finB, FINAL_MIN_DATE) === name;
 }
 
 function renderSchedule() {
@@ -1817,15 +1843,17 @@ function renderBracket() {
     return { side1, side2 };
   };
 
-  // Final matchup — chain through SF winners
+  // Final matchup — chain through SF winners. minDate=SF_MIN_DATE stops a stale
+  // earlier meeting between two semifinalists (e.g. group stage) from being
+  // mistaken for today's semifinal result before it's actually been played.
   const resolveFinalMatchup = (p) => {
     const sfa = SF_PAIRS.find(x => x.mid === p.m1);
     const sfb = SF_PAIRS.find(x => x.mid === p.m2);
     if (!sfa || !sfb) return { side1: null, side2: null };
     const a = resolveSFMatchup(sfa);
     const b = resolveSFMatchup(sfb);
-    const side1 = (a.side1 && a.side2) ? matchWinner(a.side1, a.side2) : null;
-    const side2 = (b.side1 && b.side2) ? matchWinner(b.side1, b.side2) : null;
+    const side1 = (a.side1 && a.side2) ? matchWinner(a.side1, a.side2, SF_MIN_DATE) : null;
+    const side2 = (b.side1 && b.side2) ? matchWinner(b.side1, b.side2, SF_MIN_DATE) : null;
     return { side1, side2 };
   };
 
@@ -1855,9 +1883,11 @@ function renderBracket() {
     const dynMatchups = r.matchups || [];
 
     if (dynMatchups.length > 0 && (dynMatchups[0].side1 || dynMatchups[0].side2)) {
-      // Show dynamic bracket slots
+      // Show dynamic bracket slots. SF/Final are date-gated so a stale earlier
+      // meeting between the same two teams can't be mistaken for this match.
+      const winMinDate = r.nk === 'sf' ? SF_MIN_DATE : r.nk === 'fin' ? FINAL_MIN_DATE : undefined;
       dynMatchups.forEach(mu => {
-        const w = mu.side1 && mu.side2 ? matchWinner(mu.side1, mu.side2) : null;
+        const w = mu.side1 && mu.side2 ? matchWinner(mu.side1, mu.side2, winMinDate) : null;
         html += `<div class="bm">
           ${teamSlot(mu.side1, w === mu.side1)}
           ${teamSlot(mu.side2, w === mu.side2)}
@@ -1996,7 +2026,9 @@ async function fetchAllHistoricalScores() {
   }
 
   const allResults = [];
-  const seen = new Set();
+  const seenEventIds = new Set(); // dedupe the same ESPN event, not the same team pair —
+                                   // two teams can legitimately meet twice in a tournament
+                                   // (e.g. group stage, then again in a later knockout round)
   for (const dateStr of dates) {
     try {
       const r = await fetch(`${ESPN_URL}?dates=${dateStr}&t=${Date.now()}`);
@@ -2004,16 +2036,16 @@ async function fetchAllHistoricalScores() {
       const j = await r.json();
       for (const ev of (j.events || [])) {
         if (ev.status?.type?.state !== 'post') continue;
+        if (ev.id && seenEventIds.has(ev.id)) continue;
+        if (ev.id) seenEventIds.add(ev.id);
         const comp = ev.competitions?.[0];
         const home = comp?.competitors?.find(c => c.homeAway === 'home');
         const away = comp?.competitors?.find(c => c.homeAway === 'away');
         if (!home || !away) continue;
         const t1 = ESPN_MAP[home.team?.displayName] || home.team?.displayName;
         const t2 = ESPN_MAP[away.team?.displayName] || away.team?.displayName;
-        const key = `${t1}|${t2}`;
-        if (seen.has(key)) continue;
-        seen.add(key); seen.add(`${t2}|${t1}`);
-        allResults.push({ t1, t2, hs: Number(home.score||0), as: Number(away.score||0), hw: home.winner===true, aw: away.winner===true });
+        const evDate = (ev.date || '').slice(0,10);
+        allResults.push({ t1, t2, hs: Number(home.score||0), as: Number(away.score||0), hw: home.winner===true, aw: away.winner===true, date: evDate });
       }
     } catch { /* skip unavailable date */ }
   }
@@ -2022,7 +2054,7 @@ async function fetchAllHistoricalScores() {
 
   STATS = {}; TRENDS = {};
   const freshHist = {};
-  allResults.forEach(({ t1, t2, hs, as: as_, hw, aw }) => {
+  allResults.forEach(({ t1, t2, hs, as: as_, hw, aw, date }) => {
     if (!STATS[t1]) STATS[t1] = {w:0,d:0,l:0,gf:0,ga:0};
     if (!STATS[t2]) STATS[t2] = {w:0,d:0,l:0,gf:0,ga:0};
     STATS[t1].gf += hs; STATS[t2].gf += as_;
@@ -2032,15 +2064,21 @@ async function fetchAllHistoricalScores() {
     else                { STATS[t1].d++; STATS[t2].d++; }
     TRENDS[t1] = hs > as_ ? 'win' : as_ > hs ? 'loss' : 'draw';
     TRENDS[t2] = as_ > hs ? 'win' : hs > as_ ? 'loss' : 'draw';
-    const entry = { t1, t2, homeScore: hs, awayScore: as_, state: 'post', homeWinner: hw, awayWinner: aw };
-    freshHist[`${t1}|${t2}`] = entry;
-    freshHist[`${t2}|${t1}`] = entry;
+    const entry = { t1, t2, homeScore: hs, awayScore: as_, state: 'post', homeWinner: hw, awayWinner: aw, date };
+    // If the same two teams played more than once, keep the most recent meeting —
+    // matchWinner()'s minDate guard still applies on top of this for round-safety.
+    const key = `${t1}|${t2}`;
+    if (!freshHist[key] || (date && date > (freshHist[key].date || ''))) {
+      freshHist[key] = entry;
+      freshHist[`${t2}|${t1}`] = entry;
+    }
   });
   historicalScores = freshHist;
 
   BASE_STATS = JSON.parse(JSON.stringify(STATS));
   BASE_TRENDS = JSON.parse(JSON.stringify(TRENDS));
-  BASE_RESULT_KEYS = new Set(seen);
+  BASE_RESULT_KEYS = new Set();
+  allResults.forEach(({ t1, t2 }) => { BASE_RESULT_KEYS.add(`${t1}|${t2}`); BASE_RESULT_KEYS.add(`${t2}|${t1}`); });
 
   renderGroups();
   renderPool();
@@ -2068,7 +2106,8 @@ async function fetchLiveScores() {
       if (!home || !away) return;
       const t1 = ESPN_MAP[home.team?.displayName] || home.team?.displayName;
       const t2 = ESPN_MAP[away.team?.displayName] || away.team?.displayName;
-      const entry = { t1, t2, homeScore: home.score||'0', awayScore: away.score||'0', clock, state, homeWinner: home.winner===true, awayWinner: away.winner===true };
+      const evDate = (ev.date || '').slice(0,10);
+      const entry = { t1, t2, homeScore: home.score||'0', awayScore: away.score||'0', clock, state, homeWinner: home.winner===true, awayWinner: away.winner===true, date: evDate };
       fresh[`${t1}|${t2}`] = entry;
       fresh[`${t2}|${t1}`] = entry;
       if (state === 'in') hasLive = true;
