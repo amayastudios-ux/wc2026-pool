@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-15T07:14:52Z",
+    "lastUpdated": "2026-07-16T07:22:27Z",
     "stage": "Semi-finals",
     "matchday": 3,
     "eliminatedCount": 44,
@@ -809,6 +809,14 @@
         "home": "France",
         "away": "Spain",
         "homeScore": 0,
+        "awayScore": 2,
+        "round": "Semi-finals",
+        "slug": "semifinals"
+      },
+      {
+        "home": "England",
+        "away": "Argentina",
+        "homeScore": 1,
         "awayScore": 2,
         "round": "Semi-finals",
         "slug": "semifinals"
