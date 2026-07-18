@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastUpdated": "2026-07-17T07:17:06Z",
+    "lastUpdated": "2026-07-18T07:00:40Z",
     "stage": "Semi-finals",
     "matchday": 3,
     "eliminatedCount": 44,
@@ -632,6 +632,30 @@
       {
         "home": "Mexico",
         "away": "Ecuador",
+        "homeScore": 2,
+        "awayScore": 0,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "England",
+        "away": "Congo DR",
+        "homeScore": 2,
+        "awayScore": 1,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "Belgium",
+        "away": "Senegal",
+        "homeScore": 3,
+        "awayScore": 2,
+        "round": "Round of 32",
+        "slug": "round-of-32"
+      },
+      {
+        "home": "USA",
+        "away": "Bosnia & Herzegovina",
         "homeScore": 2,
         "awayScore": 0,
         "round": "Round of 32",
