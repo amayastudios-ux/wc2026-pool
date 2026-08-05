@@ -1,9 +1,7 @@
 name: Update World Cup Results
 
 on:
-  schedule:
-    - cron: '0 5 * * *'  # once daily at 5 AM UTC (site auto-fetches live from ESPN in browser)
-  workflow_dispatch:         # allow manual trigger from GitHub UI
+  workflow_dispatch:         # manual trigger only — tournament has ended
 
 permissions:
   contents: write
